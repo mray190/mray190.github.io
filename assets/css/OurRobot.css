@@ -1553,7 +1553,7 @@
 
 	body {
 		background-color: #C0C0C0;
-		background-image: url("../../images/");
+		background-image: url("../../images/ourrobot.jpg");
 		background-size: cover;
 		background-position: center center;
 		background-attachment: fixed;
@@ -2649,6 +2649,48 @@
 		padding: 3em 0 1em 0 ;
 	}
 
+	#wrapper > .bg.fixed {
+				position: fixed;
+				width: 100vw;
+				height: 100vh;
+			}
+
+		#wrapper.fade-in:before {
+			-moz-pointer-events: none;
+			-webkit-pointer-events: none;
+			-ms-pointer-events: none;
+			pointer-events: none;
+			-moz-transition: opacity 1s ease-in-out;
+			-webkit-transition: opacity 1s ease-in-out;
+			-ms-transition: opacity 1s ease-in-out;
+			transition: opacity 1s ease-in-out;
+			-moz-transition-delay: 0.75s;
+			-webkit-transition-delay: 0.75s;
+			-ms-transition-delay: 0.75s;
+			transition-delay: 0.75s;
+			background: #000000;
+			content: '';
+			display: block;
+			height: 100%;
+			left: 0;
+			opacity: 0;
+			position: fixed;
+			top: 0;
+			width: 100%;
+		}
+
+		body.is-loading #wrapper.fade-in:before {
+			opacity: 1;
+		}
+
+		@media screen and (orientation: portrait) {
+
+			#wrapper > .bg {
+				background-size: auto,								auto,														auto 175%;
+			}
+
+		}
+
 		.wrapper > .inner {
 			width: 60em;
 			margin: 0 auto;
@@ -3159,6 +3201,216 @@
 			.wrapper {
 				padding: 3em 2em 1em 2em ;
 			}
+
+		}
+
+#intro {
+		color: #000000;
+		-moz-align-items: center;
+		-webkit-align-items: center;
+		-ms-align-items: center;
+		align-items: center;
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		-moz-flex-direction: column;
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		-moz-justify-content: -moz-flex-end;
+		-webkit-justify-content: -webkit-flex-end;
+		-ms-justify-content: -ms-flex-end;
+		justify-content: flex-end;
+		-moz-transition: opacity 1s ease, -moz-transform 1s ease;
+		-webkit-transition: opacity 1s ease, -webkit-transform 1s ease;
+		-ms-transition: opacity 1s ease, -ms-transform 1s ease;
+		transition: opacity 1s ease, transform 1s ease;
+		position: relative;
+		cursor: default;
+		text-align: center;
+		z-index: 1;
+		min-height: 100vh;
+	}
+
+		#intro input, #intro select, #intro textarea {
+			color: #000000;
+		}
+
+		#intro a {
+			color: #000000;
+			border-bottom-color: rgba(255, 255, 255, 0.5);
+		}
+
+			#intro a:hover {
+				border-bottom-color: transparent;
+				color: #ef8376 !important;
+			}
+
+		#intro strong, #intro b {
+			color: #ffffff;
+		}
+
+		#intro h1, #intro h2, #intro h3, #intro h4, #intro h5, #intro h6 {
+			color: #ffffff;
+		}
+
+		#intro blockquote {
+			border-left-color: #ffffff;
+		}
+
+		#intro code {
+			background: rgba(255, 255, 255, 0.075);
+			border-color: #ffffff;
+		}
+
+		#intro hr {
+			border-bottom-color: #ffffff;
+		}
+
+		#intro input[type="submit"],
+		#intro input[type="reset"],
+		#intro input[type="button"],
+		#intro button,
+		#intro .button {
+			background-color: transparent;
+			box-shadow: inset 0 0 0 2px #ffffff;
+			color: #ffffff !important;
+		}
+
+			#intro input[type="submit"]:hover,
+			#intro input[type="reset"]:hover,
+			#intro input[type="button"]:hover,
+			#intro button:hover,
+			#intro .button:hover {
+				box-shadow: inset 0 0 0 2px #ef8376;
+				color: #ef8376 !important;
+			}
+
+			#intro input[type="submit"].special,
+			#intro input[type="reset"].special,
+			#intro input[type="button"].special,
+			#intro button.special,
+			#intro .button.special {
+				background-color: #ffffff;
+				box-shadow: none;
+				color: #ef8376 !important;
+			}
+
+				#intro input[type="submit"].special:hover,
+				#intro input[type="reset"].special:hover,
+				#intro input[type="button"].special:hover,
+				#intro button.special:hover,
+				#intro .button.special:hover {
+					background-color: #ef8376;
+				}
+
+		#intro h1 {
+			font-size: 5rem;
+			line-height: 1;
+			padding-bottom: 4em;
+		}
+
+		#intro p {
+			font-size: 1.25rem;
+			font-style: italic;
+			margin-top: -0.25rem;
+			text-align: center;
+		}
+
+		#intro + #header {
+			margin-top: -20rem;
+		}
+
+			#intro + #header .logo {
+				-moz-transform: translateY(2rem);
+				-webkit-transform: translateY(2rem);
+				-ms-transform: translateY(2rem);
+				transform: translateY(2rem);
+				opacity: 0;
+				visibility: hidden;
+			}
+
+		#intro.hidden {
+			-moz-pointer-events: none;
+			-webkit-pointer-events: none;
+			-ms-pointer-events: none;
+			pointer-events: none;
+			-moz-transform: translateY(2rem);
+			-webkit-transform: translateY(2rem);
+			-ms-transform: translateY(2rem);
+			transform: translateY(2rem);
+			-moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease, visibility 0.5s;
+			-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, visibility 0.5s;
+			-ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, visibility 0.5s;
+			transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+			opacity: 0;
+			visibility: hidden;
+		}
+
+			#intro.hidden + #header .logo {
+				-moz-transform: translateY(0);
+				-webkit-transform: translateY(0);
+				-ms-transform: translateY(0);
+				transform: translateY(0);
+				opacity: 1;
+				visibility: visible;
+			}
+
+		body.is-loading #intro {
+			-moz-transform: translateY(2rem);
+			-webkit-transform: translateY(2rem);
+			-ms-transform: translateY(2rem);
+			transform: translateY(2rem);
+			opacity: 0;
+		}
+
+			body.is-loading #intro:not(.hidden) + #header {
+				-moz-transform: translateY(4rem);
+				-webkit-transform: translateY(4rem);
+				-ms-transform: translateY(4rem);
+				transform: translateY(4rem);
+				opacity: 0;
+			}
+
+		@media screen and (max-width: 980px) {
+
+			#intro {
+				padding: 4rem 4rem 2rem 4rem ;
+				min-height: 90vh;
+			}
+
+				#intro p br {
+					display: none;
+				}
+
+				#intro + #header {
+					margin-top: -14rem;
+				}
+
+		}
+
+		@media screen and (max-width: 736px) {
+
+			#intro {
+				padding: 3rem 2rem 1rem 2rem ;
+				min-height: 80vh;
+			}
+
+				#intro h1 {
+					font-size: 3.25rem;
+					line-height: 1.1;
+					margin-bottom: 1rem;
+				}
+
+				#intro p {
+					font-size: 1rem;
+					margin-top: 0rem;
+				}
+
+				#intro .actions {
+					display: none;
+				}
 
 		}
 
