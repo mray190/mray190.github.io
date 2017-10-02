@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic,600");
 @import url("font-awesome.min.css");
-@import url("https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic");
-
 
 /*
 	Helios by HTML5 UP
@@ -1554,7 +1552,7 @@
 
 	body {
 		position: relative;
-		background-image: url(../../images/ourrobot.jpg);
+		background-image: url(../../images/FLLCamp2.jpg);
 		background-size: cover;
 		background-position: center;
 		background-attachment: fixed;
@@ -2089,7 +2087,7 @@
 /* Wrapper */
 
 	.wrapper {
-		background-image: url("../../images/ourrobot.jpg");
+		background-image: url("../../images/FLLCamp2.jpg");
 		background: #fff;
 		margin: 0 0 2em 0;
 		padding: 6em 0 6em 0;
@@ -2103,7 +2101,7 @@
 
 	#header {
 		position: relative;
-		background-image: url("../../images/ourrobot.jpg");
+		background-image: url("../../images/FLLCamp2.jpg");
 		background-size: cover;
 		background-position: center center;
 		background-attachment: fixed;
@@ -2217,7 +2215,7 @@
 		padding: 1.5em 0 1.5em 0;
 		z-index: 1;
 		overflow: hidden;
-		color: black;
+		color: white;
 	}
 
 		#nav > ul {
@@ -3050,7 +3048,7 @@
 			width: 100%;
 			height: 100%;
 			background-color: #C0C0C0;
-			background-image: url("../../images/ourrobot.jpg"), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("../../images/ourrobot.jpg");
+			background-image: url("../../images/FLLCamp2.jpg"), linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("../../images/FLLCamp2.jpg");
 			background-size: auto,								auto,														100% auto;
 			background-position: center,								center,														top center;
 			background-repeat: repeat,								no-repeat,													no-repeat;
