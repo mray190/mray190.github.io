@@ -2398,6 +2398,10 @@
 		color: #fff;
 	}
 
+		#footer p {
+			text-align: center;
+		}
+
 		#footer header {
 			text-align: center;
 			cursor: default;

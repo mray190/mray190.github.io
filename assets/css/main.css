@@ -3242,6 +3242,11 @@
 		color: #fff;
 	}
 
+		#footer p {
+			position: center;
+			text-align: center;
+		}
+
 		#footer header {
 			text-align: center;
 			cursor: default;
