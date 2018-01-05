@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<title>Valor - Events</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.mySlides {display: none}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-card w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <a href="FRC_Website_Home.html" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+    <a href="FRC_Website_AboutUs.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">About Us</a>
+    <a href="FRC_Website_OurRobot.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Our Robot</a>
+    <a href="FRC_Website_Events.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Events</a>
+    <a href="FRC_Website_Outreach.html" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Outreach</a>
+  </div>
+
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 4</a>
+  </div>
+</div>
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+
+  <!-- The Tour Section -->
+  <div class="w3-black" id="tour">
+    <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
+      <h3><i>Valor's Next Event</i></h3>
+      <h2 class="w3-wide w3-center">2018 FIRST POWER-UP Kickoff Event</h2>
+      <p class="w3-opacity w3-center">Valor has decided to attend the FRC Kickoff Event at Dripping Springs High School where </p><br>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Band Section -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+    <h2 class="w3-wide">2017 FIRST STEAMWORKS Offseason</h2>
+    <p class="w3-opacity"><i>Pre-rookie year</i></p>
+    <p class="w3-justify">As a newly formed team, Valor wanted to gain experience by completing a full 6 weeks build cycle to prepare for our 2018 rookie season. We competed in 3 events around Texas during the offseason and returned with great experience and memories. Many of these included 6th place allaince captain at Robot Remix, 2nd highest OPR at Texas Robot Roundup, and repairing a broken drive shaft within 10 minutes at the North Texas Tournament</p>
+    <div class="w3-row w3-padding-32">
+      <div class="w3-third">
+        <p>Texas Robot Roundup</p>
+        <img src="images/6800toField.jpg" class="w3-round w3-margin-bottom" alt="TRR" style="width:95%">
+      </div>
+      <div class="w3-third">
+        <p>North Texas Tournament</p>
+        <img src="/w3images/bandmember.jpg" class="w3-round w3-margin-bottom" alt="NTX" style="width:95%">
+      </div>
+      <div class="w3-third">
+        <p>Robot Remix</p>
+        <img src="/w3images/bandmember.jpg" class="w3-round" alt="Remix" style="width:95%">
+      </div>
+    </div>
+  </div>
+
+<!-- Add Google Maps
+<div id="googleMap" style="height:400px;" class="w3-grayscale-max"></div>
+<script>
+function myMap() {
+  myCenter=new google.maps.LatLng(41.878114, -87.629798);
+  var mapOptions= {
+    center:myCenter,
+    zoom:12, scrollwheel: false, draggable: false,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
+
+  var marker = new google.maps.Marker({
+    position: myCenter,
+  });
+  marker.setMap(map);
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+
+To use this code on your website, get a free API key from Google.
+Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
+-->
+
+<!-- Footer -->
+<footer class="w3-center w3-light-grey w3-padding-16 w3-large">
+  <div class="w3-xlarge w3-padding-16">
+    <i class="fa fa-facebook-official w3-hover-opacity" style="font-size: 30px"></i>
+    <i class="fa fa-youtube w3-hover-opacity" style="font-size: 30px"></i>
+    <i class="fa fa-twitter w3-hover-opacity" style="font-size: 30px"></i>
+    <i class="fa fa-github w3-hover-opacity" style="font-size: 30px"></i>
+ </div>
+ <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+<script>
+// Automatic Slideshow - change image every 4 seconds
+var myIndex = 0;
+carousel();
+
+function carousel() {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    for (i = 0; i < x.length; i++) {
+       x[i].style.display = "none";  
+    }
+    myIndex++;
+    if (myIndex > x.length) {myIndex = 1}    
+    x[myIndex-1].style.display = "block";  
+    setTimeout(carousel, 4000);    
+}
+
+// Used to toggle the menu on small screens when clicking on the menu button
+function myFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else { 
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+var modal = document.getElementById('ticketModal');
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>
+
