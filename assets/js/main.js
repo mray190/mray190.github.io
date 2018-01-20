@@ -85,21 +85,47 @@
 						visibleClass: 'navPanel-visible'
 					});
 
-					var slideIndex = 0;
-					
-					showSlides();
+					var main = function() {
 
-					function showSlides() {
-					    var i;
-					    var slides = document.getElementsByClassName("mySlides");
-					    for (i = 0; i < slides.length; i++) {
-					        slides[i].style.display = "none"; 
-					    }
-					    slideIndex++;
-					    if (slideIndex > slides.length) {slideIndex = 1} 
-					    slides[slideIndex-1].style.display = "block"; 
-					    setTimeout(showSlides, 6000); // Change image every 2 seconds
-					}
+	var paused = false
+
+	$('.arrowR').click(function() {
+		paused = true;
+		$('#slideshow > div:first')
+		.fadeOut(1000)
+		.next()
+		.fadeIn(1000)
+		.end()
+		.appendTo('#slideshow');
+	});
+		
+	$('.arrowL').click(function() {
+		paused = true;
+		$('#slideshow > div:last')
+		.fadeIn(1000)
+		.prependTo('#slideshow')
+		.next()
+		.fadeOut(1000)
+		.end();
+	});
+
+
+	
+	setInterval(function() {
+		if (paused === false) { 
+			$('#slideshow > div:first')
+			.fadeOut(1000)
+			.next()
+			.fadeIn(1000)
+			.end()
+			.appendTo('#slideshow');
+		};
+	},  5000);
+   
+	
+};
+
+$(document).ready(main);
 
 			// Fix: Remove navPanel transitions on WP<10 (poor/buggy performance).
 				if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
