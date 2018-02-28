@@ -1,0 +1,164 @@
+<html>
+<head>
+	<title>6800 Scouting - 2018</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"></script>
+	<link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body>
+	<div class="topnav" id="nav_bar">
+		<a href="index.html" class="active">Scout</a>
+		<a href="data.html">Data</a>
+		<a href="prematch.html">Pre-match</a>
+		<a href="team.html">Team Lookup</a>
+		<a href="picklist.html">Pick list</a>
+		<a href="settings.html">Settings</a>
+		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
+	</div>
+
+	<br>
+
+	<form id="matchResultForm">
+		<label for="general">General</label>
+		<div class="row" id="general">
+			<div class="four columns">
+				<label for="match_num">Match num.</label>
+				<input class="u-full-width" type="number" placeholder="1" id="match_num" required>
+			</div>
+			<div class="four columns">
+				<label for="team_num">Team num.</label>
+				<input class="u-full-width" type="number" placeholder="6800" id="team_num" required>
+			</div>
+			<div class="four columns">
+				<label for="alliance">Alliance color</label>
+				<select class="u-full-width" id="alliance">
+					<option value="red">Red</option>
+					<option value="blue">Blue</option>
+				</select>
+			</div>
+		</div>
+		<hr>
+		<label for="auto">Autonomous</label>
+		<div class="row" id="auto">
+			<div class="three columns">
+				<label for="auto_start">Start position</label>
+				<select class="u-full-width" id="auto_start">
+					<option value="left">Left</option>
+					<option value="center">Center</option>
+					<option value="right">Right</option>
+				</select>
+			</div>
+			<div class="three columns">
+				<label>
+			    	<input type="checkbox" id="auto_line">
+			    	<span class="label-body">Cross auto line?</span>
+			  	</label>
+			</div>
+			<div class="three columns">
+				<label for="auto_switch">Cubes scored in switch</label>
+				<input class="u-full-width" type="number" placeholder="1" id="auto_switch">
+			</div>
+			<div class="three columns">
+				<label for="auto_scale">Cubes scored in scale</label>
+				<input class="u-full-width" type="number" placeholder="2" id="auto_scale">
+			</div>
+		</div>
+		<hr>
+		<label for="teleop">Teleop</label>
+		<div class="row" id="teleop">
+			<div class="three columns">
+				<label for="teleop_switch">Cubes scored in switch</label>
+				<input class="u-full-width" type="number" placeholder="3" id="teleop_switch">
+			</div>
+			<div class="three columns">
+				<label for="teleop_scale">Cubes scored in scale</label>
+				<input class="u-full-width" type="number" placeholder="4" id="teleop_scale">
+			</div>
+			<div class="three columns">
+				<label for="teleop_vault">Cubes scored in vault</label>
+				<input class="u-full-width" type="number" placeholder="5" id="teleop_vault">
+			</div>
+			<div class="three columns">
+				<label for="defensive_rating">Defensive Rating</label>
+				<select class="u-full-width" id="defensive_rating">
+					<option value="NA">None</option>
+					<option value="1">1 - Bad</option>
+					<option value="2">2 - Poor</option>
+					<option value="3">3 - Average</option>
+					<option value="4">4 - Good</option>
+					<option value="5">5 - Great</option>
+				</select>
+			</div>
+		</div>
+		<hr>
+		<label for="end">End</label>
+		<div class="row" id="end">
+			<div class="three columns">
+				<label>
+			    	<input type="checkbox" id="hang_attempt">
+			    	<span class="label-body">Attempt hang?</span>
+			  	</label>
+			</div>
+			<div class="three columns">
+				<label>
+			    	<input type="checkbox" id="hang_succeed">
+			    	<span class="label-body">Successful hang?</span>
+			  	</label>
+			</div>
+			<div class="three columns">
+				<label>
+			    	<input type="checkbox" id="hang_host">
+			    	<span class="label-body">Hosted a hang?</span>
+			  	</label>
+			</div>
+			<div class="three columns">
+				<label for="hang_time">Hang time (seconds)</label>
+				<input class="u-full-width" type="number" placeholder="6" id="hang_time">
+			</div>
+		</div>
+		<hr>
+		<input class="button-primary" type="submit" value="Submit">
+	</form>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="assets/js/custom.js"></script>
+<script>
+
+	if (getCookie("regional")=="") {
+		window.location.replace("settings.html");
+	}
+
+	$('#matchResultForm').on('submit', function () {
+		var results = {};
+		results['alliance'] = $('#alliance').val();
+		results['auto_start'] = $('#auto_start').val();
+		results['auto_line'] = $('#auto_line').val() == "on" ? true : false;
+		results['auto_switch'] = parseInt($('#auto_switch').val());
+		results['auto_scale'] = parseInt($('#auto_scale').val());
+		results['teleop_switch'] = parseInt($('#teleop_switch').val());
+		results['teleop_scale'] = parseInt($('#teleop_scale').val());
+		results['teleop_vault'] = parseInt($('#teleop_vault').val());
+		results['defensive_rating'] = $('#defensive_rating').val();
+		results['hang_attempt'] = $('#hang_attempt').val() == "on" ? true : false;
+		results['hang_succeed'] = $('#hang_succeed').val() == "on" ? true : false;
+		results['hang_host'] = $('#hang_host').val() == "on" ? true : false;
+		results['hang_time'] = parseInt($('#hang_time').val());
+
+		writeMatchResult("txlu", $('#match_num').val(), $('#team_num').val(), results);
+
+	    alert('Match results submitted!');
+	    return true;
+	});
+	firebase.initializeApp(config);
+	var database = firebase.database();
+
+	// Write match results to firebase
+	function writeMatchResult(regionalCode, matchNum, teamNum, data) {
+		firebase.database().ref(regionalCode + '/' + matchNum + "/" + teamNum).set(data);
+	}
+</script>
+</html>
