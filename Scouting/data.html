@@ -1,0 +1,65 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>6800 Scouting - 2018</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"></script>
+	<link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body>
+	<div class="topnav" id="nav_bar">
+		<a href="index.html">Scout</a>
+		<a href="data.html" class="active">Data</a>
+		<a href="prematch.html">Pre-match</a>
+		<a href="team.html">Team Lookup</a>
+		<a href="picklist.html">Pick list</a>
+		<a href="settings.html">Settings</a>
+		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
+	</div>
+
+	<br>
+
+	<div class="container">
+
+	<table class="u-full-width" id="data">
+		<thead>
+			<tr>
+				<th data-sort-default>Team #</th>
+			</tr>
+		</thead>
+		<tbody id="team_data">
+		</tbody>
+	</table>
+
+	</div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
+<script>
+
+	if (getCookie("regional")=="") {
+		window.location.replace("settings.html");
+	}
+	
+	firebase.initializeApp(config);
+	var database = firebase.database();
+
+  	var sort = new Tablesort(document.getElementById('data'), {
+	  	ascending: true
+	});
+
+	getData("txlu_teams", "event/2018txlu/teams", function(old_data, new_data) {
+		new_data.forEach(function(item, index) {
+			var html = "<tr><td>" + item.team_number + "</td></tr>";
+			$("#team_data").append(html);
+		});
+		sort.refresh();
+	});
+</script>
+</html>

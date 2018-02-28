@@ -153,12 +153,13 @@
 	    alert('Match results submitted!');
 	    return true;
 	});
+
 	firebase.initializeApp(config);
 	var database = firebase.database();
 
 	// Write match results to firebase
 	function writeMatchResult(regionalCode, matchNum, teamNum, data) {
-		firebase.database().ref(regionalCode + '/' + matchNum + "/" + teamNum).set(data);
+		firebase.database().ref(regionalCode + '/local/' + matchNum + "/" + teamNum).set(data);
 	}
 </script>
 </html>
