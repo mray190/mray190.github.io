@@ -1,0 +1,104 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>6800 Scouting - 2018</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"></script>
+	<link rel="stylesheet" href="assets/css/custom.css">
+	<meta name="viewport" content="width=device-width" />
+</head>
+<body>
+	<div class="topnav" id="nav_bar">
+		<a href="index.html">Scout</a>
+		<a href="data.html" >Data</a>
+		<a href="prematch.html">Pre-match</a>
+        <a href="team.html">Team Lookup</a>
+        <a href="match-results.html" class="active">Match Results</a>
+		<a href="picklist.html">Pick list</a>
+		<a href="settings.html">Settings</a>
+		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
+	</div>
+
+	<br>
+
+	<div class="container">
+	<table class="u-full-width tablesorter" id="data">
+		<thead>
+			<tr>
+				<th data-sort-default>#</th>
+				<th data-sort-default>Team</th>
+				<th data-sort-default>Start</th>
+				<th data-sort-default>Cross Line</th>
+				<th data-sort-default>Auto Switch</th>
+				<th data-sort-default>Auto Scale</th>
+				<th data-sort-default>Teleop Switch</th>
+				<th data-sort-default>Teleop Scale</th>
+				<th data-sort-default>Vault</th>
+				<th data-sort-default>DFR</th>
+				<th data-sort-default>Hang Attempt</th>
+				<th data-sort-default>Hang Time</th>
+			</tr>
+		</thead>
+		<tbody id="match_data">
+		</tbody>
+	</table>
+
+	</div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
+<script>
+
+	// if (getCookie("regional")=="") {
+	// 	window.location.replace("settings.html");
+	// }
+	
+	firebase.initializeApp(config);
+    var database = firebase.database();
+    var regionalCode = 'txlu';
+
+  	var sort = new Tablesort(document.getElementById('data'), {
+	  	ascending: true
+	});
+
+
+    var matchRef = firebase.database().ref("txlu/local/");
+    matchRef.on('value', function(snapshot) {
+		
+        snapshot.forEach(function(childSnapshot) {
+    		var matchNumber = childSnapshot.key;
+			var teams = childSnapshot.val();
+			
+			for(var teamNumber in teams) {
+				console.log(team)
+				var entry = document.getElementById('match_data').insertRow(-1)
+				var team = teams[teamNumber];
+				entry.className = team.alliance;
+
+				entry.insertCell(0).innerHTML = matchNumber;
+				entry.insertCell(-1).innerHTML = teamNumber;
+				entry.insertCell(-1).innerHTML = team.auto_start.toUpperCase();
+				entry.insertCell(-1).innerHTML = team.auto_line ? 'Y' : 'N';
+				entry.insertCell(-1).innerHTML = team.auto_switch;
+				entry.insertCell(-1).innerHTML = team.auto_scale;
+				entry.insertCell(-1).innerHTML = team.teleop_switch;
+				entry.insertCell(-1).innerHTML = team.teleop_scale;
+				entry.insertCell(-1).innerHTML = team.teleop_vault;
+				entry.insertCell(-1).innerHTML = team.defensive_rating;
+				entry.insertCell(-1).innerHTML = team.hang_attempt ? "Y" : "N";
+				entry.insertCell(-1).innerHTML = team.hang_attempt ? team.hang_time : 'X';			
+			}
+		  });
+		  
+	});
+	
+
+
+</script>
+</html>
