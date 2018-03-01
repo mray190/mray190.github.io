@@ -21,11 +21,22 @@
 	<br>
 
 	<div class="container">
+		<h3>Real-time predictions</h3>
 
 	<table class="u-full-width" id="data">
 		<thead>
 			<tr>
-				<th data-sort-default>Team #</th>
+				<th>Team</th>
+				<th data-sort-default>Rank</th>
+				<th>Matches</th>
+				<th>Record</th>
+				<th>RP</th>
+				<th>Auto Avg</th>
+				<th>Switch Avg</th>
+				<th>Scale Avg</th>
+				<th>Vault Avg</th>
+				<th>Hang</th>
+				<th>Hosted Hang</th>
 			</tr>
 		</thead>
 		<tbody id="team_data">
@@ -56,9 +67,16 @@
 	  	ascending: true
 	});
 
-	getData("txlu_teams", "event/2018txlu/teams", function(old_data, new_data) {
-		new_data.forEach(function(item, index) {
-			var html = "<tr><td>" + item.team_number + "</td></tr>";
+	getData("txlu_rankings", "event/2017txlu/rankings", function(old_data, new_data) {
+		new_data['rankings'].forEach(function(item, index) {
+			var html = "<tr>";
+			html += "<td>" + item.team_key.replace("frc","") + "</td>";
+			html += "<td>" + item.rank + "</td>";
+			html += "<td>" + item.matches_played + "</td>";
+			html += "<td>" + item.record.wins + "-" + item.record.losses + "-" + item.record.ties + "</td>";
+			html += "<td>" + "N/A" + "</td>";
+
+			html += "</tr>";
 			$("#team_data").append(html);
 		});
 		sort.refresh();
