@@ -9,10 +9,10 @@
 <body>
 	<div class="topnav" id="nav_bar">
 		<a href="index.html">Scout</a>
-		<a href="data.html" >Data</a>
+		<a href="data.html" >Rankings</a>
+        <a href="match-results.html" class="active">Match Results</a>
 		<a href="prematch.html">Pre-match</a>
         <a href="team.html">Team Lookup</a>
-        <a href="match-results.html" class="active">Match Results</a>
 		<a href="picklist.html">Pick list</a>
 		<a href="settings.html">Settings</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
@@ -25,17 +25,19 @@
 		<thead>
 			<tr>
 				<th data-sort-default>#</th>
-				<th data-sort-default>Team</th>
-				<th data-sort-default>Start</th>
-				<th data-sort-default>Cross Line</th>
-				<th data-sort-default>Auto Switch</th>
-				<th data-sort-default>Auto Scale</th>
-				<th data-sort-default>Teleop Switch</th>
-				<th data-sort-default>Teleop Scale</th>
-				<th data-sort-default>Vault</th>
-				<th data-sort-default>DFR</th>
-				<th data-sort-default>Hang Attempt</th>
-				<th data-sort-default>Hang Time</th>
+				<th>Team</th>
+				<th>Start</th>
+				<th>Cross Line</th>
+				<th>Auto Switch</th>
+				<th>Auto Scale</th>
+				<th>Teleop Switch</th>
+				<th>Teleop Scale</th>
+				<th>Vault</th>
+				<th>DFR</th>
+				<th>Hang Attempt</th>
+				<th>Hang Succeed</th>
+				<th>Hang Host</th>
+				<th>Hang Time</th>
 			</tr>
 		</thead>
 		<tbody id="match_data">
@@ -92,6 +94,8 @@
 				entry.insertCell(-1).innerHTML = team.teleop_vault;
 				entry.insertCell(-1).innerHTML = team.defensive_rating;
 				entry.insertCell(-1).innerHTML = team.hang_attempt ? "Y" : "N";
+				entry.insertCell(-1).innerHTML = team.hang_succeed ? "Y" : "N";
+				entry.insertCell(-1).innerHTML = team.hang_host ? "Y" : "N";
 				entry.insertCell(-1).innerHTML = team.hang_attempt ? team.hang_time : 'X';			
 			}
 		  });
