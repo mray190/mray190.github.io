@@ -50,6 +50,12 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
         }
       })
 
+      if(match_data.defensive_rating !== 'NA') {
+        current_averages.defensive_rating_total = (current_averages.defensive_rating_total || 0) + parseInt(match_data.defensive_rating);
+        current_averages.defensive_rating_counter = (current_averages.defensive_rating_counter || 0) + 1;
+        current_averages.defensive_rating_avg = (current_averages.defensive_rating_total || 0) / (current_averages.defensive_rating_counter || 1);
+      }
+
       current_averages.teleop_hang_time_total = (current_averages.teleop_hang_time_total || 0) + match_data.hang_time;
       current_averages.teleop_hang_time_avg = (current_averages.teleop_hang_time_total || 0) / current_averages.teleop_hang_succeed_total;
 
