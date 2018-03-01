@@ -18,7 +18,7 @@
 	</div>
 
 	<br>
-
+	<h2>Hello, <div id='scoutName'>N/A</div>! Currently scouting for <div id='regionalName'>N/A</div></h2>
 	<form id="matchResultForm">
 		<label for="general">General</label>
 		<div class="row" id="general">
@@ -132,6 +132,9 @@
 
 	if (getCookie("regional")=="") {
 		window.location.replace("settings.html");
+	} else {
+		document.getElementById('regionalName').innerHTML = getCookie("regional");
+		document.getElementById('scoutName').innerHTML = getCookie("name");
 	}
 
 	$('#matchResultForm').on('submit', function () {
