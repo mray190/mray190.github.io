@@ -20,7 +20,6 @@
 
 	<br>
 
-	<div class="container">
 	<table class="u-full-width tablesorter" id="data">
 		<thead>
 			<tr>
@@ -28,6 +27,8 @@
 				<th>Team</th>
 				<th>Start</th>
 				<th>Cross Line</th>
+				<th>Switch Loc</th>
+				<th>Scale Loc</th>
 				<th>Auto Switch</th>
 				<th>Auto Scale</th>
 				<th>Teleop Switch</th>
@@ -43,8 +44,6 @@
 		<tbody id="match_data">
 		</tbody>
 	</table>
-
-	</div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -86,6 +85,8 @@
 				entry.insertCell(-1).innerHTML = teamNumber;
 				entry.insertCell(-1).innerHTML = team.auto_start.toUpperCase();
 				entry.insertCell(-1).innerHTML = team.auto_line ? 'Y' : 'N';
+				entry.insertCell(-1).innerHTML = "Left/Right";
+				entry.insertCell(-1).innerHTML = "Left/Right";
 				entry.insertCell(-1).innerHTML = team.auto_switch;
 				entry.insertCell(-1).innerHTML = team.auto_scale;
 				entry.insertCell(-1).innerHTML = team.teleop_switch;
