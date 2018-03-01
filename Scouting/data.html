@@ -110,11 +110,11 @@
 					entry.insertCell(-1).innerHTML = formatAverages(averages['left_avg']);
 					entry.insertCell(-1).innerHTML = formatAverages(averages['center_avg']);
 					entry.insertCell(-1).innerHTML = formatAverages(averages['right_avg']);
-					entry.insertCell(-1).innerHTML = averages['auto_switch_avg'];
-					entry.insertCell(-1).innerHTML = averages['auto_scale_avg'];
-					entry.insertCell(-1).innerHTML = averages['teleop_switch_avg'];
-					entry.insertCell(-1).innerHTML = averages['teleop_scale_avg'];
-					entry.insertCell(-1).innerHTML = averages['teleop_vault_avg'];
+					entry.insertCell(-1).innerHTML = averages['auto_switch_avg'].toFixed(1);
+					entry.insertCell(-1).innerHTML = averages['auto_scale_avg'].toFixed(1);
+					entry.insertCell(-1).innerHTML = averages['teleop_switch_avg'].toFixed(1);
+					entry.insertCell(-1).innerHTML = averages['teleop_scale_avg'].toFixed(1);
+					entry.insertCell(-1).innerHTML = averages['teleop_vault_avg'].toFixed(1);
 					entry.insertCell(-1).innerHTML = averages['dfr_avg'];
 					entry.insertCell(-1).innerHTML = formatAverages(averages['teleop_hang_succeed_avg']);
 					entry.insertCell(-1).innerHTML = formatAverages(averages['teleop_host_succeed_avg']);
