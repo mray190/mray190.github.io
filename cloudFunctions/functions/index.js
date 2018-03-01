@@ -18,7 +18,6 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
     return averageRef.once('value', (average_snapshot) => {
       var current_averages = average_snapshot.val()
       if(!current_averages) current_averages = {}
-      console.log('Current: ' + current_averages)
       const total_num_matches = matches_snapshot.numChildren();
   
       current_averages.total_matches = (total_num_matches || 1);
@@ -30,28 +29,33 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
         case('right') : {current_averages.right_total = (current_averages.right_total || 0) + 1; break;}
         default: break;
       }
-      current_averages.left_avg = current_averages.left_total / total_num_matches;
-      current_averages.center_avg = current_averages.center_total / total_num_matches;
-      current_averages.right_avg = current_averages.right_total / total_num_matches;
+      current_averages.left_avg = (current_averages.left_total || 0) / total_num_matches;
+      current_averages.center_avg = (current_averages.center_total || 0) / total_num_matches;
+      current_averages.right_avg = (current_averages.right_total || 0) / total_num_matches;
 
-      // AUTO SCALE
-      current_averages.auto_scale_total = (current_averages.auto_scale_total || 0) + match_data.auto_scale;
-      current_averages.auto_scale_avg = current_averages.auto_scale_total / total_num_matches;
+      var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_vault']
+      props.forEach((prop)=>{
+        current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
+        current_averages[prop + '_avg'] = (current_averages[prop + '_avg'] || 0) / total_num_matches;
+        if(match_data[prop] > current_averages[prop + '_max']) {current_averages[prop + '_max'] = match_data[prop]}
+      })
+
+      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'hang_host']
+      prop_bools.forEach((prop_bool) =>{
+        current_averages[prop_bool + '_total'] = (current_averages[prop_bool + '_total'] || 0) + (match_data[prop_bool] ? 1 : 0);
+        if(prop_bool === prop_bools[0] || prop_bool === prop_bools[1]) {
+          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / total_num_matches;
+        } else {
+          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / (current_averages.teleop_hang_attempt_total || 1);
+        }
+      })
+
+      current_averages.teleop_hang_time_total = (current_averages.teleop_hang_time_total || 0) + match_data.hang_time;
+      current_averages.teleop_hang_time_avg = (current_averages.teleop_hang_time_total || 0) / current_averages.teleop_hang_succeed_total;
 
       return averageRef.set(current_averages);
-
     })
   })
-  
-
-  
-
-	// return averageRef.transaction(function(current) {
-	// 	console.log("Curent: " + current);
-	// 	current.matches = (current.matches || 0) + 1;
-	// 	return current;
-	// });
-
 	// Auto center %
 	// Auto right %
 	// Auto left %
@@ -59,13 +63,15 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
 	// Auto scale
 	// Auto max switch
 	// Auto switch
-	// Auto line cross %
+  // Auto line cross %
+  
 	// Max switch
 	// Avg switch
 	// Max scale
 	// Avg scale
 	// Max vault
-	// Avg vault
+  // Avg vault
+  
 	// Hang attempts
 	// Hang %
 	// Host hangs
