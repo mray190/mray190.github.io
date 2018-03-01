@@ -2,18 +2,38 @@ const functions = require('firebase-functions');
 
 // https://firebase.google.com/docs/functions/database-events
 
-// Listens for new messages added to /messages/:pushId/original and creates an
-// uppercase version of the message to /messages/:pushId/uppercase
-exports.updateTeamInfo = functions.database.ref('/{regional_code}/local/{match}').onWrite((event) => {
-  // Grab the current value of what was written to the Realtime Database.
-  const original = event.data.val();
-  const regional_code = event.params.regional_code;
-  const match = event.params.match;
-  console.log('Data: ' + original);
-  console.log("Code: " + regional_code);
-  console.log("Match: " + match);
-  // You must return a Promise when performing asynchronous tasks inside a Functions such as
-  // writing to the Firebase Realtime Database.
-  // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-  return event.data.ref.parent.child('uppercase').set("hi");
+exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num}/matches/{match_num}').onWrite((event) => {
+
+	const original = event.data;
+	const regional_code = event.params.regional_code;
+	const team_num = event.params.team_num;
+	const match_num = event.params.match_num;
+
+	var collectionRef = original.ref.parent;
+	var averageRef = collectionRef.parent.child("averages");
+
+	return averageRef.transaction(function(current) {
+		console.log("Curent: " + current);
+		current.matches = (current.matches || 0) + 1;
+		return current;
+	});
+
+	// Auto center %
+	// Auto right %
+	// Auto left %
+	// Auto max scale
+	// Auto scale
+	// Auto max switch
+	// Auto switch
+	// Auto line cross %
+	// Max switch
+	// Avg switch
+	// Max scale
+	// Avg scale
+	// Max vault
+	// Avg vault
+	// Hang attempts
+	// Hang %
+	// Host hangs
+	// Host hang %
 });

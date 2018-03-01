@@ -161,6 +161,7 @@
 	// Write match results to firebase
 	function writeMatchResult(regionalCode, matchNum, teamNum, data) {
 		firebase.database().ref(regionalCode + '/local/' + matchNum + "/" + teamNum).set(data);
+		firebase.database().ref(regionalCode + '/teams/' + teamNum + "/matches/" + matchNum).set(data);
 	}
 </script>
 </html>
