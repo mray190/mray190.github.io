@@ -138,16 +138,16 @@
 		var results = {};
 		results['alliance'] = $('#alliance').val();
 		results['auto_start'] = $('#auto_start').val();
-		results['auto_line'] = $('#auto_line').val() == "on" ? true : false;
+		results['auto_line'] = $('#auto_line').prop('checked');
 		results['auto_switch'] = parseInt($('#auto_switch').val());
 		results['auto_scale'] = parseInt($('#auto_scale').val());
 		results['teleop_switch'] = parseInt($('#teleop_switch').val());
 		results['teleop_scale'] = parseInt($('#teleop_scale').val());
 		results['teleop_vault'] = parseInt($('#teleop_vault').val());
 		results['defensive_rating'] = $('#defensive_rating').val();
-		results['hang_attempt'] = $('#hang_attempt').val() == "on" ? true : false;
-		results['hang_succeed'] = $('#hang_succeed').val() == "on" ? true : false;
-		results['hang_host'] = $('#hang_host').val() == "on" ? true : false;
+		results['hang_attempt'] = $('#hang_attempt').prop('checked');
+		results['hang_succeed'] = $('#hang_succeed').prop('checked');
+		results['hang_host'] = $('#hang_host').prop('checked');
 		results['hang_time'] = parseInt($('#hang_time').val());
 
 		writeMatchResult("txlu", $('#match_num').val(), $('#team_num').val(), results);

@@ -9,8 +9,8 @@
 <body>
 	<div class="topnav" id="nav_bar">
 		<a href="index.html">Scout</a>
-		<a href="data.html" >Rankings</a>
         <a href="match-results.html" class="active">Match Results</a>
+		<a href="data.html" >Rankings</a>
 		<a href="prematch.html">Pre-match</a>
         <a href="team.html">Team Lookup</a>
 		<a href="picklist.html">Pick list</a>
@@ -57,9 +57,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	// if (getCookie("regional")=="") {
-	// 	window.location.replace("settings.html");
-	// }
+	if (getCookie("regional")=="") {
+		window.location.replace("settings.html");
+	}
 	
 	firebase.initializeApp(config);
     var database = firebase.database();
@@ -70,7 +70,7 @@
 	});
 
 
-    var matchRef = firebase.database().ref("txlu/local/");
+    var matchRef = firebase.database().ref(getCookie("regional") + "/local/");
     matchRef.on('value', function(snapshot) {
 		
         snapshot.forEach(function(childSnapshot) {
@@ -78,7 +78,6 @@
 			var teams = childSnapshot.val();
 			
 			for(var teamNumber in teams) {
-				console.log(team)
 				var entry = document.getElementById('match_data').insertRow(-1)
 				var team = teams[teamNumber];
 				entry.className = team.alliance;
