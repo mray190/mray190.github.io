@@ -35,7 +35,7 @@ var config = {
 	apiKey: "b57zJeLRQ1sAqIvoF06YmXsIc8Z0DD2uT8lMB6M9",
 	authDomain: "viperbotsvalor.firebaseapp.com",
 	databaseURL: "https://viperbotsvalor.firebaseio.com",
-	storageBucket: "bucket.appspot.com"
+	storageBucket: "gs://viperbotsvalor.appspot.com"
 };
 
 var tba_api_key = "LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M";
@@ -51,7 +51,7 @@ function tbaCall(url_extension, last_modified, callback) {
  			'x-tba-auth-key': tba_api_key
  		},
  		success: callback,
-        error: function(error) { console.log(error); }
+        error: function(xhr, textStatus, errorThrown) { console.log(textStatus); }
 	});
 }
 
