@@ -107,7 +107,7 @@
 					var entry = document.getElementById('team_data').insertRow(-1)
 					entry.className = team.alliance;
 
-					entry.insertCell(0).innerHTML = team;
+					entry.insertCell(0).innerHTML = '<a href= \'https://www.thebluealliance.com/team/' + team + '\'>' + team +'</a>';
 					entry.insertCell(-1).innerHTML = data[team]['rank'];
 					entry.insertCell(-1).innerHTML = data[team]['matches'];
 					entry.insertCell(-1).innerHTML = data[team]['record'];
