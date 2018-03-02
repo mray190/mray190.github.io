@@ -43,7 +43,7 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
         if(match_data[prop] > current_averages[prop + '_max']) {current_averages[prop + '_max'] = match_data[prop]}
       })
 
-      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'hang_host']
+      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'host_succeed']
       prop_bools.forEach((prop_bool) =>{
         current_averages[prop_bool + '_total'] = (current_averages[prop_bool + '_total'] || 0) + (match_data[prop_bool] ? 1 : 0);
         if(prop_bool === prop_bools[0] || prop_bool === prop_bools[1]) {
