@@ -48,8 +48,7 @@ function tbaCall(url_extension, last_modified, callback) {
 	  	crossDomain: true,
  		headers: {
     		"if-modified-since": last_modified,
- 			'x-tba-auth-key': tba_api_key,
-	    	"content-type": "application/json"
+ 			'x-tba-auth-key': tba_api_key
  		},
  		success: callback,
         error: function(error) { console.log(error); }
