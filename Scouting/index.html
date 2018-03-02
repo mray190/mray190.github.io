@@ -8,8 +8,8 @@
 <body>
 	<div class="topnav" id="nav_bar">
 		<a href="index.html" class="active">Scout</a>
-		<a href="data.html">Rankings</a>
 		<a href="match-results.html">Match Results</a>
+		<a href="data.html">Rankings</a>
 		<a href="prematch.html">Pre-match</a>
 		<a href="team.html">Team Lookup</a>
 		<a href="picklist.html">Pick list</a>
@@ -150,7 +150,7 @@
 		results['hang_host'] = $('#hang_host').prop('checked');
 		results['hang_time'] = parseInt($('#hang_time').val());
 
-		writeMatchResult("txlu", $('#match_num').val(), $('#team_num').val(), results);
+		writeMatchResult(getCookie("regional"), $('#match_num').val(), $('#team_num').val(), results);
 
 	    alert('Match results submitted!');
 	    return true;

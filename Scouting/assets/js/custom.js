@@ -45,11 +45,14 @@ function tbaCall(url_extension, last_modified, callback) {
 	$.ajax({
 		url: tba_base_url+url_extension,
 		type: "GET",
+	  	crossDomain: true,
  		headers: {
-    		// "if-modified-since": last_modified,
- 			'x-tba-auth-key': tba_api_key
+    		"if-modified-since": last_modified,
+ 			'x-tba-auth-key': tba_api_key,
+	    	"content-type": "application/json"
  		},
- 		success: callback
+ 		success: callback,
+        error: function(error) { console.log(error); }
 	});
 }
 
@@ -61,10 +64,47 @@ function saveToStorage(key, data, last_modified) {
 }
 
 function getData(key, url_extension, callback) {
-	tbaCall(url_extension, getCookie("lastModified_" + key), function(data) {
-		var last_modified = "";
-		var old_data = localStorage.getItem(key);
-		saveToStorage(key, data, last_modified);
-		callback(old_data, data);
+	tbaCall(url_extension, getCookie("lastModified_" + key), function(data, textStatus, request) {
+		var last_modified = request.getResponseHeader('last-modified');
+		var old_data = JSON.parse(localStorage.getItem(key));
+        var new_data = mergeDeep(old_data, data);
+		saveToStorage(key, new_data, last_modified);
+		callback(new_data);
 	});
 }
+
+
+// Credit to: https://gist.github.com/sinemetu1/1732896
+function mergeDeep (o1, o2) {
+    if (o1==null)
+        o1 = {};
+    var tempNewObj = o1;
+
+    //if o1 is an object - {}
+    if (o1.length === undefined && typeof o1 !== "number") {
+        $.each(o2, function(key, value) {
+            if (o1[key] === undefined) {
+                tempNewObj[key] = value;
+            } else {
+                tempNewObj[key] = mergeDeep(o1[key], o2[key]);
+            }
+        });
+    }
+
+    //else if o1 is an array - []
+    else if (o1.length > 0 && typeof o1 !== "string") {
+        $.each(o2, function(index) {
+            if (JSON.stringify(o1).indexOf(JSON.stringify(o2[index])) === -1) {
+                tempNewObj.push(o2[index]);
+            }
+        });
+    }
+
+    //handling other types like string or number
+    else {
+        //taking value from the second object o2
+        //could be modified to keep o1 value with tempNewObj = o1;
+        tempNewObj = o2;
+    }
+    return tempNewObj;
+};

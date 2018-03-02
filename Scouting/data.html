@@ -71,9 +71,9 @@
     var averageRef = firebase.database().ref(getCookie("regional") + "/teams/");
     averageRef.on('value', function(snapshot) {
 
-		getData(getCookie("regional") + "_rankings", "event/2017" + getCookie("regional") + "/rankings", function(old_data, new_data) {
+		getData(getCookie("regional") + "_rankings", "event/2018" + getCookie("regional") + "/rankings", function(returned_data) {
 			var data = {};
-			new_data['rankings'].forEach(function(item, index) {
+			returned_data['rankings'].forEach(function(item, index) {
 				var team = item.team_key.replace("frc","");
 				data[team] = {};
 				data[team]['rank'] = item.rank;
@@ -81,11 +81,11 @@
 				data[team]['record'] = item.record.wins + "-" + item.record.losses + "-" + item.record.ties;
 			});
 
-			getData(getCookie("regional") + "_oprs", "event/2017" + getCookie("regional") + "/oprs", function(old_data, new_data) {
-				console.log(new_data['oprs']);
-				for (var key in new_data['oprs']) {
+			getData(getCookie("regional") + "_oprs", "event/2018" + getCookie("regional") + "/oprs", function(returned_data) {
+				for (var key in returned_data['oprs']) {
 					var team = key.replace("frc","");
-					data[team]['opr'] = new_data['oprs'][key].toFixed(2);
+					if (data[team] != undefined)
+						data[team]['opr'] = returned_data['oprs'][key].toFixed(2);
 				}
 
 		        snapshot.forEach(function(childSnapshot) {
