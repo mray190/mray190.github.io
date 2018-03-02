@@ -71,6 +71,7 @@
 
     var averageRef = firebase.database().ref(getCookie("regional") + "/teams/");
     averageRef.on('value', function(snapshot) {
+		$("#team_data tr").remove(); 
 
 		getData(getCookie("regional") + "_rankings", "event/2018" + getCookie("regional") + "/rankings", function(returned_data) {
 			var data = {};
@@ -91,7 +92,7 @@
 				}
 
 		        snapshot.forEach(function(childSnapshot) {
-					$("#team_data tr").remove(); 
+					
 
 					var averages = childSnapshot.val()['averages'];
 					var team = childSnapshot.key;
