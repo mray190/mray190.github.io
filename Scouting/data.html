@@ -91,6 +91,8 @@
 				}
 
 		        snapshot.forEach(function(childSnapshot) {
+					$("#team_data tr").remove(); 
+
 					var averages = childSnapshot.val()['averages'];
 					var team = childSnapshot.key;
 					if (data[team] == undefined) {

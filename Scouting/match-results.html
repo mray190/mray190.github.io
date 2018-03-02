@@ -71,7 +71,7 @@
 
     var matchRef = firebase.database().ref(getCookie("regional") + "/local/");
     matchRef.on('value', function(snapshot) {
-		
+		$("#match_data tr").remove(); 
         snapshot.forEach(function(childSnapshot) {
     		var matchNumber = childSnapshot.key;
 			var teams = childSnapshot.val();
