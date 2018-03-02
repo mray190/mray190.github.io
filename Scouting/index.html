@@ -107,7 +107,7 @@
 			</div>
 			<div class="three columns">
 				<label>
-			    	<input type="checkbox" id="hang_host">
+			    	<input type="checkbox" id="host_succeed">
 			    	<span class="label-body">Hosted a hang?</span>
 			  	</label>
 			</div>
@@ -145,7 +145,7 @@
 		results['defensive_rating'] = $('#defensive_rating').val();
 		results['hang_attempt'] = $('#hang_attempt').prop('checked');
 		results['hang_succeed'] = $('#hang_succeed').prop('checked');
-		results['hang_host'] = $('#host_succeed').prop('checked');
+		results['host_succeed'] = $('#host_succeed').prop('checked');
 		results['hang_time'] = parseInt($('#hang_time').val());
 
 		writeMatchResult(getCookie("regional"), $('#match_num').val(), $('#team_num').val(), results);
