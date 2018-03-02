@@ -16,7 +16,9 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
   
   return matchesRef.once('value',(matches_snapshot) => {
     return averageRef.once('value', (average_snapshot) => {
-      var current_averages = average_snapshot.val()
+      var current_averages = average_snapshot.val();
+      console.log("Average: " + JSON.stringify(current_averages))
+      console.log("Match Data: " + JSON.stringify(match_data))
       if(!current_averages) current_averages = {}
       const total_num_matches = matches_snapshot.numChildren();
   
@@ -36,17 +38,18 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_vault']
       props.forEach((prop)=>{
         current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
-        current_averages[prop + '_avg'] = (current_averages[prop + '_avg'] || 0) / total_num_matches;
+        current_averages[prop + '_avg'] = (current_averages[prop + '_total'] || 0) / total_num_matches;
+        console.log(prop + ": " + prop  + ' ' + match_data[prop] + ' ' + current_averages[prop + '_total'])
         if(match_data[prop] > current_averages[prop + '_max']) {current_averages[prop + '_max'] = match_data[prop]}
       })
 
-      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'hang_host']
+      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'host_succeed']
       prop_bools.forEach((prop_bool) =>{
         current_averages[prop_bool + '_total'] = (current_averages[prop_bool + '_total'] || 0) + (match_data[prop_bool] ? 1 : 0);
         if(prop_bool === prop_bools[0] || prop_bool === prop_bools[1]) {
           current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / total_num_matches;
         } else {
-          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / (current_averages.teleop_hang_attempt_total || 1);
+          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / (current_averages.hang_attempt_total || 1);
         }
       })
 
@@ -54,10 +57,13 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
         current_averages.defensive_rating_total = (current_averages.defensive_rating_total || 0) + parseInt(match_data.defensive_rating);
         current_averages.defensive_rating_counter = (current_averages.defensive_rating_counter || 0) + 1;
         current_averages.defensive_rating_avg = (current_averages.defensive_rating_total || 0) / (current_averages.defensive_rating_counter || 1);
+      } else if (!current_averages.defensive_rating_avg) {
+        current_averages.defensive_rating_avg = 0
       }
 
-      current_averages.teleop_hang_time_total = (current_averages.teleop_hang_time_total || 0) + match_data.hang_time;
-      current_averages.teleop_hang_time_avg = (current_averages.teleop_hang_time_total || 0) / current_averages.teleop_hang_succeed_total;
+      current_averages.hang_time_total = (current_averages.hang_time_total || 0) + match_data.hang_time;
+      console.log('Hang Attempt Total: ' + current_averages.hang_attempt_total)
+      current_averages.hang_time_avg = (current_averages.hang_time_total || 0) / (current_averages.hang_succeed_total || 1);
 
       return averageRef.set(current_averages);
     })

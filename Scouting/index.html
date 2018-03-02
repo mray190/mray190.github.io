@@ -8,6 +8,7 @@
 <body>
 	<div class="topnav" id="nav_bar">
 		<a href="index.html" class="active">Scout</a>
+		<a href="pit_scout.html">Pit Scout</a>
 		<a href="match-results.html">Match Results</a>
 		<a href="data.html">Rankings</a>
 		<a href="prematch.html">Pre-match</a>
@@ -107,7 +108,7 @@
 			</div>
 			<div class="three columns">
 				<label>
-			    	<input type="checkbox" id="hang_host">
+			    	<input type="checkbox" id="host_succeed">
 			    	<span class="label-body">Hosted a hang?</span>
 			  	</label>
 			</div>
@@ -117,7 +118,7 @@
 			</div>
 		</div>
 		<hr>
-		<input class="button-primary" type="submit" value="Submit">
+		<input class="button-primary" type="submit" value="Submit" style="-webkit-appearance: none;">
 	</form>
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -128,7 +129,7 @@
 <script src="assets/js/custom.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
+	if (getCookie("regional") === "") {
 		window.location.replace("settings.html");
 	}
 
@@ -145,7 +146,7 @@
 		results['defensive_rating'] = $('#defensive_rating').val();
 		results['hang_attempt'] = $('#hang_attempt').prop('checked');
 		results['hang_succeed'] = $('#hang_succeed').prop('checked');
-		results['hang_host'] = $('#hang_host').prop('checked');
+		results['host_succeed'] = $('#host_succeed').prop('checked');
 		results['hang_time'] = parseInt($('#hang_time').val());
 
 		writeMatchResult(getCookie("regional"), $('#match_num').val(), $('#team_num').val(), results);

@@ -72,6 +72,7 @@
 
     var averageRef = firebase.database().ref(getCookie("regional") + "/teams/");
     averageRef.on('value', function(snapshot) {
+		$("#team_data tr").remove(); 
 
 		getData(getCookie("regional") + "_rankings", "event/2018" + getCookie("regional") + "/rankings", function(returned_data) {
 			var data = {};
@@ -92,6 +93,8 @@
 				}
 
 		        snapshot.forEach(function(childSnapshot) {
+					
+
 					var averages = childSnapshot.val()['averages'];
 					var team = childSnapshot.key;
 					if (data[team] == undefined) {
@@ -105,7 +108,7 @@
 					var entry = document.getElementById('team_data').insertRow(-1)
 					entry.className = team.alliance;
 
-					entry.insertCell(0).innerHTML = team;
+					entry.insertCell(0).innerHTML = '<a href= \'https://www.thebluealliance.com/team/' + team + '\'>' + team +'</a>';
 					entry.insertCell(-1).innerHTML = data[team]['rank'];
 					entry.insertCell(-1).innerHTML = data[team]['matches'];
 					entry.insertCell(-1).innerHTML = data[team]['record'];
@@ -120,8 +123,8 @@
 					entry.insertCell(-1).innerHTML = averages['teleop_scale_avg'].toFixed(1);
 					entry.insertCell(-1).innerHTML = averages['teleop_vault_avg'].toFixed(1);
 					entry.insertCell(-1).innerHTML = averages['defensive_rating_avg'];
-					entry.insertCell(-1).innerHTML = formatAverages(averages['teleop_hang_succeed_avg']);
-					entry.insertCell(-1).innerHTML = formatAverages(averages['teleop_host_succeed_avg']);
+					entry.insertCell(-1).innerHTML = formatAverages(averages['hang_succeed_avg']);
+					entry.insertCell(-1).innerHTML = formatAverages(averages['host_succeed_avg']);
 			  	});
 				sort.refresh();
 			});
