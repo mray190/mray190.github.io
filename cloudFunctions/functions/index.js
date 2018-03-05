@@ -17,8 +17,6 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
   return matchesRef.once('value',(matches_snapshot) => {
     return averageRef.once('value', (average_snapshot) => {
       var current_averages = average_snapshot.val();
-      console.log("Average: " + JSON.stringify(current_averages))
-      console.log("Match Data: " + JSON.stringify(match_data))
       if(!current_averages) current_averages = {}
       const total_num_matches = matches_snapshot.numChildren();
   
@@ -35,11 +33,10 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       current_averages.center_avg = (current_averages.center_total || 0) / total_num_matches;
       current_averages.right_avg = (current_averages.right_total || 0) / total_num_matches;
 
-      var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_vault']
+      var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_opp_switch', 'teleop_vault']
       props.forEach((prop)=>{
         current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
         current_averages[prop + '_avg'] = (current_averages[prop + '_total'] || 0) / total_num_matches;
-        console.log(prop + ": " + prop  + ' ' + match_data[prop] + ' ' + current_averages[prop + '_total'])
         if(match_data[prop] > current_averages[prop + '_max']) {current_averages[prop + '_max'] = match_data[prop]}
       })
 
@@ -62,7 +59,6 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       }
 
       current_averages.hang_time_total = (current_averages.hang_time_total || 0) + match_data.hang_time;
-      console.log('Hang Attempt Total: ' + current_averages.hang_attempt_total)
       current_averages.hang_time_avg = (current_averages.hang_time_total || 0) / (current_averages.hang_succeed_total || 1);
 
       return averageRef.set(current_averages);
