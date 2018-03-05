@@ -25,22 +25,109 @@
 		<div class="row">
 			<div class="four columns">
 				<label for="team_num">Team Number</label>
-				<input class="u-full-width" type="number" placeholder="6800" id="team_num" required>
+				<input class="u-full-width" type="number" id="team_num" required>
 			</div>
 			<div class="four columns">
 				<label for="team_pic">Robot Picture</label>
 				<input id="team_pic" type="file" accept="image/*">
 			</div>
+			<div class="four columns">
+				<label for="main_strat">Main Strategy</label>
+				<select class="u-full-width" id="main_strat">
+					<option value="switch">Switch</option>
+					<option value="scale">Scale</option>
+					<option value="vault">Vault</option>
+					<option value="hang">Hang</option>
+					<option value="defense">Defense</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
 		</div>
+		<hr>
+		<label for="drive_train">Drive Train</label>
+		<div class="row" id="drive_train">
+			<div class="four columns">
+				<label for="wheel_number">Number of wheels</label>
+				<input class="u-full-width" type="number" id="wheel_number" required>
+			</div>
+			<div class="four columns">
+				<label for="wheel_size">Size of wheels</label>
+				<input class="u-full-width" type="number" id="wheel_size" required>
+			</div>
+			<div class="four columns">
+				<label for="wheel_type">Type of wheels</label>
+				<select class="u-full-width" id="wheel_type">
+					<option value="colson">Colson</option>
+					<option value="higrip">HiGrip</option>
+					<option value="plaction">Plaction</option>
+					<option value="omni">Omni</option>
+					<option value="mechanum">Mechanum</option>
+					<option value="swerve">Swerve</option>
+					<option value="Stealth">Stealth</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
+		</div>
+		<hr>
+		<label for="intake">Intake</label>
+		<div class="row" id="intake">
+			<div class="six columns">
+				<label for="intake_type">Intake Type</label>
+				<select class="u-full-width" id="intake_type">
+					<option value="side">Side rollers</option>
+					<option value="top">Top rollers</option>
+					<option value="passive">Passive</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
+			<div class="six columns">
+				<label>
+			    	<input type="checkbox" id="intake_bumper" required>
+			    	<span class="label-body">Over-the-bumper?</span>
+			  	</label>
+		  	</div>
+		</div>
+		<hr>
+		<label for="lift">Lift</label>
+		<div class="row" id="lift">
+			<div class="six columns">
+				<label for="lift_type">Lift Type</label>
+				<select class="u-full-width" id="lift_type">
+					<option value="none">None</option>
+					<option value="elevator">Elevator</option>
+					<option value="telescope">Telescope</option>
+					<option value="fourbar">Reverse 4 Bar</option>
+					<option value="aframe">A-Frame</option>
+					<option value="scissor">Scissor</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
+			<div class="six columns">
+				<label for="lift_speed">Lift Speed</label>
+				<input class="u-full-width" type="number" id="lift_speed" required>
+			</div>
+		</div>
+		<hr>
+		<label for="hang">Hang</label>
+		<div class="row" id="hang">
+			<div class="six columns">
+				<label for="hang_type">Hang Type</label>
+				<select class="u-full-width" id="hang_type">
+					<option value="none">None</option>
+					<option value="single">Single</option>
+					<option value="double">Double</option>
+					<option value="triple">Triple</option>
+					<option value="platform">Double Platform</option>
+				</select>
+			</div>
+			<div class="six columns">
+				<label for="hang_speed">Hang Speed</label>
+				<input class="u-full-width" type="number" id="hang_speed" required>
+			</div>
+		</div>
+		<hr>
 		<input class="button-primary" type="submit" value="Submit">
 	</form>
-
-	<div class="row">
-		<div class="four columns" id="photo_loc"></div>
-		<div class="eight columns">
-
-		</div>
-	</div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -64,10 +151,30 @@
 	$('#pit_scout_frm').on('submit', function () {
 		var file = document.getElementById('team_pic').files[0];
     	var metadata = { contentType: file.type };
-    	console.log(file);
 		storageRef.child("images/" + $("#team_num").val() + ".jpg").put(file, metadata);
-	    return false;
+
+		var results = {};
+		results['main_strat'] = $('#main_strat').val();
+		results['wheel_number'] = $('#wheel_number').val();
+		results['wheel_size'] = $('#wheel_size').val();
+		results['wheel_type'] = $('#wheel_type').val();
+		results['intake_type'] = $('#intake_type').val();
+		results['intake_bumper'] = $('#intake_bumper').prop('checked');
+		results['lift_type'] = $('#lift_type').val();
+		results['lift_speed'] = $('#lift_speed').val();
+		results['hang_type'] = $('#hang_type').val();
+		results['hang_speed'] = $('#hang_speed').val();
+
+		writePitScoutResults(getCookie("regional"), $('#team_num').val(), results);
+
+	    alert('Results submitted!');
+	    return true;
 	});
+
+	// Write match results to firebase
+	function writePitScoutResults(regionalCode, teamNum, data) {
+		firebase.database().ref(regionalCode + '/teams/' + teamNum + "/details").set(data);
+	}
 
 </script>
 </html>

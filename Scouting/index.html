@@ -24,11 +24,11 @@
 		<div class="row" id="general">
 			<div class="four columns">
 				<label for="match_num">Match num.</label>
-				<input class="u-full-width" type="number" placeholder="1" id="match_num" required>
+				<input class="u-full-width" type="number" id="match_num" required>
 			</div>
 			<div class="four columns">
 				<label for="team_num">Team num.</label>
-				<input class="u-full-width" type="number" placeholder="6800" id="team_num" required>
+				<input class="u-full-width" type="number" id="team_num" required>
 			</div>
 			<div class="four columns">
 				<label for="alliance">Alliance color</label>
@@ -51,35 +51,39 @@
 			</div>
 			<div class="three columns">
 				<label>
-			    	<input type="checkbox" id="auto_line">
+			    	<input type="checkbox" id="auto_line" required>
 			    	<span class="label-body">Cross auto line?</span>
 			  	</label>
 			</div>
 			<div class="three columns">
 				<label for="auto_switch">Cubes scored in switch</label>
-				<input class="u-full-width" type="number" placeholder="1" id="auto_switch">
+				<input class="u-full-width" type="number" id="auto_switch" default="0" required>
 			</div>
 			<div class="three columns">
 				<label for="auto_scale">Cubes scored in scale</label>
-				<input class="u-full-width" type="number" placeholder="2" id="auto_scale">
+				<input class="u-full-width" type="number" id="auto_scale" default="0" required>
 			</div>
 		</div>
 		<hr>
 		<label for="teleop">Teleop</label>
 		<div class="row" id="teleop">
-			<div class="three columns">
+			<div class="two columns">
 				<label for="teleop_switch">Cubes scored in switch</label>
-				<input class="u-full-width" type="number" placeholder="3" id="teleop_switch">
+				<input class="u-full-width" type="number" id="teleop_switch" default="0" required>
 			</div>
-			<div class="three columns">
+			<div class="two columns">
 				<label for="teleop_scale">Cubes scored in scale</label>
-				<input class="u-full-width" type="number" placeholder="4" id="teleop_scale">
+				<input class="u-full-width" type="number" id="teleop_scale" default="0" required>
 			</div>
-			<div class="three columns">
+			<div class="two columns">
+				<label for="teleop_opp_switch">Cubes scored in opponent switch</label>
+				<input class="u-full-width" type="number" id="teleop_opp_switch" default="0" required>
+			</div>
+			<div class="two columns">
 				<label for="teleop_vault">Cubes scored in vault</label>
-				<input class="u-full-width" type="number" placeholder="5" id="teleop_vault">
+				<input class="u-full-width" type="number" id="teleop_vault" default="0" required>
 			</div>
-			<div class="three columns">
+			<div class="two columns">
 				<label for="defensive_rating">Defensive Rating</label>
 				<select class="u-full-width" id="defensive_rating">
 					<option value="NA">None</option>
@@ -114,8 +118,14 @@
 			</div>
 			<div class="three columns">
 				<label for="hang_time">Hang time (seconds)</label>
-				<input class="u-full-width" type="number" placeholder="6" id="hang_time">
+				<input class="u-full-width" type="number" id="hang_time" default="0" required>
 			</div>
+		</div>
+		<hr>
+		<label for="comments">Comments</label>
+		<div class="row" id="comments">
+			<label for="comments">Any other comments?</label>
+			<input class="u-full-width" type="text" id="comments">
 		</div>
 		<hr>
 		<input class="button-primary" type="submit" value="Submit" style="-webkit-appearance: none;">
@@ -141,6 +151,7 @@
 		results['auto_switch'] = parseInt($('#auto_switch').val());
 		results['auto_scale'] = parseInt($('#auto_scale').val());
 		results['teleop_switch'] = parseInt($('#teleop_switch').val());
+		results['teleop_opp_switch'] = parseInt($('#teleop_opp_switch').val());
 		results['teleop_scale'] = parseInt($('#teleop_scale').val());
 		results['teleop_vault'] = parseInt($('#teleop_vault').val());
 		results['defensive_rating'] = $('#defensive_rating').val();
@@ -148,6 +159,7 @@
 		results['hang_succeed'] = $('#hang_succeed').prop('checked');
 		results['host_succeed'] = $('#host_succeed').prop('checked');
 		results['hang_time'] = parseInt($('#hang_time').val());
+		results['comments'] = $('#comments').val();
 
 		writeMatchResult(getCookie("regional"), $('#match_num').val(), $('#team_num').val(), results);
 

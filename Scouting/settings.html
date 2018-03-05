@@ -47,8 +47,8 @@
 	$("#regional").val(getCookie("regional"));
 
 	$('#settingsForm').on('submit', function () {
-		setCookie("name", $("#name").val(), 5);
-		setCookie("regional", $("#regional").val(), 5);
+		setCookie("name", $("#name").val(), 3);
+		setCookie("regional", $("#regional").val().toLowerCase(), 3);
 	    alert('Settings saved!');
 	    return true;
 	});
