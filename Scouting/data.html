@@ -29,7 +29,7 @@
 					<th>Matches</th>
 					<th>Record</th>
 					<th>RP</th>
-					<th>OPR</th>
+					<th>CCWM</th>
 					<th>Auto Left</th>
 					<th>Auto Center</th>
 					<th>Auto Right</th>
@@ -37,6 +37,7 @@
 					<th>Auto Scale</th>
 					<th>Teleop Switch</th>
 					<th>Teleop Scale</th>
+					<th>Teleop Opp Switch</th>
 					<th>Teleop Vault</th>
 					<th>DFR</th>
 					<th>Hang</th>
@@ -86,10 +87,10 @@
 			});
 
 			getData(getCookie("regional") + "_oprs", "event/2018" + getCookie("regional") + "/oprs", function(returned_data) {
-				for (var key in returned_data['oprs']) {
+				for (var key in returned_data['ccmws']) {
 					var team = key.replace("frc","");
 					if (data[team] != undefined)
-						data[team]['opr'] = returned_data['oprs'][key].toFixed(2);
+						data[team]['opr'] = returned_data['ccmws'][key].toFixed(2);
 				}
 
 		        snapshot.forEach(function(childSnapshot) {
@@ -107,24 +108,79 @@
 					
 					var entry = document.getElementById('team_data').insertRow(-1)
 					entry.className = team.alliance;
+					var cell;
 
-					entry.insertCell(0).innerHTML = '<a href= \'https://www.thebluealliance.com/team/' + team + '\'>' + team +'</a>';
-					entry.insertCell(-1).innerHTML = data[team]['rank'];
-					entry.insertCell(-1).innerHTML = data[team]['matches'];
-					entry.insertCell(-1).innerHTML = data[team]['record'];
-					entry.insertCell(-1).innerHTML = data[team]['rp'];
-					entry.insertCell(-1).innerHTML = data[team]['opr'];
-					entry.insertCell(-1).innerHTML = formatAverages(averages['left_avg']);
-					entry.insertCell(-1).innerHTML = formatAverages(averages['center_avg']);
-					entry.insertCell(-1).innerHTML = formatAverages(averages['right_avg']);
-					entry.insertCell(-1).innerHTML = averages['auto_switch_avg'].toFixed(1);
-					entry.insertCell(-1).innerHTML = averages['auto_scale_avg'].toFixed(1);
-					entry.insertCell(-1).innerHTML = averages['teleop_switch_avg'].toFixed(1);
-					entry.insertCell(-1).innerHTML = averages['teleop_scale_avg'].toFixed(1);
-					entry.insertCell(-1).innerHTML = averages['teleop_vault_avg'].toFixed(1);
-					entry.insertCell(-1).innerHTML = averages['defensive_rating_avg'];
-					entry.insertCell(-1).innerHTML = formatAverages(averages['hang_succeed_avg']);
-					entry.insertCell(-1).innerHTML = formatAverages(averages['host_succeed_avg']);
+					cell = entry.insertCell(0);
+					cell.innerHTML = team;
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = data[team]['rank'];
+					cell.setAttribute('data-title', 'Rank');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = data[team]['matches'];
+					cell.setAttribute('data-title', 'Matches');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = data[team]['record'];
+					cell.setAttribute('data-title', 'Record');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = data[team]['rp'];
+					cell.setAttribute('data-title', 'RP');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = data[team]['opr'];
+					cell.setAttribute('data-title', 'CCWM');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = formatAverages(averages['left_avg']);
+					cell.setAttribute('data-title', 'Left Start %');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = formatAverages(averages['center_avg']);
+					cell.setAttribute('data-title', 'Center Start %');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = formatAverages(averages['right_avg']);
+					cell.setAttribute('data-title', 'Right Start %');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['auto_switch_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Auto Switch Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['auto_scale_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Auto Scale Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['teleop_switch_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Teleop Switch Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['teleop_scale_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Teleop Scale Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['teleop_opp_switch_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Teleop Opp. Switch Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['teleop_vault_avg'].toFixed(1);
+					cell.setAttribute('data-title', 'Teleop Vault Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = averages['defensive_rating_avg'];
+					cell.setAttribute('data-title', 'DFR Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = formatAverages(averages['hang_succeed_avg']);
+					cell.setAttribute('data-title', 'Hang Avg');
+
+					cell = entry.insertCell(-1);
+					cell.innerHTML = formatAverages(averages['host_succeed_avg']);
+					cell.setAttribute('data-title', 'Host Avg');
+
 			  	});
 				sort.refresh();
 			});

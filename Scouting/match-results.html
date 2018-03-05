@@ -34,6 +34,7 @@
 					<th>Auto Scale</th>
 					<th>Teleop Switch</th>
 					<th>Teleop Scale</th>
+					<th>Teleop Opp. Switch</th>
 					<th>Vault</th>
 					<th>DFR</th>
 					<th>Hang Attempt</th>
@@ -78,26 +79,79 @@
 			var teams = childSnapshot.val();
 			
 			for(var teamNumber in teams) {
-				var entry = document.getElementById('match_data').insertRow(-1)
 				var team = teams[teamNumber];
+
+				var entry = document.getElementById('match_data').insertRow(-1);
 				entry.className = team.alliance;
 
-				entry.insertCell(0).innerHTML = matchNumber;
-				entry.insertCell(-1).innerHTML = '<a href= \'https://www.thebluealliance.com/team/' + teamNumber + '\'>' + teamNumber +'</a>';;
-				entry.insertCell(-1).innerHTML = team.auto_start.toUpperCase();
-				entry.insertCell(-1).innerHTML = team.auto_line ? 'Y' : 'N';
-				entry.insertCell(-1).innerHTML = "Left/Right";
-				entry.insertCell(-1).innerHTML = "Left/Right";
-				entry.insertCell(-1).innerHTML = team.auto_switch;
-				entry.insertCell(-1).innerHTML = team.auto_scale;
-				entry.insertCell(-1).innerHTML = team.teleop_switch;
-				entry.insertCell(-1).innerHTML = team.teleop_scale;
-				entry.insertCell(-1).innerHTML = team.teleop_vault;
-				entry.insertCell(-1).innerHTML = team.defensive_rating;
-				entry.insertCell(-1).innerHTML = team.hang_attempt ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = team.hang_succeed ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = team.hang_host ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = team.hang_attempt ? team.hang_time : 'X';			
+				var cell;
+
+				cell = entry.insertCell(0);
+				cell.innerHTML = matchNumber;
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = teamNumber;
+				cell.setAttribute("data-title", "Team #");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.auto_start.toUpperCase();
+				cell.setAttribute("data-title", "Auto start");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.auto_line ? 'Y' : 'N';
+				cell.setAttribute("data-title", "Auto line");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = "Left/Right";
+				cell.setAttribute("data-title", "Switch Loc");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = "Left/Right";
+				cell.setAttribute("data-title", "Scale Loc");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.auto_switch;
+				cell.setAttribute("data-title", "Auto Switch");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.auto_scale;
+				cell.setAttribute("data-title", "Auto Scale");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.teleop_switch;
+				cell.setAttribute("data-title", "Teleop Switch");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.teleop_scale;
+				cell.setAttribute("data-title", "Teleop Scale");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.teleop_opp_switch;
+				cell.setAttribute("data-title", "Teleop Opp. Switch");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.teleop_vault;
+				cell.setAttribute("data-title", "Teleop Vault");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.defensive_rating;
+				cell.setAttribute("data-title", "DFR");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.hang_attempt ? "Y" : "N";
+				cell.setAttribute("data-title", "Hang Attempt");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.hang_succeed ? "Y" : "N";
+				cell.setAttribute("data-title", "Hang Succeed");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.hang_host ? "Y" : "N";
+				cell.setAttribute("data-title", "Hang Host");
+
+				cell = entry.insertCell(-1);
+				cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
+				cell.setAttribute("data-title", "Hang Time");
 			}
 		  });
 		  
