@@ -41,17 +41,19 @@ var config = {
 var tba_api_key = "LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M";
 var tba_base_url = "https://www.thebluealliance.com/api/v3/";
 
-function tbaCall(url_extension, last_modified, callback) {
+function tbaCall(url_extension, last_modified, callback, useModify) {
+    var headerWithModify = {
+        "if-modified-since": last_modified,
+        'x-tba-auth-key': tba_api_key
+    };
+    var headerWithoutModify = { 'x-tba-auth-key': tba_api_key};
 	$.ajax({
 		url: tba_base_url+url_extension,
 		type: "GET",
 	  	crossDomain: true,
- 		headers: {
-    		"if-modified-since": last_modified,
- 			'x-tba-auth-key': tba_api_key
- 		},
+ 		headers: useModify ? headerWithModify : headerWithoutModify,
  		success: callback,
-        error: function(xhr, textStatus, errorThrown) { console.log(textStatus); }
+        error: function(xhr, textStatus, errorThrown) { console.log("ERROR: " + errorThrown); }
 	});
 }
 
@@ -62,13 +64,17 @@ function saveToStorage(key, data, last_modified) {
 	}
 }
 
-function getData(key, url_extension, callback) {
-	tbaCall(url_extension, getCookie("lastModified_" + key), function(data, textStatus, request) {
-		var last_modified = request.getResponseHeader('last-modified');
-		var old_data = JSON.parse(localStorage.getItem(key));
-        var new_data = mergeDeep(old_data, data);
-		saveToStorage(key, new_data, last_modified);
-		callback(new_data);
+function getData(key, url_extension, callback, useModify) {
+	tbaCall(url_extension, getCookie("lastModified_" + key, useModify), function(data, textStatus, request) {
+        if (useModify) {
+    		var last_modified = request.getResponseHeader('last-modified');
+    		var old_data = JSON.parse(localStorage.getItem(key));
+            var new_data = mergeDeep(old_data, data);
+    		saveToStorage(key, new_data, last_modified);
+    		callback(new_data);
+        } else {
+            callback(data);
+        }
 	});
 }
 
