@@ -66,25 +66,25 @@ only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
 
   /* Force table to not be like tables anymore */
-  table, thead, tbody, th, td, tr { 
+  .condense table,.condense thead,.condense tbody,.condense th,.condense td,.condense tr { 
     display: block; 
   }
 
   /* Zebra striping */
-  tr:nth-of-type(odd) { 
+  .condense tr:nth-of-type(odd) { 
     background: #eee; 
   }
   
   /* Hide table headers (but not display: none;, for accessibility) */
-  thead tr { 
+  .condense thead tr { 
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
   
-  tr { border: 1px solid #ccc; }
+  .condense tr { border: 1px solid #ccc; }
   
-  td { 
+  .condense td { 
     /* Behave  like a "row" */
     border: none;
     border-bottom: 1px solid #eee; 
@@ -92,7 +92,7 @@ only screen and (max-width: 760px),
     padding-left: 50%; 
   }
   
-  td:before { 
+  .condense td:before { 
     /* Now like a table header */
     position: absolute;
     /* Top/left values mimic padding */
@@ -103,5 +103,5 @@ only screen and (max-width: 760px),
     white-space: nowrap;
   }
 
-  td:before { content: attr(data-title); }
+  .condense td:before { content: attr(data-title); }
 }
