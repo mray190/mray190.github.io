@@ -150,8 +150,10 @@
 
 	$('#pit_scout_frm').on('submit', function () {
 		var file = document.getElementById('team_pic').files[0];
-    	var metadata = { contentType: file.type };
-		storageRef.child("images/" + $("#team_num").val() + ".jpg").put(file, metadata);
+		if (file) {
+	    	var metadata = { contentType: file.type };
+			storageRef.child("images/" + $("#team_num").val() + ".jpg").put(file, metadata);
+		}
 
 		var results = {};
 		results['main_strat'] = $('#main_strat').val();

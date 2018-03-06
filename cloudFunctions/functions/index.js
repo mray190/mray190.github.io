@@ -35,9 +35,15 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
 
       var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_opp_switch', 'teleop_vault']
       props.forEach((prop)=>{
+        if (prop.indexOf("auto")!=-1) {
+          var modifiedProp = prop.replace("auto_", "auto_" + match_data.auto_start.toLowerCase() + "_");
+          current_averages[modifiedProp + '_max'] = ((current_averages[modifiedProp + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[modifiedProp + '_max'] || 0);
+          current_averages[modifiedProp + '_total'] = (current_averages[modifiedProp + '_total'] || 0) + match_data[prop];
+          current_averages[modifiedProp + '_avg'] = (current_averages[modifiedProp + '_total'] || 0) / total_num_matches;
+        }
+        current_averages[prop + '_max'] = ((current_averages[prop + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[prop + '_max'] || 0);
         current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
         current_averages[prop + '_avg'] = (current_averages[prop + '_total'] || 0) / total_num_matches;
-        if(match_data[prop] > current_averages[prop + '_max']) {current_averages[prop + '_max'] = match_data[prop]}
       })
 
       var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'host_succeed']
