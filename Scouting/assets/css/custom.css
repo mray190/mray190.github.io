@@ -4,41 +4,97 @@ body {
 
 /* Add a black background color to the top navigation */
 .topnav {
-    background-color: #333;
-    overflow: hidden;
+  background-color: #333;
+  overflow: hidden;
 }
 
 /* Style the links inside the navigation bar */
 .topnav a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #ddd;
-    color: black;
+  background-color: #ddd;
+  color: black;
 }
 
 /* Add an active class to highlight the current page */
 .active {
-    background-color: #777;
-    color: white;
+  background-color: #777;
+  color: white;
 }
 
 /* Hide the link that should open and close the topnav on small screens */
 .topnav .icon {
-    display: none;
+  display: none;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.content {
+  width: 95%;
+}
+
+#matchResultForm {
+  width: 100%;
+}
+
+.rowheader {
+  font-size: 1.5em;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.form-question {
+  min-width: 400px;
+  max-width: 400px;
+  flex-grow: 1;
+}
+
+div.btn {
+  display: inline-block;
+  border: 2px solid #ccc;
+  margin-right: 5px;
+  padding: 2px 5px;
+  cursor: pointer;
+  border-radius: 0.6em;
+  background-color: #ccc;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+div.btn.on {
+  border-color: #000;
+}
+
+.select_options {
+  display: flex;
+  justify-content: space-between;
 }
 
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 900px) {
-  .topnav a:not(:first-child) {display: none;}
+  .topnav a:not(:first-child) {
+    display: none;
+  }
+
   .topnav a.icon {
     float: right;
     display: block;
@@ -47,12 +103,16 @@ body {
 
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
 @media screen and (max-width: 900px) {
-  .topnav.responsive {position: relative;}
+  .topnav.responsive {
+    position: relative;
+  }
+
   .topnav.responsive a.icon {
     position: absolute;
     right: 0;
     top: 0;
   }
+
   .topnav.responsive a {
     float: none;
     display: block;
@@ -60,48 +120,50 @@ body {
   }
 }
 
-
-@media 
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px) {
 
   /* Force table to not be like tables anymore */
-  table, thead, tbody, th, td, tr { 
-    display: block; 
+  table, thead, tbody, th, td, tr {
+    display: block;
   }
 
   /* Zebra striping */
-  tr:nth-of-type(odd) { 
-    background: #eee; 
+  tr:nth-of-type(odd) {
+    background: #eee;
   }
-  
+
   /* Hide table headers (but not display: none;, for accessibility) */
-  thead tr { 
+  thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
-  
-  tr { border: 1px solid #ccc; }
-  
-  td { 
+
+  tr {
+    border: 1px solid #ccc;
+  }
+
+  td {
     /* Behave  like a "row" */
     border: none;
-    border-bottom: 1px solid #eee; 
+    border-bottom: 1px solid #eee;
     position: relative;
-    padding-left: 50%; 
+    padding-left: 50%;
   }
-  
-  td:before { 
+
+  td:before {
     /* Now like a table header */
     position: absolute;
     /* Top/left values mimic padding */
     top: 12px;
     left: 6px;
-    width: 45%; 
-    padding-right: 10px; 
+    width: 45%;
+    padding-right: 10px;
     white-space: nowrap;
   }
 
-  td:before { content: attr(data-title); }
+  td:before {
+    content: attr(data-title);
+  }
 }
