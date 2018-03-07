@@ -1,0 +1,383 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>6800 Scouting - 2018</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"></script>
+	<link rel="stylesheet" href="assets/css/custom.css">
+	<meta name="viewport" content="width=device-width" />
+</head>
+<body>
+	<div class="topnav" id="nav_bar">
+		<a href="index.html">Scout</a>
+		<a href="pit_scout.html">Pit Scout</a>
+        <a href="match-results.html">Match Results</a>
+		<a href="data.html" >Rankings</a>
+		<a href="prematch.html" class="active">Pre-match</a>
+        <a href="team.html">Team Lookup</a>
+		<a href="picklist.html">Pick list</a>
+		<a href="settings.html">Settings</a>
+		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
+	</div>
+
+	<div id="content">
+
+		<br>
+
+		<h4 id="match_details"></h4>
+
+		<h4>Blue Alliance</h4>
+
+		<div class="row" style="background-color: #8ec9f9;">
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Auto Switch</b></td>
+							<td style="text-align: center;">Left</td>
+							<td style="text-align: center;">Center</td>
+							<td style="text-align: center;">Right</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="switch-auto-blue-1"></td>
+							<td id="switch-auto-blue-1-left"></td>
+							<td id="switch-auto-blue-1-center"></td>
+							<td id="switch-auto-blue-1-right"></td>
+						</tr>
+						<tr>
+							<td id="switch-auto-blue-2"></td>
+							<td id="switch-auto-blue-2-left"></td>
+							<td id="switch-auto-blue-2-center"></td>
+							<td id="switch-auto-blue-2-right"></td>
+						</tr>
+						<tr>
+							<td id="switch-auto-blue-3"></td>
+							<td id="switch-auto-blue-3-left"></td>
+							<td id="switch-auto-blue-3-center"></td>
+							<td id="switch-auto-blue-3-right"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Auto Scale</b></td>
+							<td style="text-align: center;">Left</td>
+							<td style="text-align: center;">Center</td>
+							<td style="text-align: center;">Right</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="scale-auto-blue-1"></td>
+							<td id="scale-auto-blue-1-left"></td>
+							<td id="scale-auto-blue-1-center"></td>
+							<td id="scale-auto-blue-1-right"></td>
+						</tr>
+						<tr>
+							<td id="scale-auto-blue-2"></td>
+							<td id="scale-auto-blue-2-left"></td>
+							<td id="scale-auto-blue-2-center"></td>
+							<td id="scale-auto-blue-2-right"></td>
+						</tr>
+						<tr>
+							<td id="scale-auto-blue-3"></td>
+							<td id="scale-auto-blue-3-left"></td>
+							<td id="scale-auto-blue-3-center"></td>
+							<td id="scale-auto-blue-3-right"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Teleop</b></td>
+							<td style="text-align: center;">Switch</td>
+							<td style="text-align: center;">Scale</td>
+							<td style="text-align: center;">Opp Switch</td>
+							<td style="text-align: center;">Vault</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="teleop-blue-1"></td>
+							<td id="teleop-blue-1-switch"></td>
+							<td id="teleop-blue-1-scale"></td>
+							<td id="teleop-blue-1-opp-switch"></td>
+							<td id="teleop-blue-1-vault"></td>
+						</tr>
+						<tr>
+							<td id="teleop-blue-2"></td>
+							<td id="teleop-blue-2-switch"></td>
+							<td id="teleop-blue-2-scale"></td>
+							<td id="teleop-blue-2-opp-switch"></td>
+							<td id="teleop-blue-2-vault"></td>
+						</tr>
+						<tr>
+							<td id="teleop-blue-3"></td>
+							<td id="teleop-blue-3-switch"></td>
+							<td id="teleop-blue-3-scale"></td>
+							<td id="teleop-blue-3-opp-switch"></td>
+							<td id="teleop-blue-3-vault"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Hang</b></td>
+							<td style="text-align: center;">Success</td>
+							<td style="text-align: center;">Attempts</td>
+							<td style="text-align: center;">Hosts</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="hang-blue-1"></td>
+							<td id="hang-blue-1-succeed"></td>
+							<td id="hang-blue-1-attempt"></td>
+							<td id="hang-blue-1-host-succeed"></td>
+						</tr>
+						<tr>
+							<td id="hang-blue-2"></td>
+							<td id="hang-blue-2-succeed"></td>
+							<td id="hang-blue-2-attempt"></td>
+							<td id="hang-blue-2-host-succeed"></td>
+						</tr>
+						<tr>
+							<td id="hang-blue-3"></td>
+							<td id="hang-blue-3-succeed"></td>
+							<td id="hang-blue-3-attempt"></td>
+							<td id="hang-blue-3-host-succeed"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<br>
+
+		<h4>Red Alliance</h4>
+
+		<div class="row" style="background-color: #f99d9d;">
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Auto Switch</b></td>
+							<td style="text-align: center;">Left</td>
+							<td style="text-align: center;">Center</td>
+							<td style="text-align: center;">Right</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="switch-auto-red-1"></td>
+							<td id="switch-auto-red-1-left"></td>
+							<td id="switch-auto-red-1-center"></td>
+							<td id="switch-auto-red-1-right"></td>
+						</tr>
+						<tr>
+							<td id="switch-auto-red-2"></td>
+							<td id="switch-auto-red-2-left"></td>
+							<td id="switch-auto-red-2-center"></td>
+							<td id="switch-auto-red-2-right"></td>
+						</tr>
+						<tr>
+							<td id="switch-auto-red-3"></td>
+							<td id="switch-auto-red-3-left"></td>
+							<td id="switch-auto-red-3-center"></td>
+							<td id="switch-auto-red-3-right"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Auto Scale</b></td>
+							<td style="text-align: center;">Left</td>
+							<td style="text-align: center;">Center</td>
+							<td style="text-align: center;">Right</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="scale-auto-red-1"></td>
+							<td id="scale-auto-red-1-left"></td>
+							<td id="scale-auto-red-1-center"></td>
+							<td id="scale-auto-red-1-right"></td>
+						</tr>
+						<tr>
+							<td id="scale-auto-red-2"></td>
+							<td id="scale-auto-red-2-left"></td>
+							<td id="scale-auto-red-2-center"></td>
+							<td id="scale-auto-red-2-right"></td>
+						</tr>
+						<tr>
+							<td id="scale-auto-red-3"></td>
+							<td id="scale-auto-red-3-left"></td>
+							<td id="scale-auto-red-3-center"></td>
+							<td id="scale-auto-red-3-right"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Teleop</b></td>
+							<td style="text-align: center;">Switch</td>
+							<td style="text-align: center;">Scale</td>
+							<td style="text-align: center;">Opp Switch</td>
+							<td style="text-align: center;">Vault</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="teleop-red-1"></td>
+							<td id="teleop-red-1-switch"></td>
+							<td id="teleop-red-1-scale"></td>
+							<td id="teleop-red-1-opp-switch"></td>
+							<td id="teleop-red-1-vault"></td>
+						</tr>
+						<tr>
+							<td id="teleop-red-2"></td>
+							<td id="teleop-red-2-switch"></td>
+							<td id="teleop-red-2-scale"></td>
+							<td id="teleop-red-2-opp-switch"></td>
+							<td id="teleop-red-2-vault"></td>
+						</tr>
+						<tr>
+							<td id="teleop-red-3"></td>
+							<td id="teleop-red-3-switch"></td>
+							<td id="teleop-red-3-scale"></td>
+							<td id="teleop-red-3-opp-switch"></td>
+							<td id="teleop-red-3-vault"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="three columns">
+				<table>
+					<thead>
+						<tr>
+							<td style="text-align: center;"><b>Hang</b></td>
+							<td style="text-align: center;">Success</td>
+							<td style="text-align: center;">Attempts</td>
+							<td style="text-align: center;">Hosts</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="hang-red-1"></td>
+							<td id="hang-red-1-succeed"></td>
+							<td id="hang-red-1-attempt"></td>
+							<td id="hang-red-1-host-succeed"></td>
+						</tr>
+						<tr>
+							<td id="hang-red-2"></td>
+							<td id="hang-red-2-succeed"></td>
+							<td id="hang-red-2-attempt"></td>
+							<td id="hang-red-2-host-succeed"></td>
+						</tr>
+						<tr>
+							<td id="hang-red-3"></td>
+							<td id="hang-red-3-succeed"></td>
+							<td id="hang-red-3-attempt"></td>
+							<td id="hang-red-3-host-succeed"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
+<script>
+
+	if (getCookie("regional")=="") {
+		window.location.replace("settings.html");
+	}
+	
+	firebase.initializeApp(config);
+    var database = firebase.database();
+    var storageRef = firebase.storage().ref();
+
+	var auto_positions = ['center', 'left', 'right'];
+	var auto_items = ['switch', 'scale'];
+	var teleop_items = ['switch', 'scale', 'vault', 'opp-switch'];
+
+
+	getData(null, "team/frc118/event/2018" + getCookie("regional") + "/status", function(returned_data) {
+		var next_match = returned_data.next_match_key;
+
+		getData(null, "match/" + next_match + "/simple", function(match_data) {
+			var predictedTime = match_data.predicted_time;
+			var teamLookup = {};
+			teamLookup[match_data.alliances.red.team_keys[0].replace("frc","")] = "red-1";
+			teamLookup[match_data.alliances.red.team_keys[1].replace("frc","")] = "red-2";
+			teamLookup[match_data.alliances.red.team_keys[2].replace("frc","")] = "red-3";
+			teamLookup[match_data.alliances.blue.team_keys[0].replace("frc","")] = "blue-1";
+			teamLookup[match_data.alliances.blue.team_keys[1].replace("frc","")] = "blue-2";
+			teamLookup[match_data.alliances.blue.team_keys[2].replace("frc","")] = "blue-3";
+
+			var teamRef = firebase.database().ref(getCookie("regional") + "/teams");
+		    teamRef.on('value', function(snapshot) {
+		    	var teamDict = snapshot.val();
+
+			    for (var team in teamLookup) {
+					var station = teamLookup[team];
+
+					if (teamDict[team] != undefined) {
+				    	var details = teamDict[team].averages;
+
+						auto_items.forEach(function (item) {
+							$("#" + item + "-auto-" + station).text(team);
+							auto_positions.forEach(function (position) {
+								var avg = details['auto_' + position + "_" + item + "_avg"];
+								if (!avg) avg = 0;
+								var total = details['auto_' + position + "_" + item + "_total"];
+								if (!total) total = 0;
+			    				$("#" + item + "-auto-" + station + "-" + position).text(avg*100 + "% (" + total + ")");
+				    		});
+				    	});
+
+						$("#teleop-" + station).text(team);
+						teleop_items.forEach(function (item) {
+							var avg = details['teleop_' + item + "_avg"];
+							if (!avg) avg = 0;
+							var max = details['teleop_' + item + "_max"];
+							if (!max) max = 0;
+							$("#teleop-" + station + "-" + item).text(avg + " (" + max + ")");
+			    		});
+
+						$("#hang-" + station).text(team);
+						$("#hang-" + station + "-succeed").text(details['hang_succeed_avg']*100 + "%");
+						$("#hang-" + station + "-attempt").text(details['hang_attempt_total']);
+						$("#hang-" + station + "-host-succeed").text(details['host_succeed_total']);
+					}
+				}
+		    });
+		}, false);
+	}, false);
+	
+</script>
+</html>

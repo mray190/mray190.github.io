@@ -21,7 +21,7 @@
 
 	<br>
 	<div style="overflow-x:auto;">
-		<table class="u-full-width" id="data">
+		<table class="u-full-width condense" id="data">
 			<thead>
 				<tr>
 					<th>Team</th>
@@ -112,6 +112,7 @@
 
 					cell = entry.insertCell(0);
 					cell.innerHTML = team;
+					cell.setAttribute('data-title', 'Team');
 
 					cell = entry.insertCell(-1);
 					cell.innerHTML = data[team]['rank'];
@@ -183,8 +184,8 @@
 
 			  	});
 				sort.refresh();
-			});
-		});
+			}, true);
+		}, true);
 	});
 
 	function formatAverages(data) {

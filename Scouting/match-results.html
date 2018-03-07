@@ -21,7 +21,7 @@
 
 	<br>
 	<div style="overflow-x:auto;">
-		<table class="u-full-width tablesorter" id="data">
+		<table class="u-full-width tablesorter condense" id="data">
 			<thead>
 				<tr>
 					<th data-sort-default>#</th>
@@ -88,6 +88,7 @@
 
 				cell = entry.insertCell(0);
 				cell.innerHTML = matchNumber;
+				cell.setAttribute('data-title', 'Match #');
 
 				cell = entry.insertCell(-1);
 				cell.innerHTML = teamNumber;
