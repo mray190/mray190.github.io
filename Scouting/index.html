@@ -27,11 +27,11 @@
 			<div class="row" id="general_row">
 				<div class="form-question">
 					<label for="match_num">Match num.</label>
-					<input class="u-full-width" type="number" id="match_num" required>
+					<input class="u-full-width" type="text" id="match_num" required>
 				</div>
 				<div class="form-question">
 					<label for="team_num">Team num.</label>
-					<input class="u-full-width" type="number" id="team_num" required>
+					<input class="u-full-width" type="text" id="team_num" required>
 				</div>
 				<div class="form-question">
 					<label for="alliance">Alliance color</label>
@@ -60,11 +60,11 @@
 				</div>
 				<div class="form-question">
 					<label for="auto_switch">Cubes scored in switch</label>
-					<input class="u-full-width" type="number" id="auto_switch" default="0" required>
+					<input class="u-full-width increment" type="text" id="auto_switch" value="0" required>
 				</div>
 				<div class="form-question">
 					<label for="auto_scale">Cubes scored in scale</label>
-					<input class="u-full-width" type="number" id="auto_scale" default="0" required>
+					<input class="u-full-width increment" type="text" id="auto_scale" value="0" required>
 				</div>
 			</div>
 			<hr>
@@ -72,19 +72,19 @@
 			<div class="row" id="teleop_row">
 				<div class="form-question">
 					<label for="teleop_switch">Cubes scored in switch</label>
-					<input class="u-full-width" type="number" id="teleop_switch" default="0" required>
+					<input class="u-full-width increment" type="text" id="teleop_switch" value="0" required>
 				</div>
 				<div class="form-question">
 					<label for="teleop_scale">Cubes scored in scale</label>
-					<input class="u-full-width" type="number" id="teleop_scale" default="0" required>
+					<input class="u-full-width increment" type="text" id="teleop_scale" value="0" required>
 				</div>
 				<div class="form-question">
 					<label for="teleop_opp_switch">Cubes scored in opponent switch</label>
-					<input class="u-full-width" type="number" id="teleop_opp_switch" default="0" required>
+					<input class="u-full-width increment" type="text" id="teleop_opp_switch" value="0" required>
 				</div>
 				<div class="form-question">
 					<label for="teleop_vault">Cubes scored in vault</label>
-					<input class="u-full-width" type="number" id="teleop_vault" default="0" required>
+					<input class="u-full-width increment" type="text" id="teleop_vault" value="0" required>
 				</div>
 				<div class="form-question">
 					<label for="defensive_rating">Defensive Rating</label>
@@ -121,7 +121,7 @@
 				</div>
 				<div class="form-question">
 					<label for="hang_time">Hang time (seconds)</label>
-					<input class="u-full-width" type="number" id="hang_time" default="0" required>
+					<input class="u-full-width increment" type="text" id="hang_time" value="0" required>
 				</div>
 			</div>
 			<hr>
@@ -149,11 +149,11 @@
   		window.location.replace("settings.html");
   	}
 
+
   $('select').each(function() {
 
     var selectName = this.id;
 
-    // add a hidden element with the same name as the select
     var hidden = $('<input type="hidden" id="'+selectName+'">');
     hidden.val(this.val);
     hidden.insertAfter(this);
@@ -161,13 +161,17 @@
     var optionDiv = $('<div class="select_options"></div>');
     optionDiv.insertAfter(this);
 
+		// Add a button for each select option
     $("#"+selectName+" option").unwrap().each(function() {
-      var btn = $('<div class="btn btn_'+selectName+'" value="'+ $(this).attr('value') +'">'+$(this).text()+'</div>');
-      if($(this).is(':checked')) btn.addClass('on');
+      var value = $(this).attr('value');
+
+      var color = value == "red" || value == "blue" ? " " + value : "";
+      var btn = $('<div class="btn btn_'+selectName+color+'" value="'+ value +'">'+$(this).text()+'</div>');
       optionDiv.append(btn);
       $(this).remove();
     });
 
+    // Add click event listener
     $(document).on('click', '.btn_'+selectName, function() {
       $('.btn_'+selectName).removeClass('on');
       $(this).addClass('on');
@@ -175,6 +179,39 @@
     });
 
   });
+
+  $('.increment').each(function() {
+
+    var input = $(this);
+
+    var incrementDiv = $('<div class="increment_container"></div>');
+    incrementDiv.insertBefore(input);
+
+		var inputDiv = $('<div class="input_container"></div>');
+    inputDiv.append(input);
+
+    var minus = $('<div class="dec btn plusminus">-</div>');
+    var plus = $('<div class="inc btn plusminus">+</div>');
+
+    incrementDiv.append(minus);
+    incrementDiv.append(inputDiv);
+    incrementDiv.append(plus);
+
+    // Add click event listener
+    $(minus).on('click', function() {
+      var oldValue = input.val();
+      var newVal = parseFloat(oldValue) - 1;
+      input.val(newVal);
+    });
+
+    // Add click event listener
+    $(plus).on('click', function() {
+      var oldValue = input.val();
+      var newVal = parseFloat(oldValue) + 1;
+      input.val(newVal);
+    });
+
+	});
 
   $('#matchResultForm').on('submit', function () {
     var results = {};
