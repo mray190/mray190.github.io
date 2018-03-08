@@ -69,7 +69,7 @@ body {
 div.btn {
   display: inline-block;
   border: 2px solid #ccc;
-  margin-right: 5px;
+  margin: 0 5px;
   padding: 2px 5px;
   cursor: pointer;
   border-radius: 0.6em;
@@ -84,9 +84,43 @@ div.btn.on {
   border-color: #000;
 }
 
+div.btn.red.on {
+  border-color: #000;
+  background-color: #B22222;
+  color: #fff;
+}
+
+div.btn.blue.on {
+  border-color: #000;
+  background-color: #191970;
+  color: #fff;
+}
+
 .select_options {
   display: flex;
   justify-content: space-between;
+}
+
+.increment_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input_container {
+  flex-grow: 1;
+}
+
+input {
+  font-size: 1.4em;
+  width: auto;
+}
+
+div.btn.plusminus {
+  width: auto;
+  flex-grow: 10;
+  font-size: 1.4em;
+  padding: 0;
+  height: 34px;
 }
 
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
