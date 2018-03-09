@@ -82,7 +82,7 @@
 			</div>
 			<div class="six columns">
 				<label>
-			    	<input type="checkbox" id="intake_bumper" required>
+			    	<input type="checkbox" id="intake_bumper">
 			    	<span class="label-body">Over-the-bumper?</span>
 			  	</label>
 		  	</div>
@@ -140,9 +140,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
+//	if (getCookie("regional")=="") {
+//		window.location.replace("settings.html");
+//	}
 	
 	firebase.initializeApp(config);
     var database = firebase.database();	
