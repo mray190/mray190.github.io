@@ -326,7 +326,7 @@
 	var teleop_items = ['switch', 'scale', 'vault', 'opp-switch'];
 
 
-	getData(null, "team/frc118/event/2018" + getCookie("regional") + "/status", function(returned_data) {
+	getData(null, "team/frc6800/event/2018" + getCookie("regional") + "/status", function(returned_data) {
 		var next_match = returned_data.next_match_key;
 
 		getData(null, "match/" + next_match + "/simple", function(match_data) {
