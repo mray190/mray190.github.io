@@ -2,92 +2,71 @@ const functions = require('firebase-functions');
 
 // https://firebase.google.com/docs/functions/database-events
 
-exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num}/matches/{match_uid}').onWrite((event) => {
+exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num}/matches').onWrite((event) => {
 
-	const original = event.data;
-	const regional_code = event.params.regional_code;
-	const team_num = event.params.team_num;
-  const match_num = event.params.match_uid;
-  const match_data = event.data.val();
+  const team_hash_list = event.data.val();
+  const total_num_matches = (team_hash_list.length > 0 ? team_hash_list.length : 1);
+  const regional_code = event.params.regional_code;
+  const team_num = event.params.team_num;
 
-	var rootRef = original.ref.root;
-  var averageRef = rootRef.child('/'+regional_code+'/teams/' + team_num + '/averages');
-  var matchesRef = rootRef.child('/'+regional_code+'/teams/' + team_num + '/matches');
-  
-  return matchesRef.once('value',(matches_snapshot) => {
-    return averageRef.once('value', (average_snapshot) => {
-      var current_averages = average_snapshot.val();
-      if(!current_averages) current_averages = {}
-      const total_num_matches = matches_snapshot.numChildren();
-  
-      current_averages.total_matches = (total_num_matches || 1);
+	const root_ref = original.ref.root;
+  const team_average_ref = rootRef.child('/' + regional_code + '/teams/' + team_num + '/averages');
+  const raw_results_ref = rootRef.child('/' + regional_code + '/raw_results');
 
-      // AUTO STARTING POSITIONS
-      switch(match_data.auto_start.toLowerCase()) {
-        case('left') : {current_averages.left_total = (current_averages.left_total || 0) + 1; break;}
-        case('center') : {current_averages.center_total = (current_averages.center_total || 0) + 1; break;}
-        case('right') : {current_averages.right_total = (current_averages.right_total || 0) + 1; break;}
-        default: break;
-      }
-      current_averages.left_avg = (current_averages.left_total || 0) / total_num_matches;
-      current_averages.center_avg = (current_averages.center_total || 0) / total_num_matches;
-      current_averages.right_avg = (current_averages.right_total || 0) / total_num_matches;
+  // Properties that don't get averaged because that would be bad...
+  const dont_average = ['auto_start', 'alliance', 'match_num'];
 
-      var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_opp_switch', 'teleop_vault']
-      props.forEach((prop)=>{
-        if (prop.indexOf("auto")!=-1) {
-          var modifiedProp = prop.replace("auto_", "auto_" + match_data.auto_start.toLowerCase() + "_");
-          current_averages[modifiedProp + '_max'] = ((current_averages[modifiedProp + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[modifiedProp + '_max'] || 0);
-          current_averages[modifiedProp + '_total'] = (current_averages[modifiedProp + '_total'] || 0) + match_data[prop];
-          current_averages[modifiedProp + '_avg'] = (current_averages[modifiedProp + '_total'] || 0) / total_num_matches;
+  return raw_results_ref.once('value',(raw_results_snapshot) => {
+    const raw_results = raw_results_snapshot.val();
+    var averages = {};
+    averages.left_start = 0;
+    averages.center_start = 0;
+    averages.right_start = 0;
+
+    // Total all of the match data from the hash list
+    team_hash_list.forEach(hash => {
+      console.log('Team:' + team_num + ' Hash:' + hash)
+      const match = raw_results[hash];
+
+      switch(match['auto_start'].toLowerCase()) {
+        case('left') : {averages.left_start = (averages.left_start || 0) + 1; break;}
+        case('center') : {averages.center_start = (averages.center_start || 0) + 1; break;}
+        case('right') : {averages.right_start = (averages.right_start || 0) + 1; break;}
+      }   
+            
+      for(prop in match) {
+        if(dont_average.contains(prop.toLowerCase())) continue;
+
+        // Create a list of comments instead
+        if(prop.toLowerCase() === 'comments') { 
+          averages[prop] = (averages[prop] || []).push(match[prop]);
+        } 
+        // Average booleans differently
+        else if(typeof(match[prop]) === "boolean") { 
+         if(match[prop]) {
+           averages[prop] = (averages[prop] || 0.0) + 1.0;
+         }
+        } 
+        // Average all other props by their match data totals
+        else { 
+          averages[prop] = (averages[prop] || 0.0) + match[prop];
         }
-        current_averages[prop + '_max'] = ((current_averages[prop + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[prop + '_max'] || 0);
-        current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
-        current_averages[prop + '_avg'] = (current_averages[prop + '_total'] || 0) / total_num_matches;
-      })
-
-      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'host_succeed']
-      prop_bools.forEach((prop_bool) =>{
-        current_averages[prop_bool + '_total'] = (current_averages[prop_bool + '_total'] || 0) + (match_data[prop_bool] ? 1 : 0);
-        if(prop_bool === prop_bools[0] || prop_bool === prop_bools[1]) {
-          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / total_num_matches;
-        } else {
-          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / (current_averages.hang_attempt_total || 1);
-        }
-      })
-
-      if(match_data.defensive_rating !== 'NA') {
-        current_averages.defensive_rating_total = (current_averages.defensive_rating_total || 0) + parseInt(match_data.defensive_rating);
-        current_averages.defensive_rating_counter = (current_averages.defensive_rating_counter || 0) + 1;
-        current_averages.defensive_rating_avg = (current_averages.defensive_rating_total || 0) / (current_averages.defensive_rating_counter || 1);
-      } else if (!current_averages.defensive_rating_avg) {
-        current_averages.defensive_rating_avg = 0
       }
+    });
 
-      current_averages.hang_time_total = (current_averages.hang_time_total || 0) + match_data.hang_time;
-      current_averages.hang_time_avg = (current_averages.hang_time_total || 0) / (current_averages.hang_succeed_total || 1);
+    // Average totals
+    const total_hang_attempts = averages['hang_attempt'];
+    for(i in averages) {
+      
+        // Only average hang attempts based on how many times they attempt
+      if(i.toLowerCase() === 'hang_succeed' || i.toLowerCase() === 'host_succeed' || i.toLowerCase() === 'hang_time') {
+        averages[i] = parseFloat(averages[i]) / total_hang_attempts;
+      } else {
+        averages[i] = parseFloat(averages[i]) / total_num_matches;
+      }
+    }
 
-      return averageRef.set(current_averages);
-    })
+    // Upload averages to Firebase
+    return team_average_ref.set(averages);
   })
-	// Auto center %
-	// Auto right %
-	// Auto left %
-	// Auto max scale
-	// Auto scale
-	// Auto max switch
-	// Auto switch
-  // Auto line cross %
-  
-	// Max switch
-	// Avg switch
-	// Max scale
-	// Avg scale
-	// Max vault
-  // Avg vault
-  
-	// Hang attempts
-	// Hang %
-	// Host hangs
-	// Host hang %
 });
