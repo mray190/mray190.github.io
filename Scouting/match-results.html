@@ -20,7 +20,8 @@
 	</div>
 
 	<br>
-	<div style="overflow-x:auto;">
+  <div class="content-container">
+    <div class="content">
 		<table class="u-full-width tablesorter condense" id="data">
 			<thead>
 				<tr>
@@ -46,7 +47,8 @@
 			<tbody id="match_data">
 			</tbody>
 		</table>
-	</div>
+    </div>
+  </div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -59,10 +61,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
-	
 	firebase.initializeApp(config);
     var database = firebase.database();
 
@@ -71,11 +69,12 @@
 	});
 
 
-    var matchRef = firebase.database().ref(getCookie("regional") + "/local/");
-    matchRef.on('value', function(snapshot) {
+  var matchRef = firebase.database().ref(regionalCode + "/local/");
+
+  matchRef.on('value', function(snapshot) {
 		$("#match_data tr").remove(); 
-        snapshot.forEach(function(childSnapshot) {
-    		var matchNumber = childSnapshot.key;
+    snapshot.forEach(function(childSnapshot) {
+      var matchNumber = childSnapshot.key;
 			var teams = childSnapshot.val();
 			
 			for(var teamNumber in teams) {
@@ -101,6 +100,7 @@
 				cell = entry.insertCell(-1);
 				cell.innerHTML = team.auto_line ? 'Y' : 'N';
 				cell.setAttribute("data-title", "Auto line");
+
 
 				cell = entry.insertCell(-1);
 				cell.innerHTML = "Left/Right";
@@ -154,9 +154,14 @@
 				cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
 				cell.setAttribute("data-title", "Hang Time");
 			}
-		  });
-		  
+    });
+
+    $("td").each(function() {
+      if (this.innerHTML == "N" || this.innerHTML == "0") this.classList.add("off");
+    });
 	});
+
+
 	
 </script>
 </html>

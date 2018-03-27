@@ -30,6 +30,20 @@ function getCookie(cname) {
     return "";
 }
 
+function getHash(value) {
+
+  var hash = 0;
+  if (value.length == 0) {
+    return hash;
+  }
+  for (var i = 0; i < value.length; i++) {
+    var char = value.charCodeAt(i);
+    hash = ((hash<<5)-hash)+char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash;
+}
+
 // Initialize Firebase
 var config = {
 	apiKey: "b57zJeLRQ1sAqIvoF06YmXsIc8Z0DD2uT8lMB6M9",
@@ -37,6 +51,8 @@ var config = {
 	databaseURL: "https://viperbotsvalor.firebaseio.com",
 	storageBucket: "gs://viperbotsvalor.appspot.com"
 };
+
+var regionalCode = "txlu";
 
 var tba_api_key = "LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M";
 var tba_base_url = "https://www.thebluealliance.com/api/v3/";

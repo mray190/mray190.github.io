@@ -59,10 +59,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
-
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
 	
 	firebase.initializeApp(config);
 	var database = firebase.database();
@@ -71,11 +67,11 @@
 	  	ascending: true
 	});
 
-    var averageRef = firebase.database().ref(getCookie("regional") + "/teams/");
+    var averageRef = firebase.database().ref(regionalCode + "/teams/");
     averageRef.on('value', function(snapshot) {
 		$("#team_data tr").remove(); 
 
-		getData(getCookie("regional") + "_rankings", "event/2018" + getCookie("regional") + "/rankings", function(returned_data) {
+		getData(regionalCode + "_rankings", "event/2018" + regionalCode + "/rankings", function(returned_data) {
 			var data = {};
 			returned_data['rankings'].forEach(function(item, index) {
 				var team = item.team_key.replace("frc","");
@@ -86,7 +82,7 @@
 				data[team]['rp'] = item.extra_stats[0];
 			});
 
-			getData(getCookie("regional") + "_oprs", "event/2018" + getCookie("regional") + "/oprs", function(returned_data) {
+			getData(regionalCode + "_oprs", "event/2018" + regionalCode + "/oprs", function(returned_data) {
 				for (var key in returned_data['ccmws']) {
 					var team = key.replace("frc","");
 					if (data[team] != undefined)

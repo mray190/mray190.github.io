@@ -44,7 +44,7 @@
 <script src="assets/js/custom.js"></script>
 <script>
 	$("#name").val(getCookie("name"));
-	$("#regional").val(getCookie("regional"));
+	$("#regional").val(regionalCode);
 
 	$('#settingsForm').on('submit', function () {
 		setCookie("name", $("#name").val(), 3);
