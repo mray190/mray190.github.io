@@ -209,6 +209,7 @@
 	});
 
   $('#matchResultForm').on('submit', function () {
+
     var valid = confirm('Are you sure you want to submit');
     if(valid) {
       var results = {};
@@ -231,12 +232,13 @@
 
       writeMatchResult($('#team_num').val(), results);
 
-      alert('Match results submitted!');
-      return true;
+      $('#matchResultForm').trigger("reset");
+      $('.btn').removeClass('on');
+
     } else {
       alert('Not sumbitted');
-      return false;
     }
+    return false;
   });
 
   firebase.initializeApp(config);
@@ -248,12 +250,21 @@
 		const hash = getHash(teamNum + '__' + JSON.stringify(data));
 
 		// Write object and hash to raw_results
-    firebase.database().ref(regionalCode + '/raw_results/' + hash).set(data);
+    firebase.database().ref(regionalCode + '/raw_results/' + hash).set(data, function (error) {
+			if (error) {
+        alert('Error submitting match results ' + error);
+        return;
+			}
+      // Write hash to team list
+      firebase.database().ref(regionalCode + '/teams/' + teamNum + "/matches").push(hash, function (error) {
+        if (error) {
+          alert('Error submitting match results ' + error);
+        }
+        alert('Match results submitted!');
+      });
 
+    });
 
-    // Write hash to team list
-    const newIndex = firebase.database().ref(regionalCode + '/teams/' + teamNum + "/matches").push();
-    newIndex.set(hash);
   }
 </script>
 </html>
