@@ -139,10 +139,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
-
-//	if (getCookie("regional")=="") {
-//		window.location.replace("settings.html");
-//	}
 	
 	firebase.initializeApp(config);
     var database = firebase.database();	
@@ -167,7 +163,7 @@
 		results['hang_type'] = $('#hang_type').val();
 		results['hang_speed'] = $('#hang_speed').val();
 
-		writePitScoutResults(getCookie("regional"), $('#team_num').val(), results);
+		writePitScoutResults(regionalCode, $('#team_num').val(), results);
 
 	    alert('Results submitted!');
 	    return true;

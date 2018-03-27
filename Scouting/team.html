@@ -265,10 +265,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
-
 	$("#content").hide();
 	
 	firebase.initializeApp(config);
@@ -283,7 +279,7 @@
 			console.log(error);
 		});
 
-    	var matchRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/matches");
+    	var matchRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/matches");
 	    matchRef.on('value', function(snapshot) {
 			$("#match_data tr").remove(); 
 	        snapshot.forEach(function(childSnapshot) {
@@ -311,7 +307,7 @@
 			  
 		});
 
-    	var teamRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/details");
+    	var teamRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/details");
 	    teamRef.on('value', function(snapshot) {
 	    	var details = snapshot.val();
 	    	$("#wheel-num").text(details.wheel_number);
@@ -325,7 +321,7 @@
 	    	$("#hang-speed").text(details.hang_speed);
 		});
 
-    	var teamRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/averages");
+    	var teamRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/averages");
 	    teamRef.on('value', function(snapshot) {
 	    	var details = snapshot.val();
 	    	$("#center-tries").text(details.center_total);

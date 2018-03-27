@@ -123,6 +123,20 @@ div.btn.plusminus {
   height: 34px;
 }
 
+tr.red {
+  background-color: #f1b2c4;
+}
+tr.red td.off {
+  background-color: #f1dce2;
+}
+
+tr.blue {
+  background-color: #accfe5;
+}
+tr.blue td.off {
+  background-color: #dae8f0;
+}
+
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 900px) {
   .topnav a:not(:first-child) {

@@ -145,11 +145,6 @@
 <script src="assets/js/custom.js"></script>
 <script>
 
-  	if (getCookie("regional") === "") {
-  		window.location.replace("settings.html");
-  	}
-
-
   $('select').each(function() {
 
     var selectName = this.id;
@@ -232,8 +227,9 @@
       results['host_succeed'] = $('#host_succeed').prop('checked');
       results['hang_time'] = parseInt($('#hang_time').val());
       results['comments'] = $('#comments').val();
+      results['match_num'] = $('#match_num').val();
 
-      writeMatchResult(getCookie("regional"), $('#match_num').val(), $('#team_num').val(), results);
+      writeMatchResult($('#team_num').val(), results);
 
       alert('Match results submitted!');
       return true;
@@ -244,12 +240,20 @@
   });
 
   firebase.initializeApp(config);
-  var database = firebase.database();
 
   // Write match results to firebase
-  function writeMatchResult(regionalCode, matchNum, teamNum, data) {
-    firebase.database().ref(regionalCode + '/local/' + matchNum + "/" + teamNum).set(data);
-    firebase.database().ref(regionalCode + '/teams/' + teamNum + "/matches/" + matchNum).set(data);
+  function writeMatchResult(teamNum, data) {
+
+    // Calculate object hash
+		const hash = getHash(teamNum + '__' + JSON.stringify(data));
+
+		// Write object and hash to raw_results
+    firebase.database().ref(regionalCode + '/raw_results/' + hash).set(data);
+
+
+    // Write hash to team list
+    const newIndex = firebase.database().ref(regionalCode + '/teams/' + teamNum + "/matches").push();
+    newIndex.set(hash);
   }
 </script>
 </html>

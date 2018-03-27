@@ -312,10 +312,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
-
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
 	
 	firebase.initializeApp(config);
 
@@ -324,7 +320,7 @@
 	var teleop_items = ['switch', 'scale', 'vault', 'opp-switch'];
 
 
-	getData(null, "team/frc6800/event/2018" + getCookie("regional") + "/status", function(returned_data) {
+	getData(null, "team/frc6800/event/2018" + regionalCode + "/status", function(returned_data) {
 	  //TODO: proper error checking on null response
 		var next_match = returned_data.next_match_key;
 
@@ -337,7 +333,7 @@
 			teamLookup[match_data.alliances.blue.team_keys[1].replace("frc","")] = "blue-2";
 			teamLookup[match_data.alliances.blue.team_keys[2].replace("frc","")] = "blue-3";
 
-			var teamRef = firebase.database().ref(getCookie("regional") + "/teams");
+			var teamRef = firebase.database().ref(regionalCode + "/teams");
 		    teamRef.on('value', function(snapshot) {
 		    	var teamDict = snapshot.val();
 
