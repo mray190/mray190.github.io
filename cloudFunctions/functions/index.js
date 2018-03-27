@@ -46,7 +46,7 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
          if(match[prop]) {
            averages[prop] = (averages[prop] || 0.0) + 1.0;
          }
-        } 
+        }
         // Average all other props by their match data totals
         else { 
           averages[prop] = (averages[prop] || 0.0) + match[prop];
