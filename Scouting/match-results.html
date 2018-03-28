@@ -69,97 +69,95 @@
 	});
 
 
-  var matchRef = firebase.database().ref(regionalCode + "/local/");
+  var matchRef = firebase.database().ref(regionalCode + "/raw_results/");
 
   matchRef.on('value', function(snapshot) {
-		$("#match_data tr").remove(); 
+	$("#match_data tr").remove(); 
     snapshot.forEach(function(childSnapshot) {
-      var matchNumber = childSnapshot.key;
-			var teams = childSnapshot.val();
-			
-			for(var teamNumber in teams) {
-				var team = teams[teamNumber];
+		var team = childSnapshot.val();
+      	var matchNumber = team.match_num;
+      	var teamNumber = team.team_num;
 
-				var entry = document.getElementById('match_data').insertRow(-1);
-				entry.className = team.alliance;
+		var entry = document.getElementById('match_data').insertRow(-1);
+		entry.className = team.alliance;
 
-				var cell;
+		var cell;
 
-				cell = entry.insertCell(0);
-				cell.innerHTML = matchNumber;
-				cell.setAttribute('data-title', 'Match #');
+		cell = entry.insertCell(0);
+		cell.innerHTML = matchNumber;
+		cell.setAttribute('data-title', 'Match #');
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = teamNumber;
-				cell.setAttribute("data-title", "Team #");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = teamNumber;
+		cell.setAttribute("data-title", "Team #");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_start.toUpperCase();
-				cell.setAttribute("data-title", "Auto start");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_start.toUpperCase();
+		cell.setAttribute("data-title", "Auto start");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_line ? 'Y' : 'N';
-				cell.setAttribute("data-title", "Auto line");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_line ? 'Y' : 'N';
+		cell.setAttribute("data-title", "Auto line");
 
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = "Left/Right";
-				cell.setAttribute("data-title", "Switch Loc");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = "Left/Right";
+		cell.setAttribute("data-title", "Switch Loc");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = "Left/Right";
-				cell.setAttribute("data-title", "Scale Loc");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = "Left/Right";
+		cell.setAttribute("data-title", "Scale Loc");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_switch;
-				cell.setAttribute("data-title", "Auto Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_switch;
+		cell.setAttribute("data-title", "Auto Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_scale;
-				cell.setAttribute("data-title", "Auto Scale");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_scale;
+		cell.setAttribute("data-title", "Auto Scale");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_switch;
-				cell.setAttribute("data-title", "Teleop Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_switch;
+		cell.setAttribute("data-title", "Teleop Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_scale;
-				cell.setAttribute("data-title", "Teleop Scale");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_scale;
+		cell.setAttribute("data-title", "Teleop Scale");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_opp_switch;
-				cell.setAttribute("data-title", "Teleop Opp. Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_opp_switch;
+		cell.setAttribute("data-title", "Teleop Opp. Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_vault;
-				cell.setAttribute("data-title", "Teleop Vault");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_vault;
+		cell.setAttribute("data-title", "Teleop Vault");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.defensive_rating;
-				cell.setAttribute("data-title", "DFR");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.defensive_rating;
+		cell.setAttribute("data-title", "DFR");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_attempt ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Attempt");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_attempt ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Attempt");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_succeed ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Succeed");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_succeed ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Succeed");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_host ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Host");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_host ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Host");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
-				cell.setAttribute("data-title", "Hang Time");
-			}
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
+		cell.setAttribute("data-title", "Hang Time");
     });
+	sort.refresh();
 
     $("td").each(function() {
       if (this.innerHTML == "N" || this.innerHTML == "0") this.classList.add("off");
     });
-	});
+});
 
 
 	

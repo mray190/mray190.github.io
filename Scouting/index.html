@@ -213,6 +213,7 @@
     var valid = confirm('Are you sure you want to submit');
     if(valid) {
       var results = {};
+      results['team_num'] = $('#team_num').val();
       results['alliance'] = $('#alliance').val();
       results['auto_start'] = $('#auto_start').val();
       results['auto_line'] = $('#auto_line').prop('checked');
