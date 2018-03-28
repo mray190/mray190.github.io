@@ -30,7 +30,6 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       matches_snapshot.forEach((hash_snapshot) => {
         total_num_matches ++;
         const hash = hash_snapshot.val();
-        console.log('Team:' + team_num + ' Hash:' + hash)
         const match = raw_results[hash];
   
         switch(match['auto_start'].toLowerCase()) {
@@ -60,6 +59,9 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
           // Average all other props by their match data totals
           else { 
             averages[prop] = (averages[prop] || 0.0) + parseFloat(match[prop]);
+            if(averages[prop + '_max'] < match[prop]) {
+              averages[prop + '_max'] = match[prop];
+            }
           }
         }
       });
@@ -67,10 +69,8 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       // Average totals
       const total_hang_attempts = (averages['hang_attempt'] > 0) ? averages['hang_attempt'] : 1;
 
-      console.log('Total Num Matches: ' + total_num_matches);
       for(i in averages) {
-        console.log(i + ' : ' + averages[i])
-        if(i.toLowerCase() === 'comments') continue;
+        if(i.toLowerCase() === 'comments' || i.includes('_max')) continue;
 
           // Only average hang attempts based on how many times they attempt
         if(i.toLowerCase() === 'hang_succeed' || i.toLowerCase() === 'host_succeed' || i.toLowerCase() === 'hang_time') {
