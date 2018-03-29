@@ -123,14 +123,22 @@ div.btn.plusminus {
   height: 34px;
 }
 
-tr.red {
+.hidden {
+  display: none;
+}
+
+tr {
+  border: 1px solid #000!important;
+}
+
+tr.red td{
   background-color: #f1b2c4;
 }
 tr.red td.off {
   background-color: #f1dce2;
 }
 
-tr.blue {
+tr.blue td{
   background-color: #accfe5;
 }
 tr.blue td.off {
