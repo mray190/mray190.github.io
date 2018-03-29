@@ -54,8 +54,11 @@
 				</div>
 				<div class="form-question">
 					<label>
-						<input type="checkbox" id="auto_line">
 						<span class="label-body">Cross auto line?</span>
+						<select class="u-full-width" id="auto_line">
+							<option value=true>Yes</option>
+							<option value=false>No</option>
+						</select>
 					</label>
 				</div>
 				<div class="form-question">
@@ -101,25 +104,34 @@
 			<hr>
 			<label for="end_row" class="rowheader">End</label>
 			<div class="row" id="end_row">
-				<div class="form-question">
+				<div id="hang_attempt_div" class="form-question">
 					<label>
-						<input type="checkbox" id="hang_attempt">
 						<span class="label-body">Attempt hang?</span>
+						<select class="u-full-width" id="hang_attempt">
+							<option class="yes" value=true>Yes</option>
+							<option class="no "value=false>No</option>
+						</select>
 					</label>
 				</div>
-				<div class="form-question">
+				<div id="hang_succeed_div" class="form-question hidden">
 					<label>
-						<input type="checkbox" id="hang_succeed">
 						<span class="label-body">Successful hang?</span>
+						<select class="u-full-width" id="hang_succeed">
+							<option class="yes" value=true>Yes</option>
+							<option class="no "value=false>No</option>
+						</select>
 					</label>
 				</div>
-				<div class="form-question">
+				<div id="host_succeed_div" class="form-question hidden">
 					<label>
-						<input type="checkbox" id="host_succeed">
 						<span class="label-body">Hosted a hang?</span>
+						<select class="u-full-width" id="host_succeed">
+							<option class="yes" value=true>Yes</option>
+							<option class="no "value=false>No</option>
+						</select>
 					</label>
 				</div>
-				<div class="form-question">
+				<div id="hang_time_div" class="form-question hidden">
 					<label for="hang_time">Hang time (seconds)</label>
 					<input class="u-full-width increment" type="text" id="hang_time" value="0" required>
 				</div>
@@ -158,10 +170,10 @@
 
 		// Add a button for each select option
     $("#"+selectName+" option").unwrap().each(function() {
-      var value = $(this).attr('value');
-
+			var value = this.value;
+      var classes = this.className ? " " + this.className.trim() : "";
       var color = value == "red" || value == "blue" ? " " + value : "";
-      var btn = $('<div class="btn btn_'+selectName+color+'" value="'+ value +'">'+$(this).text()+'</div>');
+      var btn = $('<div class="btn btn_' + selectName + color + classes + '" value="'+ value +'">'+this.text+'</div>');
       optionDiv.append(btn);
       $(this).remove();
     });
@@ -207,6 +219,27 @@
     });
 
 	});
+
+  $('#hang_attempt_div > label > div > div.yes').click(function(){
+    $("#hang_succeed_div").removeClass("hidden")
+  });
+
+  $('#hang_attempt_div > label > div > div.no').click(function(){
+    $("#hang_succeed_div").addClass("hidden")
+    $("#host_succeed_div").addClass("hidden");
+    $("#hang_time_div").addClass("hidden");
+  });
+
+  $('#hang_succeed_div > label > div > div.yes').click(function(){
+    $("#host_succeed_div").removeClass("hidden");
+    $("#hang_time_div").removeClass("hidden");
+  });
+
+  $('#hang_succeed_div > label > div > div.no').click(function(){
+    $("#host_succeed_div").addClass("hidden");
+    $("#hang_time_div").addClass("hidden");
+  });
+
 
   $('#matchResultForm').on('submit', function () {
 
