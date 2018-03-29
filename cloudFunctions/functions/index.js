@@ -1,4 +1,6 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
 // https://firebase.google.com/docs/functions/database-events
 
@@ -12,12 +14,14 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
   return calculateTeam(regional_code, team_num);
 });
 
-exports.calculateTeam = functions.https.onCall((data, context) => {
-  const regional_code = data.regional_code;
-  const team_num = data.team_num;
-  
+exports.calculateTeam = functions.https.onRequest((req, res) => {
+  const regional_code = req.body.regional_code;
+  const team_num = req.body.team_num;
+
   console.log('Requested to calculate ' + regional_code + '/' + team_num);
-  return calculateTeam(regional_code, team_num);
+  calculateTeam(regional_code, team_num).then(()=>{
+    res.status(200).send('hi');
+  })
 });
 
 

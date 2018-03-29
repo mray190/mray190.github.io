@@ -255,7 +255,9 @@
 	</div>
 
 </body>
-<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-functions.js"></script>
+
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -269,7 +271,19 @@
 	
 	firebase.initializeApp(config);
     var database = firebase.database();
-    var storageRef = firebase.storage().ref();
+	var storageRef = firebase.storage().ref();
+	var functions = firebase.functions();
+	
+	function callMessage(teamNum) {
+		$.post(
+    		"https://us-central1-viperbotsvalor.cloudfunctions.net/calculateTeam",
+    		{team_num : teamNum, regionalCode : regionalCode},
+    		function(data) {
+       			alert('Post! ' + data);
+    		}
+		);
+	}
+		
 
 	$('#team_select').on('submit', function () {
 		var teamNum = $('#team_num').val();
@@ -277,12 +291,6 @@
 			$("#photo_loc").append("<img src=\"" + url + "\" style=\"width: 100%;\"></img>");
 		}).catch(function(error) {
 			console.log(error);
-		});
-
-		var addMessage = firebase.functions().httpsCallable('calculateTeam');
-		addMessage({team_num: teamNum, regionalCode: regionalCode}).then(function(result) {
-			// Read result of the Cloud Function.
-			console.log("updated!"); 			
 		});
 
     	var matchRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/matches");
