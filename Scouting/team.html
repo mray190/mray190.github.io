@@ -279,6 +279,12 @@
 			console.log(error);
 		});
 
+		var addMessage = firebase.functions().httpsCallable('calculateTeam');
+		addMessage({team_num: teamNum, regionalCode: regionalCode}).then(function(result) {
+			// Read result of the Cloud Function.
+			console.log("updated!"); 			
+		});
+
     	var matchRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/matches");
 	    matchRef.on('value', function(snapshot) {
 			$("#match_data tr").remove(); 
