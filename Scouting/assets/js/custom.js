@@ -47,7 +47,8 @@ function getHash(value) {
 // Initialize Firebase
 var config = {
 	apiKey: "b57zJeLRQ1sAqIvoF06YmXsIc8Z0DD2uT8lMB6M9",
-	authDomain: "viperbotsvalor.firebaseapp.com",
+    authDomain: "viperbotsvalor.firebaseapp.com",
+    projectId: 'viperbotsvalor',
 	databaseURL: "https://viperbotsvalor.firebaseio.com",
 	storageBucket: "gs://viperbotsvalor.appspot.com"
 };
