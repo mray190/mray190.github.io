@@ -149,13 +149,13 @@
 		cell.setAttribute("data-title", "Hang Host");
 
 		cell = entry.insertCell(-1);
-		cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
+		cell.innerHTML = team.hang_succeed ? team.hang_time : 'X';
 		cell.setAttribute("data-title", "Hang Time");
     });
 	sort.refresh();
 
     $("td").each(function() {
-      if (this.innerHTML == "N" || this.innerHTML == "0") this.classList.add("off");
+      if (this.innerHTML == "N" || this.innerHTML == "X" || this.innerHTML == "0") this.classList.add("off");
     });
 });
 
