@@ -346,7 +346,7 @@
 						auto_items.forEach(function (item) {
 							$("#" + item + "-auto-" + station).text(team);
 							auto_positions.forEach(function (position) {
-								var avg = details['auto_' + position + "_" + item + "_avg"] || 0;
+								var avg = details['auto_' + position + "_" + item] || 0;
 								var total = details['auto_' + position + "_" + item + "_total"] || 0;
 			    				$("#" + item + "-auto-" + station + "-" + position).text((avg*100).toFixed(2) + "% (" + total + ")");
 				    		});
@@ -354,15 +354,15 @@
 
 						$("#teleop-" + station).text(team);
 						teleop_items.forEach(function (item) {
-							var avg = details['teleop_' + item + "_avg"] || 0;
-							var max = details['teleop_' + item + "_max"] || 0;
+							var avg = details['teleop_' + item.replace("-","_")] || 0;
+							var max = details['teleop_' + item.replace("-","_") + "_max"] || 0;
 							$("#teleop-" + station + "-" + item).text((avg).toFixed(2) + " (" + max + ")");
 			    		});
 
 						$("#hang-" + station).text(team);
-						$("#hang-" + station + "-succeed").text((details['hang_succeed_avg']*100).toFixed(2) + "%");
-						$("#hang-" + station + "-attempt").text(details['hang_attempt_total']);
-						$("#hang-" + station + "-host-succeed").text(details['host_succeed_total']);
+						$("#hang-" + station + "-succeed").text(Math.round(details.hang_succeed * details.matches * details.hang_attempt));
+						$("#hang-" + station + "-attempt").text(Math.round(details.hang_attempt * details.matches));
+						$("#hang-" + station + "-host-succeed").text(Math.round(details.host_succeed * details.matches * details.hang_attempt));
 					}
 				}
 		    });
