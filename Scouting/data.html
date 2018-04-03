@@ -14,13 +14,13 @@
 		<a href="data.html" class="active">Rankings</a>
 		<a href="prematch.html">Pre-match</a>
 		<a href="team.html">Team Lookup</a>
-		<a href="picklist.html">Pick list</a>
-		<a href="settings.html">Settings</a>
+		<a href="index.html">Pick list</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
 	</div>
 
 	<br>
-	<div style="overflow-x:auto;">
+	<div class="content-container">
+		<div class="content">
 		<table class="u-full-width condense" id="data">
 			<thead>
 				<tr>
@@ -47,6 +47,7 @@
 			<tbody id="team_data">
 			</tbody>
 		</table>
+		</div>
 	</div>
 
 </body>
@@ -123,10 +124,8 @@
 					cell.setAttribute('data-title', 'RP');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = data[team]['opr'];
+					cell.innerHTML = data[team]['opr'] || '----';
 					cell.setAttribute('data-title', 'CCWM');
-
-					console.log(averages);
 
 					cell = entry.insertCell(-1);
 					cell.innerHTML = formatAverages(averages['left_start']);
@@ -141,31 +140,31 @@
 					cell.setAttribute('data-title', 'Right Start %');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['auto_switch'] ? parseFloat(averages['auto_switch']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['auto_switch']);
 					cell.setAttribute('data-title', 'Auto Switch Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['auto_scale'] ? parseFloat(averages['auto_scale']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['auto_scale']);
 					cell.setAttribute('data-title', 'Auto Scale Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['teleop_switch'] ? parseFloat(averages['teleop_switch']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['teleop_switch']);
 					cell.setAttribute('data-title', 'Teleop Switch Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['teleop_scale'] ? parseFloat(averages['teleop_scale']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['teleop_scale']);
 					cell.setAttribute('data-title', 'Teleop Scale Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['teleop_opp_switch'] ? parseFloat(averages['teleop_opp_switch']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['teleop_opp_switch']);
 					cell.setAttribute('data-title', 'Teleop Opp. Switch Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['teleop_vault'] ? parseFloat(averages['teleop_vault']).toFixed(1) : 0;
+					cell.innerHTML = formatDouble(averages['teleop_vault']);
 					cell.setAttribute('data-title', 'Teleop Vault Avg');
 
 					cell = entry.insertCell(-1);
-					cell.innerHTML = averages['defensive_rating'];
+					cell.innerHTML = formatDouble(averages['defensive_rating']);
 					cell.setAttribute('data-title', 'DFR Avg');
 
 					cell = entry.insertCell(-1);
@@ -181,9 +180,20 @@
 			}, true);
 		}, true);
 	});
+  function formatAverages(data) {
+    if (!data){
+      return '----';
+    }
+    const value = parseFloat(data);
+    return value ? (value * 100).toFixed() + '%' : '----';
+  }
 
-	function formatAverages(data) {
-		return (parseFloat(data) * 100).toFixed() + '%';
-	}
+  function formatDouble(data) {
+    if (!data){
+      return '----';
+    }
+    const value = parseFloat(data);
+    return value ? (value).toFixed(1): '----';
+  }
 </script>
 </html>
