@@ -44,18 +44,18 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
   
         switch(match['auto_start'].toLowerCase()) {
           case('left') : {
-            averages.left_start = (averages.left_start || 0) + 1; break;
-            averages.auto_left_switch = (averages.auto_left_switch || 0) + (match.auto_switch || 0); break;          
+            averages.left_start = (averages.left_start || 0) + 1; 
+            averages.auto_left_switch = (averages.auto_left_switch || 0) + (match.auto_switch || 0);          
             averages.auto_left_scale = (averages.auto_left_scale || 0) + (match.auto_scale || 0); break;          
           }
           case('center') : {
-            averages.center_start = (averages.center_start || 0) + 1; break;
-            averages.auto_center_switch = (averages.auto_center_switch || 0) + (match.auto_switch || 0); break;
+            averages.center_start = (averages.center_start || 0) + 1;
+            averages.auto_center_switch = (averages.auto_center_switch || 0) + (match.auto_switch || 0);
             averages.auto_center_scale = (averages.auto_center_scale || 0) + (match.auto_scale || 0); break;
           }
           case('right') : {
-            averages.right_start = (averages.right_start || 0) + 1; break;
-            averages.auto_right_switch = (averages.auto_right_switch || 0) + (match.auto_switch || 0); break;
+            averages.right_start = (averages.right_start || 0) + 1;
+            averages.auto_right_switch = (averages.auto_right_switch || 0) + (match.auto_switch || 0);
             averages.auto_right_scale = (averages.auto_right_scale || 0) + (match.auto_scale || 0); break;
           }
         }   
@@ -82,7 +82,7 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
           }
           // Average all other props by their match data totals
           else { 
-            averages[prop] = (averages[prop] || 0.0) + parseFloat(match[prop]);
+            averages[prop] = (parseFloat(averages[prop]) || 0.0) + parseFloat(match[prop]);
             if(averages[prop + '_max'] < match[prop] || !(averages[prop + '_max'])) {
               averages[prop + '_max'] = parseFloat(match[prop]);
             }
@@ -107,7 +107,7 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
       for(i in averages) {
         if(i.toLowerCase() === 'comments' || i.includes('_max') || i.includes('_min')) continue;
 
-        var divisor = 1;
+        var divisor = total_num_matches;
         switch(i) {
           case 'auto_left_switch': 
           case 'auto_left_scale': {divisor = total_auto_left; break;}
@@ -122,10 +122,10 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
           case 'host_succeed':
           case 'hang_time': {divisor = total_hang_attempts; break;}
           
-          default: total_num_matches;
+          default: {divisor = total_num_matches; break;}
         }
 
-        averages[i] = parseFloat((parseFloat(averages[i]) / divisor)).toFixed(5);
+        averages[i] = parseFloat((parseFloat(averages[i]) / divisor).toFixed(5));
       }
       // Upload averages to Firebase
       return team_average_ref.set(averages);
