@@ -12,16 +12,13 @@ exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num
   const regional_code = event.params.regional_code;
   const team_num = event.params.team_num;
 
-  return calculateTeam(regional_code, team_num);
-});
-
-function calculateTeam(regional_code, team_num) {
-
-  var team_average_ref = functions.database.ref('/' + regional_code + '/teams/' + team_num + '/averages');
-  var raw_results_ref = functions.database.ref('/' + regional_code + '/raw_results');
-  var team_hash_list = functions.database.ref('/' + regional_code + '/teams/' + team_num + '/matches');
+  const root_ref = original.ref.root;
+  var team_average_ref = root_ref.child('/' + regional_code + '/teams/' + team_num + '/averages');
+  var raw_results_ref =  root_ref.child('/' + regional_code + '/raw_results');
+  var team_hash_list =  root_ref.child('/' + regional_code + '/teams/' + team_num + '/matches');
   // Properties that don't get averaged because that would be bad...
-  const dont_average = ['auto_start', 'alliance', 'match_num', 'team_num'];
+  const dont_average = ['auto_start', 'alliance', 'match_num', 'team_num', 'auto_switch', 'auto_scale'];
+  console.log('RREF: ' + raw_results_ref);
 
   return raw_results_ref.once('value' , (raw_results_snapshot) => {
     const raw_results = raw_results_snapshot.val();
@@ -46,9 +43,21 @@ function calculateTeam(regional_code, team_num) {
         }
   
         switch(match['auto_start'].toLowerCase()) {
-          case('left') : {averages.left_start = (averages.left_start || 0) + 1; break;}
-          case('center') : {averages.center_start = (averages.center_start || 0) + 1; break;}
-          case('right') : {averages.right_start = (averages.right_start || 0) + 1; break;}
+          case('left') : {
+            averages.left_start = (averages.left_start || 0) + 1; break;
+            averages.auto_left_switch = (averages.auto_left_switch || 0) + (match.auto_switch || 0); break;          
+            averages.auto_left_scale = (averages.auto_left_scale || 0) + (match.auto_scale || 0); break;          
+          }
+          case('center') : {
+            averages.center_start = (averages.center_start || 0) + 1; break;
+            averages.auto_center_switch = (averages.auto_center_switch || 0) + (match.auto_switch || 0); break;
+            averages.auto_center_scale = (averages.auto_center_scale || 0) + (match.auto_scale || 0); break;
+          }
+          case('right') : {
+            averages.right_start = (averages.right_start || 0) + 1; break;
+            averages.auto_right_switch = (averages.auto_right_switch || 0) + (match.auto_switch || 0); break;
+            averages.auto_right_scale = (averages.auto_right_scale || 0) + (match.auto_scale || 0); break;
+          }
         }   
               
         for(prop in match) {
@@ -90,19 +99,36 @@ function calculateTeam(regional_code, team_num) {
       // Average totals
       const total_hang_attempts = (averages['hang_attempt'] > 0) ? averages['hang_attempt'] : 1;
 
+      const total_auto_left = (averages['left_start'] > 0) ? averages['left_start'] : 1;
+      const total_auto_center = (averages['center_start'] > 0) ? averages['center_start'] : 1;
+      const total_auto_right = (averages['right_start'] > 0) ? averages['right_start'] : 1;
+
+
       for(i in averages) {
         if(i.toLowerCase() === 'comments' || i.includes('_max') || i.includes('_min')) continue;
 
-          // Only average hang attempts based on how many times they attempt
-        if(i.toLowerCase() === 'hang_succeed' || i.toLowerCase() === 'host_succeed' || i.toLowerCase() === 'hang_time') {
-          averages[i] = parseFloat((parseFloat(averages[i]) / total_hang_attempts).toFixed(5));
-        } else {
-          averages[i] = parseFloat((parseFloat(averages[i]) / total_num_matches).toFixed(5));
-        }
-      }
+        var divisor = 1;
+        switch(i) {
+          case 'auto_left_switch': 
+          case 'auto_left_scale': {divisor = total_auto_left; break;}
 
+          case 'auto_center_switch': 
+          case 'auto_center_scale': {divisor = total_auto_center; break;}
+
+          case 'auto_right_switch': 
+          case 'auto_right_scale': {divisor = total_auto_right; break;}
+
+          case 'hang_succeed':
+          case 'host_succeed':
+          case 'hang_time': {divisor = total_hang_attempts; break;}
+          
+          default: total_num_matches;
+        }
+
+        averages[i] = parseFloat((parseFloat(averages[i]) / divisor)).toFixed(5);
+      }
       // Upload averages to Firebase
       return team_average_ref.set(averages);
     });
   })
-}
+});
