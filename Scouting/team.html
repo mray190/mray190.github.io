@@ -141,26 +141,26 @@
 							<tr>
 								<td>Left</td>
 								<td id="left-tries"></td>
-								<td id="left-switch-avg"></td>
-								<td id="left-switch-max"></td>
-								<td id="left-scale-avg"></td>
-								<td id="left-scale-max"></td>
+								<td id="left-switch"></td>
+								<td id="left-switch_max"></td>
+								<td id="left-scale"></td>
+								<td id="left-scale_max"></td>
 							</tr>
 							<tr>
 								<td>Center</td>
 								<td id="center-tries"></td>
-								<td id="center-switch-avg"></td>
-								<td id="center-switch-max"></td>
-								<td id="center-scale-avg"></td>
-								<td id="center-scale-max"></td>
+								<td id="center-switch"></td>
+								<td id="center-switch_max"></td>
+								<td id="center-scale"></td>
+								<td id="center-scale_max"></td>
 							</tr>
 							<tr>
 								<td>Right</td>
 								<td id="right-tries"></td>
-								<td id="right-switch-avg"></td>
-								<td id="right-switch-max"></td>
-								<td id="right-scale-avg"></td>
-								<td id="right-scale-max"></td>
+								<td id="right-switch"></td>
+								<td id="right-switch_max"></td>
+								<td id="right-scale"></td>
+								<td id="right-scale_max"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -339,6 +339,7 @@
     	var teamRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/averages");
 	    teamRef.on('value', function(snapshot) {
 	    	var details = snapshot.val();
+
 	    	$("#center-tries").text(Math.round(details.center_start * details.matches));
 	    	$("#left-tries").text(Math.round(details.left_start * details.matches));
 	    	$("#right-tries").text(Math.round(details.right_start * details.matches));
@@ -350,7 +351,11 @@
     		items.forEach(function (item) {
     			metric.forEach(function (metric) {
 	    			positions.forEach(function (position) {
-	    				$("#" + position + "-" + item + "-" + metric).text(details['auto_' + position + "_" + item + metric]);
+	    				if (item=="switch" || item=="scale") {
+	    					const td_id = "#" + position + "-" + item + metric;
+	    					const json_key = 'auto_' + position + "_" + item + metric;
+	    					$(td_id).text(details[json_key]);
+	    				}
 	    			});
     				$("#" + item + "-" + (metric=='' ? 'avg' : 'max')).text(details['teleop_' + item.replace("-","_") + metric]);
 	    		});
