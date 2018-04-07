@@ -34,7 +34,7 @@
 				</div>
 				<div class="form-question">
 					<label for="alliance">Alliance color</label>
-					<select class="u-full-width" id="alliance">
+					<select class="u-full-width required" id="alliance">
 						<option value="red">Red</option>
 						<option value="blue">Blue</option>
 					</select>
@@ -45,7 +45,7 @@
 			<div class="row" id="auto_row">
 				<div class="form-question">
 					<label for="auto_start">Start position</label>
-					<select class="u-full-width" id="auto_start">
+					<select class="u-full-width required" id="auto_start">
 						<option value="left">Left</option>
 						<option value="center">Center</option>
 						<option value="right">Right</option>
@@ -54,7 +54,7 @@
 				<div class="form-question">
 					<label>
 						<span class="label-body">Cross auto line?</span>
-						<select class="u-full-width" id="auto_line">
+						<select class="u-full-width required" id="auto_line">
 							<option value=true>Yes</option>
 							<option value=false>No</option>
 						</select>
@@ -90,7 +90,7 @@
 				</div>
 				<div class="form-question">
 					<label for="defensive_rating">Defensive Rating</label>
-					<select class="u-full-width" id="defensive_rating">
+					<select class="u-full-width required" id="defensive_rating">
 						<option value="0">None</option>
 						<option value="1">Bad</option>
 						<option value="2">Poor</option>
@@ -106,9 +106,9 @@
 				<div id="hang_attempt_div" class="form-question">
 					<label>
 						<span class="label-body">Attempt hang?</span>
-						<select class="u-full-width" id="hang_attempt">
+						<select class="u-full-width required" id="hang_attempt">
 							<option class="yes" value=true>Yes</option>
-							<option class="no "value=false>No</option>
+							<option class="no" value=false>No</option>
 						</select>
 					</label>
 				</div>
@@ -117,7 +117,7 @@
 						<span class="label-body">Successful hang?</span>
 						<select class="u-full-width" id="hang_succeed">
 							<option class="yes" value=true>Yes</option>
-							<option class="no "value=false>No</option>
+							<option class="no" value=false>No</option>
 						</select>
 					</label>
 				</div>
@@ -126,7 +126,7 @@
 						<span class="label-body">Hosted a hang?</span>
 						<select class="u-full-width" id="host_succeed">
 							<option class="yes" value=true>Yes</option>
-							<option class="no "value=false>No</option>
+							<option class="no" value=false>No</option>
 						</select>
 					</label>
 				</div>
@@ -160,7 +160,9 @@
 
     var selectName = this.id;
 
-    var hidden = $('<input type="hidden" id="'+selectName+'">');
+    const required = $(this).hasClass('required') ? ' required' : '';
+
+    var hidden = $('<input type="hidden" id="'+selectName+'"' + required + '>');
     hidden.val(this.val);
     hidden.insertAfter(this);
 
@@ -248,7 +250,7 @@
       results['team_num'] = $('#team_num').val();
       results['alliance'] = $('#alliance').val();
       results['auto_start'] = $('#auto_start').val();
-      results['auto_line'] = $('#auto_line').prop('checked');
+      results['auto_line'] = $('#auto_line').val() == 'true';
       results['auto_switch'] = parseInt($('#auto_switch').val());
       results['auto_scale'] = parseInt($('#auto_scale').val());
       results['teleop_switch'] = parseInt($('#teleop_switch').val());
@@ -256,9 +258,9 @@
       results['teleop_scale'] = parseInt($('#teleop_scale').val());
       results['teleop_vault'] = parseInt($('#teleop_vault').val());
       results['defensive_rating'] = $('#defensive_rating').val();
-      results['hang_attempt'] = $('#hang_attempt').prop('checked');
-      results['hang_succeed'] = $('#hang_succeed').prop('checked');
-      results['host_succeed'] = $('#host_succeed').prop('checked');
+      results['hang_attempt'] = $('#hang_attempt').val() == 'true';
+      results['hang_succeed'] = $('#hang_succeed').val() == 'true';
+      results['host_succeed'] = $('#host_succeed').val() == 'true';
       results['hang_time'] = parseInt($('#hang_time').val());
       results['comments'] = $('#comments').val();
       results['match_num'] = $('#match_num').val();
