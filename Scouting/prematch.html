@@ -342,21 +342,21 @@
 					if (teamDict[team] != undefined) {
 				    	var details = teamDict[team].averages || {};
 
-						auto_items.forEach(function (item) {
-							$("#" + item + "-auto-" + station).text(team);
-							auto_positions.forEach(function (position) {
-								var avg = details['auto_' + position + "_" + item] || 0;
-								var total = details['auto_' + position + "_" + item + "_total"] || 0;
-			    				$("#" + item + "-auto-" + station + "-" + position).text((avg*100).toFixed(2) + "% (" + total + ")");
-				    		});
-				    	});
+							auto_items.forEach(function (item) {
+								$("#" + item + "-auto-" + station).text(team);
+								auto_positions.forEach(function (position) {
+									var avg = details['auto_' + position + "_" + item] || 0;
+									var total_matches = (details[position + "_start"] || 0) * (details["matches"] || 0);
+									$("#" + item + "-auto-" + station + "-" + position).text((avg).toFixed(2) + " (" + total_matches + ")");
+								});
+							});
 
 						$("#teleop-" + station).text(team);
 						teleop_items.forEach(function (item) {
 							var avg = details['teleop_' + item.replace("-","_")] || 0;
 							var max = details['teleop_' + item.replace("-","_") + "_max"] || 0;
 							$("#teleop-" + station + "-" + item).text((avg).toFixed(2) + " (" + max + ")");
-			    		});
+						});
 
 						$("#hang-" + station).text(team);
 						$("#hang-" + station + "-succeed").text(Math.round(details.hang_succeed * details.matches * details.hang_attempt));
