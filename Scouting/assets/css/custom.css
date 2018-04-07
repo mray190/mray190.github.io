@@ -2,6 +2,14 @@ body {
   margin: 0px;
 }
 
+.hide {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  height: 1px;
+  color: white;
+}
+
 /* Add a black background color to the top navigation */
 .topnav {
   background-color: #333;

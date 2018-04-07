@@ -162,7 +162,7 @@
 
     const required = $(this).hasClass('required') ? ' required' : '';
 
-    var hidden = $('<input type="hidden" id="'+selectName+'"' + required + '>');
+    var hidden = $('<input class="hide" id="'+selectName+'"' + required + '>');
     hidden.val(this.val);
     hidden.insertAfter(this);
 
