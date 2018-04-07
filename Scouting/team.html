@@ -366,8 +366,15 @@
 			$("#hang-host").text(Math.round(details.host_succeed * details.matches * details.hang_attempt));
 		});
 		$("#content").show();
+
+    $("#match_data td").each(function() {
+      if (this.innerHTML == "N" || this.innerHTML == "X" || this.innerHTML == "0") this.classList.add("off");
+    });
+
 	    return false;
 	});
+
+
 	
 </script>
 </html>
