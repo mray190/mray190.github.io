@@ -347,7 +347,7 @@
 								auto_positions.forEach(function (position) {
 									var avg = details['auto_' + position + "_" + item] || 0;
 									var total_matches = (details[position + "_start"] || 0) * (details["matches"] || 0);
-									$("#" + item + "-auto-" + station + "-" + position).text((avg).toFixed(2) + " (" + total_matches + ")");
+									$("#" + item + "-auto-" + station + "-" + position).text((avg).toFixed(2) + " (" + total_matches.toFixed(0) + ")");
 								});
 							});
 
