@@ -10,17 +10,17 @@
 	<div class="topnav" id="nav_bar">
 		<a href="index.html">Scout</a>
 		<a href="pit_scout.html">Pit Scout</a>
-        <a href="match-results.html" class="active">Match Results</a>
+    <a href="match-results.html" class="active">Match Results</a>
 		<a href="data.html" >Rankings</a>
 		<a href="prematch.html">Pre-match</a>
-        <a href="team.html">Team Lookup</a>
-		<a href="picklist.html">Pick list</a>
-		<a href="settings.html">Settings</a>
+    <a href="team.html">Team Lookup</a>
+		<a href="index.html">Pick list</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
 	</div>
 
 	<br>
-	<div style="overflow-x:auto;">
+  <div class="content-container">
+    <div class="content">
 		<table class="u-full-width tablesorter condense" id="data">
 			<thead>
 				<tr>
@@ -46,7 +46,8 @@
 			<tbody id="match_data">
 			</tbody>
 		</table>
-	</div>
+    </div>
+  </div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -59,10 +60,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
-	
 	firebase.initializeApp(config);
     var database = firebase.database();
 
@@ -71,92 +68,97 @@
 	});
 
 
-    var matchRef = firebase.database().ref(getCookie("regional") + "/local/");
-    matchRef.on('value', function(snapshot) {
-		$("#match_data tr").remove(); 
-        snapshot.forEach(function(childSnapshot) {
-    		var matchNumber = childSnapshot.key;
-			var teams = childSnapshot.val();
-			
-			for(var teamNumber in teams) {
-				var team = teams[teamNumber];
+  var matchRef = firebase.database().ref(regionalCode + "/raw_results/");
 
-				var entry = document.getElementById('match_data').insertRow(-1);
-				entry.className = team.alliance;
+  matchRef.on('value', function(snapshot) {
+	$("#match_data tr").remove(); 
+    snapshot.forEach(function(childSnapshot) {
+		var team = childSnapshot.val();
+      	var matchNumber = team.match_num;
+      	var teamNumber = team.team_num;
 
-				var cell;
+		var entry = document.getElementById('match_data').insertRow(-1);
+		entry.className = team.alliance;
 
-				cell = entry.insertCell(0);
-				cell.innerHTML = matchNumber;
-				cell.setAttribute('data-title', 'Match #');
+		var cell;
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = teamNumber;
-				cell.setAttribute("data-title", "Team #");
+		cell = entry.insertCell(0);
+		cell.innerHTML = matchNumber;
+		cell.setAttribute('data-title', 'Match #');
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_start.toUpperCase();
-				cell.setAttribute("data-title", "Auto start");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = teamNumber;
+		cell.setAttribute("data-title", "Team #");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_line ? 'Y' : 'N';
-				cell.setAttribute("data-title", "Auto line");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_start.toUpperCase();
+		cell.setAttribute("data-title", "Auto start");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = "Left/Right";
-				cell.setAttribute("data-title", "Switch Loc");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_line ? 'Y' : 'N';
+		cell.setAttribute("data-title", "Auto line");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = "Left/Right";
-				cell.setAttribute("data-title", "Scale Loc");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_switch;
-				cell.setAttribute("data-title", "Auto Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = "Left/Right";
+		cell.setAttribute("data-title", "Switch Loc");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.auto_scale;
-				cell.setAttribute("data-title", "Auto Scale");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = "Left/Right";
+		cell.setAttribute("data-title", "Scale Loc");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_switch;
-				cell.setAttribute("data-title", "Teleop Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_switch;
+		cell.setAttribute("data-title", "Auto Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_scale;
-				cell.setAttribute("data-title", "Teleop Scale");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.auto_scale;
+		cell.setAttribute("data-title", "Auto Scale");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_opp_switch;
-				cell.setAttribute("data-title", "Teleop Opp. Switch");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_switch;
+		cell.setAttribute("data-title", "Teleop Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.teleop_vault;
-				cell.setAttribute("data-title", "Teleop Vault");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_scale;
+		cell.setAttribute("data-title", "Teleop Scale");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.defensive_rating;
-				cell.setAttribute("data-title", "DFR");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_opp_switch;
+		cell.setAttribute("data-title", "Teleop Opp. Switch");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_attempt ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Attempt");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.teleop_vault;
+		cell.setAttribute("data-title", "Teleop Vault");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_succeed ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Succeed");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.defensive_rating;
+		cell.setAttribute("data-title", "DFR");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_host ? "Y" : "N";
-				cell.setAttribute("data-title", "Hang Host");
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_attempt ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Attempt");
 
-				cell = entry.insertCell(-1);
-				cell.innerHTML = team.hang_attempt ? team.hang_time : 'X';
-				cell.setAttribute("data-title", "Hang Time");
-			}
-		  });
-		  
-	});
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_succeed ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Succeed");
+
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_host ? "Y" : "N";
+		cell.setAttribute("data-title", "Hang Host");
+
+		cell = entry.insertCell(-1);
+		cell.innerHTML = team.hang_succeed ? team.hang_time : 'X';
+		cell.setAttribute("data-title", "Hang Time");
+    });
+	sort.refresh();
+
+    $("td").each(function() {
+      if (this.innerHTML == "N" || this.innerHTML == "X" || this.innerHTML == "0") this.classList.add("off");
+    });
+});
+
+
 	
 </script>
 </html>

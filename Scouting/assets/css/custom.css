@@ -2,6 +2,14 @@ body {
   margin: 0px;
 }
 
+.hide {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  height: 1px;
+  color: white;
+}
+
 /* Add a black background color to the top navigation */
 .topnav {
   background-color: #333;
@@ -121,6 +129,28 @@ div.btn.plusminus {
   font-size: 1.4em;
   padding: 0;
   height: 34px;
+}
+
+.hidden {
+  display: none;
+}
+
+tr {
+  border: 1px solid #000!important;
+}
+
+tr.red td{
+  background-color: #f1b2c4;
+}
+tr.red td.off {
+  background-color: #f1dce2;
+}
+
+tr.blue td{
+  background-color: #accfe5;
+}
+tr.blue td.off {
+  background-color: #dae8f0;
 }
 
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */

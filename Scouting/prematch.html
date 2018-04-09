@@ -14,8 +14,7 @@
 		<a href="data.html" >Rankings</a>
 		<a href="prematch.html" class="active">Pre-match</a>
         <a href="team.html">Team Lookup</a>
-		<a href="picklist.html">Pick list</a>
-		<a href="settings.html">Settings</a>
+		<a href="index.html">Pick list</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
 	</div>
 
@@ -312,10 +311,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
-
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
 	
 	firebase.initializeApp(config);
 
@@ -324,7 +319,7 @@
 	var teleop_items = ['switch', 'scale', 'vault', 'opp-switch'];
 
 
-	getData(null, "team/frc6800/event/2018" + getCookie("regional") + "/status", function(returned_data) {
+	getData(null, "team/frc6800/event/2018" + regionalCode + "/status", function(returned_data) {
 	  //TODO: proper error checking on null response
 		var next_match = returned_data.next_match_key;
 
@@ -337,7 +332,7 @@
 			teamLookup[match_data.alliances.blue.team_keys[1].replace("frc","")] = "blue-2";
 			teamLookup[match_data.alliances.blue.team_keys[2].replace("frc","")] = "blue-3";
 
-			var teamRef = firebase.database().ref(getCookie("regional") + "/teams");
+			var teamRef = firebase.database().ref(regionalCode + "/teams");
 		    teamRef.on('value', function(snapshot) {
 		    	var teamDict = snapshot.val();
 
@@ -347,26 +342,26 @@
 					if (teamDict[team] != undefined) {
 				    	var details = teamDict[team].averages || {};
 
-						auto_items.forEach(function (item) {
-							$("#" + item + "-auto-" + station).text(team);
-							auto_positions.forEach(function (position) {
-								var avg = details['auto_' + position + "_" + item + "_avg"] || 0;
-								var total = details['auto_' + position + "_" + item + "_total"] || 0;
-			    				$("#" + item + "-auto-" + station + "-" + position).text((avg*100).toFixed(2) + "% (" + total + ")");
-				    		});
-				    	});
+							auto_items.forEach(function (item) {
+								$("#" + item + "-auto-" + station).text(team);
+								auto_positions.forEach(function (position) {
+									var avg = details['auto_' + position + "_" + item] || 0;
+									var total_matches = (details[position + "_start"] || 0) * (details["matches"] || 0);
+									$("#" + item + "-auto-" + station + "-" + position).text((avg).toFixed(2) + " (" + total_matches.toFixed(0) + ")");
+								});
+							});
 
 						$("#teleop-" + station).text(team);
 						teleop_items.forEach(function (item) {
-							var avg = details['teleop_' + item + "_avg"] || 0;
-							var max = details['teleop_' + item + "_max"] || 0;
+							var avg = details['teleop_' + item.replace("-","_")] || 0;
+							var max = details['teleop_' + item.replace("-","_") + "_max"] || 0;
 							$("#teleop-" + station + "-" + item).text((avg).toFixed(2) + " (" + max + ")");
-			    		});
+						});
 
 						$("#hang-" + station).text(team);
-						$("#hang-" + station + "-succeed").text((details['hang_succeed_avg']*100).toFixed(2) + "%");
-						$("#hang-" + station + "-attempt").text(details['hang_attempt_total']);
-						$("#hang-" + station + "-host-succeed").text(details['host_succeed_total']);
+						$("#hang-" + station + "-succeed").text(Math.round(details.hang_succeed * details.matches * details.hang_attempt));
+						$("#hang-" + station + "-attempt").text(Math.round(details.hang_attempt * details.matches));
+						$("#hang-" + station + "-host-succeed").text(Math.round(details.host_succeed * details.matches * details.hang_attempt));
 					}
 				}
 		    });

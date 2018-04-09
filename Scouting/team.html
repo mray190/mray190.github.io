@@ -14,8 +14,7 @@
 		<a href="data.html" >Rankings</a>
 		<a href="prematch.html">Pre-match</a>
         <a href="team.html" class="active">Team Lookup</a>
-		<a href="picklist.html">Pick list</a>
-		<a href="settings.html">Settings</a>
+		<a href="index.html">Pick list</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
 	</div>
 
@@ -34,228 +33,231 @@
 		</div>
 	</form>
 
-	<div id="content">
+  	<div class="content-container">
+		<div class="content">
 
-		<h4>Team results</h4>
-		<div class="row">
-			<div class="three columns" id="photo_loc"></div>
-			<div class="nine columns">
-				<div class="row">
-					<div class="three columns">
-						<table>
-							<tbody>
-								<tr>
-									<td colspan="2" style="text-align: center;">Drive train</td>
-								</tr>
-								<tr>
-									<td>Number of wheels</td>
-									<td id="wheel-num"></td>
-								</tr>
-								<tr>
-									<td>Size of wheels</td>
-									<td id="wheel-size"></td>
-								</tr>
-								<tr>
-									<td>Type of wheels</td>
-									<td id="wheel-type"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="three columns">
-						<table>
-							<tbody>
-								<tr>
-									<td colspan="2" style="text-align: center;">Intake</td>
-								</tr>
-								<tr>
-									<td>Type of Intake</td>
-									<td id="intake-type"></td>
-								</tr>
-								<tr>
-									<td>Over the bumper?</td>
-									<td id="intake-bumper"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="three columns">
-						<table>
-							<tbody>
-								<tr>
-									<td colspan="2" style="text-align: center;">Lift</td>
-								</tr>
-								<tr>
-									<td>Type of Lift</td>
-									<td id="lift-type"></td>
-								</tr>
-								<tr>
-									<td>Lift speed</td>
-									<td id="lift-speed"></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="three columns">
-						<table>
-							<tbody>
-								<tr>
-									<td colspan="2" style="text-align: center;">Hang</td>
-								</tr>
-								<tr>
-									<td>Type of Hang</td>
-									<td id="hang-type"></td>
-								</tr>
-								<tr>
-									<td>Hang speed</td>
-									<td id="hang-speed"></td>
-								</tr>
-							</tbody>
-						</table>
+			<h4>Team results</h4>
+			<div class="row">
+				<div class="three columns" id="photo_loc"></div>
+				<div class="nine columns">
+					<div class="row">
+						<div class="three columns">
+							<table>
+								<tbody>
+									<tr>
+										<td colspan="2" style="text-align: center;">Drive train</td>
+									</tr>
+									<tr>
+										<td>Number of wheels</td>
+										<td id="wheel-num"></td>
+									</tr>
+									<tr>
+										<td>Size of wheels</td>
+										<td id="wheel-size"></td>
+									</tr>
+									<tr>
+										<td>Type of wheels</td>
+										<td id="wheel-type"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="three columns">
+							<table>
+								<tbody>
+									<tr>
+										<td colspan="2" style="text-align: center;">Intake</td>
+									</tr>
+									<tr>
+										<td>Type of Intake</td>
+										<td id="intake-type"></td>
+									</tr>
+									<tr>
+										<td>Over the bumper?</td>
+										<td id="intake-bumper"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="three columns">
+							<table>
+								<tbody>
+									<tr>
+										<td colspan="2" style="text-align: center;">Lift</td>
+									</tr>
+									<tr>
+										<td>Type of Lift</td>
+										<td id="lift-type"></td>
+									</tr>
+									<tr>
+										<td>Lift speed</td>
+										<td id="lift-speed"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="three columns">
+							<table>
+								<tbody>
+									<tr>
+										<td colspan="2" style="text-align: center;">Hang</td>
+									</tr>
+									<tr>
+										<td>Type of Hang</td>
+										<td id="hang-type"></td>
+									</tr>
+									<tr>
+										<td>Hang speed</td>
+										<td id="hang-speed"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<br>
+			<br>
 
-		<h4>Summarized Data</h4>
-		<div class="row">
-			<div class="four columns">
-				<table>
+			<h4>Summarized Data</h4>
+			<div class="row">
+				<div class="four columns">
+					<table>
+						<thead>
+							<tr>
+								<td rowspan="2" style="text-align: center;"><b>Auto</b></td>
+								<td rowspan="2" style="text-align: center;">Tries</td>
+								<td colspan="2" style="text-align: center;">Switch</td>
+								<td colspan="2" style="text-align: center;">Scale</td>
+							</tr>
+							<tr>
+								<td>Average</td>
+								<td>Max</td>
+								<td>Average</td>
+								<td>Max</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Left</td>
+								<td id="left-tries"></td>
+								<td id="left-switch"></td>
+								<td id="left-switch_max"></td>
+								<td id="left-scale"></td>
+								<td id="left-scale_max"></td>
+							</tr>
+							<tr>
+								<td>Center</td>
+								<td id="center-tries"></td>
+								<td id="center-switch"></td>
+								<td id="center-switch_max"></td>
+								<td id="center-scale"></td>
+								<td id="center-scale_max"></td>
+							</tr>
+							<tr>
+								<td>Right</td>
+								<td id="right-tries"></td>
+								<td id="right-switch"></td>
+								<td id="right-switch_max"></td>
+								<td id="right-scale"></td>
+								<td id="right-scale_max"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="four columns">
+					<table>
+						<thead>
+							<tr>
+								<td style="text-align: center;"><b>Teleop</b></td>
+								<td style="text-align: center;">Average</td>
+								<td style="text-align: center;">Max</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Switch</td>
+								<td id="switch-avg"></td>
+								<td id="switch-max"></td>
+							</tr>
+							<tr>
+								<td>Scale</td>
+								<td id="scale-avg"></td>
+								<td id="scale-max"></td>
+							</tr>
+							<tr>
+								<td>Opp. Switch</td>
+								<td id="opp-switch-avg"></td>
+								<td id="opp-switch-max"></td>
+							</tr>
+							<tr>
+								<td>Vault</td>
+								<td id="vault-avg"></td>
+								<td id="vault-max"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="four columns">
+					<table>
+						<thead>
+							<tr>
+								<td style="text-align: center;"><b>Hang</b></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Attempts</td>
+								<td id="hang-attempts"></td>
+							</tr>
+							<tr>
+								<td>Successes</td>
+								<td id="hang-success"></td>
+							</tr>
+							<tr>
+								<td>Host Hangs</td>
+								<td id="hang-host"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<br>
+
+			<h4>Match Results</h4>
+			<div class="row">
+				<table class="u-full-width tablesorter condense" id="data">
 					<thead>
 						<tr>
-							<td rowspan="2" style="text-align: center;"><b>Auto</b></td>
-							<td rowspan="2" style="text-align: center;">Tries</td>
-							<td colspan="2" style="text-align: center;">Switch</td>
-							<td colspan="2" style="text-align: center;">Scale</td>
-						</tr>
-						<tr>
-							<td>Average</td>
-							<td>Max</td>
-							<td>Average</td>
-							<td>Max</td>
+							<th data-sort-default>#</th>
+							<th>Start</th>
+							<th>Cross Line</th>
+							<th>Switch Loc</th>
+							<th>Scale Loc</th>
+							<th>Auto Switch</th>
+							<th>Auto Scale</th>
+							<th>Teleop Switch</th>
+							<th>Teleop Scale</th>
+							<th>Opp Switch</th>
+							<th>Vault</th>
+							<th>DFR</th>
+							<th>Hang Attempt</th>
+							<th>Hang Succeed</th>
+							<th>Hang Host</th>
+							<th>Hang Time</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>Left</td>
-							<td id="left-tries"></td>
-							<td id="left-switch-avg"></td>
-							<td id="left-switch-max"></td>
-							<td id="left-scale-avg"></td>
-							<td id="left-scale-max"></td>
-						</tr>
-						<tr>
-							<td>Center</td>
-							<td id="center-tries"></td>
-							<td id="center-switch-avg"></td>
-							<td id="center-switch-max"></td>
-							<td id="center-scale-avg"></td>
-							<td id="center-scale-max"></td>
-						</tr>
-						<tr>
-							<td>Right</td>
-							<td id="right-tries"></td>
-							<td id="right-switch-avg"></td>
-							<td id="right-switch-max"></td>
-							<td id="right-scale-avg"></td>
-							<td id="right-scale-max"></td>
-						</tr>
+					<tbody id="match_data">
 					</tbody>
 				</table>
 			</div>
-			<div class="four columns">
-				<table>
-					<thead>
-						<tr>
-							<td style="text-align: center;"><b>Teleop</b></td>
-							<td style="text-align: center;">Average</td>
-							<td style="text-align: center;">Max</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Switch</td>
-							<td id="switch-avg"></td>
-							<td id="switch-max"></td>
-						</tr>
-						<tr>
-							<td>Scale</td>
-							<td id="scale-avg"></td>
-							<td id="scale-max"></td>
-						</tr>
-						<tr>
-							<td>Opp. Switch</td>
-							<td id="opp-switch-avg"></td>
-							<td id="opp-switch-max"></td>
-						</tr>
-						<tr>
-							<td>Vault</td>
-							<td id="vault-avg"></td>
-							<td id="vault-max"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="four columns">
-				<table>
-					<thead>
-						<tr>
-							<td style="text-align: center;"><b>Hang</b></td>
-							<td></td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Attempts</td>
-							<td id="hang-attempts"></td>
-						</tr>
-						<tr>
-							<td>Successes</td>
-							<td id="hang-success"></td>
-						</tr>
-						<tr>
-							<td>Host Hangs</td>
-							<td id="hang-host"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<br>
-
-		<h4>Match Results</h4>
-		<div class="row">
-			<table class="u-full-width tablesorter condense" id="data">
-				<thead>
-					<tr>
-						<th data-sort-default>#</th>
-						<th>Start</th>
-						<th>Cross Line</th>
-						<th>Switch Loc</th>
-						<th>Scale Loc</th>
-						<th>Auto Switch</th>
-						<th>Auto Scale</th>
-						<th>Teleop Switch</th>
-						<th>Teleop Scale</th>
-						<th>Vault</th>
-						<th>DFR</th>
-						<th>Hang Attempt</th>
-						<th>Hang Succeed</th>
-						<th>Hang Host</th>
-						<th>Hang Time</th>
-					</tr>
-				</thead>
-				<tbody id="match_data">
-				</tbody>
-			</table>
 		</div>
 	</div>
 
 </body>
-<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -265,96 +267,114 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
 
-	if (getCookie("regional")=="") {
-		window.location.replace("settings.html");
-	}
-
 	$("#content").hide();
 	
 	firebase.initializeApp(config);
     var database = firebase.database();
-    var storageRef = firebase.storage().ref();
+	var storageRef = firebase.storage().ref();
+
+  	var sort = new Tablesort(document.getElementById('data'), {
+	  	ascending: true
+	});
+	
 
 	$('#team_select').on('submit', function () {
 		var teamNum = $('#team_num').val();
 		storageRef.child('images/' + teamNum + ".jpg").getDownloadURL().then(function(url) {
+		  $("#photo_loc").empty();
 			$("#photo_loc").append("<img src=\"" + url + "\" style=\"width: 100%;\"></img>");
 		}).catch(function(error) {
 			console.log(error);
 		});
 
-    	var matchRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/matches");
+    	var matchRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/matches");
 	    matchRef.on('value', function(snapshot) {
 			$("#match_data tr").remove(); 
 	        snapshot.forEach(function(childSnapshot) {
-	    		var matchNumber = childSnapshot.key;
-				var match = childSnapshot.val();
-				var entry = document.getElementById('match_data').insertRow(-1);
-				entry.className = match.alliance;
 
-				entry.insertCell(0).innerHTML = matchNumber;
-				entry.insertCell(-1).innerHTML = match.auto_start.toUpperCase();
-				entry.insertCell(-1).innerHTML = match.auto_line ? 'Y' : 'N';
-				entry.insertCell(-1).innerHTML = "Left/Right";
-				entry.insertCell(-1).innerHTML = "Left/Right";
-				entry.insertCell(-1).innerHTML = match.auto_switch;
-				entry.insertCell(-1).innerHTML = match.auto_scale;
-				entry.insertCell(-1).innerHTML = match.teleop_switch;
-				entry.insertCell(-1).innerHTML = match.teleop_scale;
-				entry.insertCell(-1).innerHTML = match.teleop_vault;
-				entry.insertCell(-1).innerHTML = match.defensive_rating;
-				entry.insertCell(-1).innerHTML = match.hang_attempt ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = match.hang_succeed ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = match.hang_host ? "Y" : "N";
-				entry.insertCell(-1).innerHTML = match.hang_attempt ? match.hang_time : 'X';
+	        	var specMatchRef = firebase.database().ref(regionalCode + "/raw_results/" + childSnapshot.val());
+	        	specMatchRef.on('value', function(data) {
+
+					var match = data.val();
+		    		var matchNumber = parseInt(match.match_num);
+					var entry = document.getElementById('match_data').insertRow(-1);
+					entry.className = match.alliance;
+
+					entry.insertCell(0).innerHTML = matchNumber;
+					entry.insertCell(-1).innerHTML = match.auto_start.toUpperCase();
+					entry.insertCell(-1).innerHTML = match.auto_line ? 'Y' : 'N';
+					entry.insertCell(-1).innerHTML = "Left/Right";
+					entry.insertCell(-1).innerHTML = "Left/Right";
+					entry.insertCell(-1).innerHTML = match.auto_switch;
+					entry.insertCell(-1).innerHTML = match.auto_scale;
+					entry.insertCell(-1).innerHTML = match.teleop_switch;
+					entry.insertCell(-1).innerHTML = match.teleop_scale;
+					entry.insertCell(-1).innerHTML = match.teleop_opp_switch;
+					entry.insertCell(-1).innerHTML = match.teleop_vault;
+					entry.insertCell(-1).innerHTML = match.defensive_rating;
+					entry.insertCell(-1).innerHTML = match.hang_attempt ? "Y" : "N";
+					entry.insertCell(-1).innerHTML = match.hang_succeed ? "Y" : "N";
+					entry.insertCell(-1).innerHTML = match.host_succeed ? "Y" : "N";
+					entry.insertCell(-1).innerHTML = match.hang_attempt ? match.hang_time : 'X';
+					sort.refresh();
+	        	});
 		  	});
-			  
 		});
 
-    	var teamRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/details");
+    	var teamRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/details");
 	    teamRef.on('value', function(snapshot) {
-	    	var details = snapshot.val();
-	    	$("#wheel-num").text(details.wheel_number);
-	    	$("#wheel-size").text(details.wheel_size);
-	    	$("#wheel-type").text(details.wheel_type);
-	    	$("#intake-type").text(details.intake_type);
-	    	$("#intake-bumper").text(details.intake_bumper);
-	    	$("#lift-type").text(details.lift_type);
-	    	$("#lift-speed").text(details.lift_speed);
-	    	$("#hang-type").text(details.hang_type);
-	    	$("#hang-speed").text(details.hang_speed);
+	    	if (snapshot.val()) {
+		    	var details = snapshot.val();
+		    	$("#wheel-num").text(details.wheel_number);
+		    	$("#wheel-size").text(details.wheel_size);
+		    	$("#wheel-type").text(details.wheel_type);
+		    	$("#intake-type").text(details.intake_type);
+		    	$("#intake-bumper").text(details.intake_bumper);
+		    	$("#lift-type").text(details.lift_type);
+		    	$("#lift-speed").text(details.lift_speed);
+		    	$("#hang-type").text(details.hang_type);
+		    	$("#hang-speed").text(details.hang_speed);
+		    }
 		});
 
-    	var teamRef = firebase.database().ref(getCookie("regional") + "/teams/" + $('#team_num').val() + "/averages");
+    	var teamRef = firebase.database().ref(regionalCode + "/teams/" + $('#team_num').val() + "/averages");
 	    teamRef.on('value', function(snapshot) {
 	    	var details = snapshot.val();
-	    	$("#center-tries").text(details.center_total);
-	    	$("#left-tries").text(details.left_total);
-	    	$("#right-tries").text(details.right_total);
+
+	    	$("#center-tries").text(Math.round(details.center_start * details.matches));
+	    	$("#left-tries").text(Math.round(details.left_start * details.matches));
+	    	$("#right-tries").text(Math.round(details.right_start * details.matches));
 
 	    	var positions = ['center', 'left', 'right'];
 	    	var items = ['switch', 'scale', 'vault', 'opp-switch'];
-	    	var metric = ['avg', 'max'];
+	    	var metric = ['', '_max'];
 
     		items.forEach(function (item) {
     			metric.forEach(function (metric) {
 	    			positions.forEach(function (position) {
-	    				$("#" + position + "-" + item + "-" + metric).text(details['auto_' + position + "_" + item + "_" + metric]);
+	    				if (item=="switch" || item=="scale") {
+	    					const td_id = "#" + position + "-" + item + metric;
+	    					const json_key = 'auto_' + position + "_" + item + metric;
+	    					$(td_id).text(details[json_key]);
+	    				}
 	    			});
-    				$("#" + item + "-" + metric).text(details['teleop_' + item.replace("-","_") + "_" + metric]);
+    				$("#" + item + "-" + (metric=='' ? 'avg' : 'max')).text(details['teleop_' + item.replace("-","_") + metric]);
 	    		});
 	    	});
-			$("#hang-attempts").text(details.hang_attempt_total);
-			$("#hang-success").text(details.hang_succeed_total);
-			$("#hang-host").text(details.host_succeed_total);
+			$("#hang-attempts").text(Math.round(details.hang_attempt * details.matches));
+			$("#hang-success").text(Math.round(details.hang_succeed * details.matches * details.hang_attempt));
+			$("#hang-host").text(Math.round(details.host_succeed * details.matches * details.hang_attempt));
 		});
 		$("#content").show();
+
+    $("#match_data td").each(function() {
+      if (this.innerHTML == "N" || this.innerHTML == "X" || this.innerHTML == "0") this.classList.add("off");
+    });
+
 	    return false;
 	});
 
-  	var sort = new Tablesort(document.getElementById('data'), {
-	  	ascending: true
-	});
+
 	
 </script>
 </html>

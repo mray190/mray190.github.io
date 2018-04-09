@@ -14,120 +14,123 @@
 		<a href="data.html" >Rankings</a>
 		<a href="prematch.html">Pre-match</a>
         <a href="team.html">Team Lookup</a>
-		<a href="picklist.html">Pick list</a>
-		<a href="settings.html">Settings</a>
+		<a href="index.html">Pick list</a>
 		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
 	</div>
 
 	<br>
 
-	<form id="pit_scout_frm">
-		<div class="row">
-			<div class="four columns">
-				<label for="team_num">Team Number</label>
-				<input class="u-full-width" type="number" id="team_num" required>
-			</div>
-			<div class="four columns">
-				<label for="team_pic">Robot Picture</label>
-				<input id="team_pic" type="file" accept="image/*">
-			</div>
-			<div class="four columns">
-				<label for="main_strat">Main Strategy</label>
-				<select class="u-full-width" id="main_strat">
-					<option value="switch">Switch</option>
-					<option value="scale">Scale</option>
-					<option value="vault">Vault</option>
-					<option value="hang">Hang</option>
-					<option value="defense">Defense</option>
-					<option value="other">Other</option>
-				</select>
-			</div>
+	<div class="content-container">
+		<div class="content">
+			<form id="pit_scout_frm">
+				<div class="row">
+					<div class="four columns">
+						<label for="team_num">Team Number</label>
+						<input class="u-full-width" type="number" id="team_num" required>
+					</div>
+					<div class="four columns">
+						<label for="team_pic">Robot Picture</label>
+						<input id="team_pic" type="file" accept="image/*">
+					</div>
+					<div class="four columns">
+						<label for="main_strat">Main Strategy</label>
+						<select class="u-full-width" id="main_strat">
+							<option value="switch">Switch</option>
+							<option value="scale">Scale</option>
+							<option value="vault">Vault</option>
+							<option value="hang">Hang</option>
+							<option value="defense">Defense</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+				</div>
+				<hr>
+				<label for="drive_train">Drive Train</label>
+				<div class="row" id="drive_train">
+					<div class="four columns">
+						<label for="wheel_number">Number of wheels</label>
+						<input class="u-full-width" type="number" id="wheel_number" required>
+					</div>
+					<div class="four columns">
+						<label for="wheel_size">Size of wheels</label>
+						<input class="u-full-width" type="number" id="wheel_size" required>
+					</div>
+					<div class="four columns">
+						<label for="wheel_type">Type of wheels</label>
+						<select class="u-full-width" id="wheel_type">
+							<option value="colson">Colson</option>
+							<option value="higrip">HiGrip</option>
+							<option value="plaction">Plaction</option>
+							<option value="omni">Omni</option>
+							<option value="mechanum">Mechanum</option>
+							<option value="swerve">Swerve</option>
+							<option value="Stealth">Stealth</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+				</div>
+				<hr>
+				<label for="intake">Intake</label>
+				<div class="row" id="intake">
+					<div class="six columns">
+						<label for="intake_type">Intake Type</label>
+						<select class="u-full-width" id="intake_type">
+							<option value="side">Side rollers</option>
+							<option value="top">Top rollers</option>
+							<option value="passive">Passive</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="six columns">
+						<label>
+								<input type="checkbox" id="intake_bumper">
+								<span class="label-body">Over-the-bumper?</span>
+							</label>
+						</div>
+				</div>
+				<hr>
+				<label for="lift">Lift</label>
+				<div class="row" id="lift">
+					<div class="six columns">
+						<label for="lift_type">Lift Type</label>
+						<select class="u-full-width" id="lift_type">
+							<option value="none">None</option>
+							<option value="elevator">Elevator</option>
+							<option value="telescope">Telescope</option>
+							<option value="fourbar">Reverse 4 Bar</option>
+							<option value="aframe">A-Frame</option>
+							<option value="scissor">Scissor</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="six columns">
+						<label for="lift_speed">Lift Speed</label>
+						<input class="u-full-width" type="number" id="lift_speed" required>
+					</div>
+				</div>
+				<hr>
+				<label for="hang">Hang</label>
+				<div class="row" id="hang">
+					<div class="six columns">
+						<label for="hang_type">Hang Type</label>
+						<select class="u-full-width" id="hang_type">
+							<option value="none">None</option>
+							<option value="single">Single</option>
+							<option value="double">Double</option>
+							<option value="triple">Triple</option>
+							<option value="platform">Double Platform</option>
+						</select>
+					</div>
+					<div class="six columns">
+						<label for="hang_speed">Hang Speed</label>
+						<input class="u-full-width" type="number" id="hang_speed" required>
+					</div>
+				</div>
+				<hr>
+				<input class="button-primary" type="submit" value="Submit">
+			</form>
 		</div>
-		<hr>
-		<label for="drive_train">Drive Train</label>
-		<div class="row" id="drive_train">
-			<div class="four columns">
-				<label for="wheel_number">Number of wheels</label>
-				<input class="u-full-width" type="number" id="wheel_number" required>
-			</div>
-			<div class="four columns">
-				<label for="wheel_size">Size of wheels</label>
-				<input class="u-full-width" type="number" id="wheel_size" required>
-			</div>
-			<div class="four columns">
-				<label for="wheel_type">Type of wheels</label>
-				<select class="u-full-width" id="wheel_type">
-					<option value="colson">Colson</option>
-					<option value="higrip">HiGrip</option>
-					<option value="plaction">Plaction</option>
-					<option value="omni">Omni</option>
-					<option value="mechanum">Mechanum</option>
-					<option value="swerve">Swerve</option>
-					<option value="Stealth">Stealth</option>
-					<option value="other">Other</option>
-				</select>
-			</div>
-		</div>
-		<hr>
-		<label for="intake">Intake</label>
-		<div class="row" id="intake">
-			<div class="six columns">
-				<label for="intake_type">Intake Type</label>
-				<select class="u-full-width" id="intake_type">
-					<option value="side">Side rollers</option>
-					<option value="top">Top rollers</option>
-					<option value="passive">Passive</option>
-					<option value="other">Other</option>
-				</select>
-			</div>
-			<div class="six columns">
-				<label>
-			    	<input type="checkbox" id="intake_bumper">
-			    	<span class="label-body">Over-the-bumper?</span>
-			  	</label>
-		  	</div>
-		</div>
-		<hr>
-		<label for="lift">Lift</label>
-		<div class="row" id="lift">
-			<div class="six columns">
-				<label for="lift_type">Lift Type</label>
-				<select class="u-full-width" id="lift_type">
-					<option value="none">None</option>
-					<option value="elevator">Elevator</option>
-					<option value="telescope">Telescope</option>
-					<option value="fourbar">Reverse 4 Bar</option>
-					<option value="aframe">A-Frame</option>
-					<option value="scissor">Scissor</option>
-					<option value="other">Other</option>
-				</select>
-			</div>
-			<div class="six columns">
-				<label for="lift_speed">Lift Speed</label>
-				<input class="u-full-width" type="number" id="lift_speed" required>
-			</div>
-		</div>
-		<hr>
-		<label for="hang">Hang</label>
-		<div class="row" id="hang">
-			<div class="six columns">
-				<label for="hang_type">Hang Type</label>
-				<select class="u-full-width" id="hang_type">
-					<option value="none">None</option>
-					<option value="single">Single</option>
-					<option value="double">Double</option>
-					<option value="triple">Triple</option>
-					<option value="platform">Double Platform</option>
-				</select>
-			</div>
-			<div class="six columns">
-				<label for="hang_speed">Hang Speed</label>
-				<input class="u-full-width" type="number" id="hang_speed" required>
-			</div>
-		</div>
-		<hr>
-		<input class="button-primary" type="submit" value="Submit">
-	</form>
+	</div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
@@ -139,10 +142,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
 <script>
-
-//	if (getCookie("regional")=="") {
-//		window.location.replace("settings.html");
-//	}
 	
 	firebase.initializeApp(config);
     var database = firebase.database();	
@@ -167,7 +166,7 @@
 		results['hang_type'] = $('#hang_type').val();
 		results['hang_speed'] = $('#hang_speed').val();
 
-		writePitScoutResults(getCookie("regional"), $('#team_num').val(), results);
+		writePitScoutResults(regionalCode, $('#team_num').val(), results);
 
 	    alert('Results submitted!');
 	    return true;

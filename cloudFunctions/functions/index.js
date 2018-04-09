@@ -1,93 +1,134 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const cors = require('cors')({origin: true});
+admin.initializeApp();
 
 // https://firebase.google.com/docs/functions/database-events
 
-exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num}/matches/{match_uid}').onWrite((event) => {
+exports.calculateAvgs = functions.database.ref('/{regional_code}/teams/{team_num}/matches').onWrite((event) => {
+  if(event.eventType === 'providers/google.firebase.database/eventTypes/ref.delete') return;
 
-	const original = event.data;
-	const regional_code = event.params.regional_code;
-	const team_num = event.params.team_num;
-  const match_num = event.params.match_uid;
-  const match_data = event.data.val();
+  const original = event.data;
+  const regional_code = event.params.regional_code;
+  const team_num = event.params.team_num;
 
-	var rootRef = original.ref.root;
-  var averageRef = rootRef.child('/'+regional_code+'/teams/' + team_num + '/averages');
-  var matchesRef = rootRef.child('/'+regional_code+'/teams/' + team_num + '/matches');
-  
-  return matchesRef.once('value',(matches_snapshot) => {
-    return averageRef.once('value', (average_snapshot) => {
-      var current_averages = average_snapshot.val();
-      if(!current_averages) current_averages = {}
-      const total_num_matches = matches_snapshot.numChildren();
-  
-      current_averages.total_matches = (total_num_matches || 1);
+  const root_ref = original.ref.root;
+  var team_average_ref = root_ref.child('/' + regional_code + '/teams/' + team_num + '/averages');
+  var raw_results_ref =  root_ref.child('/' + regional_code + '/raw_results');
+  var team_hash_list =  root_ref.child('/' + regional_code + '/teams/' + team_num + '/matches');
+  // Properties that don't get averaged because that would be bad...
+  const dont_average = ['auto_start', 'alliance', 'match_num', 'team_num', 'auto_switch', 'auto_scale'];
+  console.log('RREF: ' + raw_results_ref);
 
-      // AUTO STARTING POSITIONS
-      switch(match_data.auto_start.toLowerCase()) {
-        case('left') : {current_averages.left_total = (current_averages.left_total || 0) + 1; break;}
-        case('center') : {current_averages.center_total = (current_averages.center_total || 0) + 1; break;}
-        case('right') : {current_averages.right_total = (current_averages.right_total || 0) + 1; break;}
-        default: break;
-      }
-      current_averages.left_avg = (current_averages.left_total || 0) / total_num_matches;
-      current_averages.center_avg = (current_averages.center_total || 0) / total_num_matches;
-      current_averages.right_avg = (current_averages.right_total || 0) / total_num_matches;
+  return raw_results_ref.once('value' , (raw_results_snapshot) => {
+    const raw_results = raw_results_snapshot.val();
+    var averages = {};
+    averages.left_start = 0;
+    averages.center_start = 0;
+    averages.right_start = 0;
 
-      var props = ['auto_scale', 'auto_switch', 'teleop_scale', 'teleop_switch', 'teleop_opp_switch', 'teleop_vault']
-      props.forEach((prop)=>{
-        if (prop.indexOf("auto")!=-1) {
-          var modifiedProp = prop.replace("auto_", "auto_" + match_data.auto_start.toLowerCase() + "_");
-          current_averages[modifiedProp + '_max'] = ((current_averages[modifiedProp + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[modifiedProp + '_max'] || 0);
-          current_averages[modifiedProp + '_total'] = (current_averages[modifiedProp + '_total'] || 0) + match_data[prop];
-          current_averages[modifiedProp + '_avg'] = (current_averages[modifiedProp + '_total'] || 0) / total_num_matches;
+    // Total all of the match data from the hash list
+    team_hash_list.once('value', matches_snapshot => {
+
+      var total_num_matches = 0;
+      // retrieve each snapshot from the list of matches from the team
+      matches_snapshot.forEach((hash_snapshot) => {
+        total_num_matches ++;
+        const hash = hash_snapshot.val();
+        const match = raw_results[hash];
+
+        if(!match) {
+          console.error('Unable to find match hash: ' + hash + ' for team: ' + team_num);
+          return;
         }
-        current_averages[prop + '_max'] = ((current_averages[prop + '_max'] || 0) < match_data[prop]) ? (match_data[prop]) : (current_averages[prop + '_max'] || 0);
-        current_averages[prop + '_total'] = (current_averages[prop + '_total'] || 0) + match_data[prop];
-        current_averages[prop + '_avg'] = (current_averages[prop + '_total'] || 0) / total_num_matches;
-      })
+  
+        switch(match['auto_start'].toLowerCase()) {
+          case('left') : {
+            averages.left_start = (averages.left_start || 0) + 1; 
+            averages.auto_left_switch = (averages.auto_left_switch || 0) + (match.auto_switch || 0);          
+            averages.auto_left_scale = (averages.auto_left_scale || 0) + (match.auto_scale || 0); break;          
+          }
+          case('center') : {
+            averages.center_start = (averages.center_start || 0) + 1;
+            averages.auto_center_switch = (averages.auto_center_switch || 0) + (match.auto_switch || 0);
+            averages.auto_center_scale = (averages.auto_center_scale || 0) + (match.auto_scale || 0); break;
+          }
+          case('right') : {
+            averages.right_start = (averages.right_start || 0) + 1;
+            averages.auto_right_switch = (averages.auto_right_switch || 0) + (match.auto_switch || 0);
+            averages.auto_right_scale = (averages.auto_right_scale || 0) + (match.auto_scale || 0); break;
+          }
+        }   
+              
+        for(prop in match) {
+          if(dont_average.includes(prop.toLowerCase())) continue;
+  
+          // Create a list of comments instead
+          if(prop.toLowerCase() === 'comments') { 
+            if(typeof(averages['comments']) === 'undefined') {
+              averages['comments'] = []
+            } 
+            if(match[prop]){
+              averages['comments'].push(match[prop]);
+            }
+          } 
+          // Average booleans differently
+          else if(typeof(match[prop]) === "boolean") { 
+           if(match[prop]) {
+             averages[prop] = (averages[prop] || 0.0) + 1.0;
+           } else {
+            averages[prop] = (averages[prop] || 0.0);
+           }
+          }
+          // Average all other props by their match data totals
+          else { 
+            averages[prop] = (parseFloat(averages[prop]) || 0.0) + parseFloat(match[prop]);
+            if(averages[prop + '_max'] < match[prop] || !(averages[prop + '_max'])) {
+              averages[prop + '_max'] = parseFloat(match[prop]);
+            }
 
-      var prop_bools = ['auto_line', 'hang_attempt', 'hang_succeed', 'host_succeed']
-      prop_bools.forEach((prop_bool) =>{
-        current_averages[prop_bool + '_total'] = (current_averages[prop_bool + '_total'] || 0) + (match_data[prop_bool] ? 1 : 0);
-        if(prop_bool === prop_bools[0] || prop_bool === prop_bools[1]) {
-          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / total_num_matches;
-        } else {
-          current_averages[prop_bool + '_avg'] = (current_averages[prop_bool + '_total'] || 0) / (current_averages.hang_attempt_total || 1);
+            if(prop === 'hang_time' && match['hang_attempt']) {
+              if((match[prop] < averages[prop + '_min'] && match[prop] > 0) || !(averages[prop + '_min'])) {
+                averages[prop + '_min'] = parseFloat(match[prop]);
+              }
+            }
+          }
         }
-      })
+      });
 
-      if(match_data.defensive_rating !== 'NA') {
-        current_averages.defensive_rating_total = (current_averages.defensive_rating_total || 0) + parseInt(match_data.defensive_rating);
-        current_averages.defensive_rating_counter = (current_averages.defensive_rating_counter || 0) + 1;
-        current_averages.defensive_rating_avg = (current_averages.defensive_rating_total || 0) / (current_averages.defensive_rating_counter || 1);
-      } else if (!current_averages.defensive_rating_avg) {
-        current_averages.defensive_rating_avg = 0
+      // Average totals
+      const total_hang_attempts = (averages['hang_attempt'] > 0) ? averages['hang_attempt'] : 1;
+
+      const total_auto_left = (averages['left_start'] > 0) ? averages['left_start'] : 1;
+      const total_auto_center = (averages['center_start'] > 0) ? averages['center_start'] : 1;
+      const total_auto_right = (averages['right_start'] > 0) ? averages['right_start'] : 1;
+
+
+      for(i in averages) {
+        if(i.toLowerCase() === 'comments' || i.includes('_max') || i.includes('_min')) continue;
+
+        var divisor = total_num_matches;
+        switch(i) {
+          case 'auto_left_switch': 
+          case 'auto_left_scale': {divisor = total_auto_left; break;}
+
+          case 'auto_center_switch': 
+          case 'auto_center_scale': {divisor = total_auto_center; break;}
+
+          case 'auto_right_switch': 
+          case 'auto_right_scale': {divisor = total_auto_right; break;}
+
+          case 'hang_succeed':
+          case 'host_succeed':
+          case 'hang_time': {divisor = total_hang_attempts; break;}
+          
+          default: {divisor = total_num_matches; break;}
+        }
+
+        averages[i] = parseFloat((parseFloat(averages[i]) / divisor).toFixed(5));
       }
-
-      current_averages.hang_time_total = (current_averages.hang_time_total || 0) + match_data.hang_time;
-      current_averages.hang_time_avg = (current_averages.hang_time_total || 0) / (current_averages.hang_succeed_total || 1);
-
-      return averageRef.set(current_averages);
-    })
+      // Upload averages to Firebase
+      return team_average_ref.set(averages);
+    });
   })
-	// Auto center %
-	// Auto right %
-	// Auto left %
-	// Auto max scale
-	// Auto scale
-	// Auto max switch
-	// Auto switch
-  // Auto line cross %
-  
-	// Max switch
-	// Avg switch
-	// Max scale
-	// Avg scale
-	// Max vault
-  // Avg vault
-  
-	// Hang attempts
-	// Hang %
-	// Host hangs
-	// Host hang %
 });
