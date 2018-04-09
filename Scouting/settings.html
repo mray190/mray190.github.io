@@ -30,12 +30,14 @@
 			</div>
 			<div class="six columns">
 				<label for="regional">Regional code</label>
-				<input class="u-full-width" type="text" placeholder="Hub City: txlu, Lone Start South: txho" id="regional" required>
+				<select class="u-full-width" id="regional">
+					<option value="txlu">Hub City</option>
+					<option value="txho">Lone Star South</option>
+				</select>
 			</div>
 		</div>
 		<input class="button-primary" type="submit" value="Save">
 	</form>
-
 </body>
 <script
 	src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -47,10 +49,11 @@
 	$("#regional").val(getCookie("regional"));
 
 	$('#settingsForm').on('submit', function () {
+		var regionalCode = document.getElementById('regional');
 		setCookie("name", $("#name").val(), 3);
-		setCookie("regional", $("#regional").val().toLowerCase(), 3);
-	    alert('Settings saved!');
-	    return true;
+		setCookie("regional", regionalCode.value, 3);
+		alert('Settings saved!');
+	  return true;
 	});
 </script>
 </html>
