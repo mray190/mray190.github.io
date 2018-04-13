@@ -75,14 +75,16 @@
 
 		getData(regionalCode + "_rankings", "event/2018" + regionalCode + "/rankings", function(returned_data) {
 			var data = {};
-			returned_data['rankings'].forEach(function(item, index) {
-				var team = item.team_key.replace("frc","");
-				data[team] = {};
-				data[team]['rank'] = item.rank;
-				data[team]['matches'] = item.matches_played;
-				data[team]['record'] = item.record.wins + "-" + item.record.losses + "-" + item.record.ties;
-				data[team]['rp'] = item.extra_stats[0];
-			});
+			if (Object.keys(returned_data['rankings']).length>0) {
+				returned_data['rankings'].forEach(function(item, index) {
+					var team = item.team_key.replace("frc","");
+					data[team] = {};
+					data[team]['rank'] = item.rank;
+					data[team]['matches'] = item.matches_played;
+					data[team]['record'] = item.record.wins + "-" + item.record.losses + "-" + item.record.ties;
+					data[team]['rp'] = item.extra_stats[0];
+				});
+			}
 
 			getData(regionalCode + "_oprs", "event/2018" + regionalCode + "/oprs", function(returned_data) {
 				for (var key in returned_data['ccwms']) {
