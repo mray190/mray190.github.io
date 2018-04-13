@@ -53,7 +53,7 @@ var config = {
 	storageBucket: "gs://viperbotsvalor.appspot.com"
 };
 
-var regionalCode = "txpa";
+var regionalCode = "carv";
 
 var tba_api_key = "LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M";
 var tba_base_url = "https://www.thebluealliance.com/api/v3/";
