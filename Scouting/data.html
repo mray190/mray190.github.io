@@ -109,7 +109,7 @@
 						var cell;
 
 						cell = entry.insertCell(0);
-						cell.innerHTML = team;
+						cell.innerHTML = '<a href="chart.html?team=' + team + '">' + team + '</a>';
 						cell.setAttribute('data-title', 'Team');
 
 						cell = entry.insertCell(-1);

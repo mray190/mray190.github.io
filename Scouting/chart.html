@@ -1,0 +1,143 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>6800 Scouting - 2018</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+	<link rel="stylesheet" href="assets/css/custom.css">
+	<meta name="viewport" content="width=device-width" />
+</head>
+<body>
+	<div class="topnav" id="nav_bar">
+		<a href="index.html">Scout</a>
+		<a href="pit_scout.html">Pit Scout</a>
+		<a href="match-results.html">Match Results</a>
+		<a href="data.html">Rankings</a>
+		<a href="prematch.html">Pre-match</a>
+		<a href="team.html">Team Lookup</a>
+		<a href="index.html">Pick list</a>
+		<a href="javascript:void(0);" class="icon" onclick="nav_bar_click()">&#9776;</a>
+	</div>
+
+	<br>
+	<div class="content-container">
+		<div class="content" style="position: relative; height:75%; width:75%">
+			<canvas id="chart"></canvas>
+		</div>
+	</div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="assets/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/tablesort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.0.2/sorts/tablesort.number.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script>
+	
+	function getQueryVariable(variable)
+	{
+	       var query = window.location.search.substring(1);
+	       var vars = query.split("&");
+	       for (var i=0;i<vars.length;i++) {
+	               var pair = vars[i].split("=");
+	               if(pair[0] == variable){return pair[1];}
+	       }
+	       return(false);
+	}
+
+	firebase.initializeApp(config);
+	var database = firebase.database();
+
+	var chart_ref = document.getElementById("chart").getContext('2d');
+	var chart = new Chart(chart_ref, {
+	    type: 'bar',
+	    data: {
+	        labels: [],
+	        datasets: [{
+	            label: 'Vault',
+        		borderColor: "#eef442",
+        		backgroundColor: "#eef442dd",
+        		hoverBackgroundColor: "#eef442dd",
+	            data: []
+	        },
+	        {
+	            label: 'Switch',
+        		borderColor: "#41f441",
+        		backgroundColor: "#41f441dd",
+        		hoverBackgroundColor: "#41f441dd",
+	            data: []
+	        },
+	        {
+	            label: 'Scale',
+        		borderColor: "#417ff4",
+        		backgroundColor: "#417ff4dd",
+        		hoverBackgroundColor: "#417ff4dd",
+	            data: []
+	        }
+	        ,{
+	            label: 'Opp Switch',
+        		borderColor: "#d8133e",
+        		backgroundColor: "#d8133edd",
+        		hoverBackgroundColor: "#d8133edd",
+	            data: []
+	        }]
+	    },
+	    options: {
+	        scales: {
+	            yAxes: [{
+	                stacked: true
+	            }],
+	            xAxes: [{
+	            	stacked: true
+	            }]
+	        }
+	    }
+	});
+
+	function compareMatches(a, b) {
+		return a.match_num - b.match_num;
+	}
+
+	var origRef = firebase.database().ref("carv/teams/" + getQueryVariable("team") + "/matches");
+	origRef.on('value', function(orig_snapshot) {
+		var promises = [];
+		orig_snapshot.forEach(function(orig_child_snapshot) {
+			var ref = orig_child_snapshot.val();
+
+			var matchRef = firebase.database().ref("carv/raw_results/" + ref);
+			var promise = matchRef.once('value').then(function(snap) {
+				return snap;
+			});
+
+			promises.push(promise);
+		});
+		Promise.all(promises).then(function(values) {
+
+			var archive = []
+			values.forEach(function(data) {
+				archive.push({
+					match_num: data.val()['match_num'], 
+					vault: data.val()['teleop_vault'],
+					switch: data.val()['teleop_switch'],
+					scale: data.val()['teleop_scale'],
+					opp_switch: data.val()['teleop_opp_switch']
+				});
+			});
+
+			archive.sort(compareMatches);
+			archive.forEach(function(data) {
+				chart.data.labels.push(data.match_num);
+				chart.data.datasets[0].data.push(data.vault);
+				chart.data.datasets[1].data.push(data.switch);
+				chart.data.datasets[2].data.push(data.scale);
+				chart.data.datasets[3].data.push(data.opp_switch);
+				chart.update();
+			});
+		});
+	});
+
+</script>
+</html>
