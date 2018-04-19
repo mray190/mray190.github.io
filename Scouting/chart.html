@@ -56,11 +56,12 @@
 	    type: 'bar',
 	    data: {
 	        labels: [],
-	        datasets: [{
-	            label: 'Vault',
-        		borderColor: "#eef442",
-        		backgroundColor: "#eef442dd",
-        		hoverBackgroundColor: "#eef442dd",
+	        datasets: [
+	        {
+	            label: 'Scale',
+        		borderColor: "#417ff4",
+        		backgroundColor: "#417ff4dd",
+        		hoverBackgroundColor: "#417ff4dd",
 	            data: []
 	        },
 	        {
@@ -71,24 +72,32 @@
 	            data: []
 	        },
 	        {
-	            label: 'Scale',
-        		borderColor: "#417ff4",
-        		backgroundColor: "#417ff4dd",
-        		hoverBackgroundColor: "#417ff4dd",
-	            data: []
-	        }
-	        ,{
 	            label: 'Opp Switch',
         		borderColor: "#d8133e",
         		backgroundColor: "#d8133edd",
         		hoverBackgroundColor: "#d8133edd",
 	            data: []
+	        },
+	        {
+	            label: 'Vault',
+        		borderColor: "#eef442",
+        		backgroundColor: "#eef442dd",
+        		hoverBackgroundColor: "#eef442dd",
+	            data: []
 	        }]
 	    },
 	    options: {
+	        title: {
+	            display: true,
+	            text: 'Team #'
+	        },
 	        scales: {
 	            yAxes: [{
-	                stacked: true
+	                stacked: true,
+                    ticks: {
+				        beginAtZero: true,
+				        max:14
+				    }
 	            }],
 	            xAxes: [{
 	            	stacked: true
@@ -100,6 +109,7 @@
 	function compareMatches(a, b) {
 		return a.match_num - b.match_num;
 	}
+	chart.options.title.text=getQueryVariable("team")
 
 	var origRef = firebase.database().ref("carv/teams/" + getQueryVariable("team") + "/matches");
 	origRef.on('value', function(orig_snapshot) {
@@ -130,10 +140,10 @@
 			archive.sort(compareMatches);
 			archive.forEach(function(data) {
 				chart.data.labels.push(data.match_num);
-				chart.data.datasets[0].data.push(data.vault);
+				chart.data.datasets[3].data.push(data.vault);
 				chart.data.datasets[1].data.push(data.switch);
-				chart.data.datasets[2].data.push(data.scale);
-				chart.data.datasets[3].data.push(data.opp_switch);
+				chart.data.datasets[0].data.push(data.scale);
+				chart.data.datasets[2].data.push(data.opp_switch);
 				chart.update();
 			});
 		});

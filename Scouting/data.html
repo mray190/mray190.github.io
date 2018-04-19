@@ -25,7 +25,7 @@
 			<thead>
 				<tr>
 					<th>Team</th>
-					<th data-sort-default>Rank</th>
+					<th>Rank</th>
 					<th>Matches</th>
 					<th>Record</th>
 					<th>RP</th>
@@ -40,7 +40,7 @@
 					<th>Teleop Scale</th>
 					<th>Teleop Opp Switch</th>
 					<th>Teleop Vault</th>
-					<th>Total Cubes</th>
+					<th data-sort-default>Total Cubes</th>
 					<th>Hang</th>
 					<th>Hosted Hang</th>
 				</tr>
@@ -90,6 +90,13 @@
 				for (var key in returned_data['ccwms']) {
 					if (key != undefined) {
 						var team = key.replace("frc","");
+						if (data[team] == undefined) {
+							data[team] = {};
+							data[team]['rank'] = "N/A";
+							data[team]['matches'] = "N/A";
+							data[team]['record'] = "N/A";
+							data[team]['rp'] = "N/A";
+						}
 						data[team]['opr'] = returned_data['ccwms'][key].toFixed(2);
 					}
 				}
