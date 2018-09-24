@@ -32,11 +32,10 @@
 			</div>
 		</div>
 	</form>
-
   	<div class="content-container">
 		<div class="content">
 
-			<h4>Team results</h4>
+			<a href="" id="chart_link"><h4>Team results</h4></a>
 			<div class="row">
 				<div class="three columns" id="photo_loc"></div>
 				<div class="nine columns">
@@ -279,7 +278,11 @@
 	
 
 	$('#team_select').on('submit', function () {
+
 		var teamNum = $('#team_num').val();
+
+		$("#chart_link").attr("href", "chart.html?team=" + teamNum);
+
 		storageRef.child('images/' + teamNum + ".jpg").getDownloadURL().then(function(url) {
 		  $("#photo_loc").empty();
 			$("#photo_loc").append("<img src=\"" + url + "\" style=\"width: 100%;\"></img>");

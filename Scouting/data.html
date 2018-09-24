@@ -25,7 +25,7 @@
 			<thead>
 				<tr>
 					<th>Team</th>
-					<th data-sort-default>Rank</th>
+					<th>Rank</th>
 					<th>Matches</th>
 					<th>Record</th>
 					<th>RP</th>
@@ -40,7 +40,7 @@
 					<th>Teleop Scale</th>
 					<th>Teleop Opp Switch</th>
 					<th>Teleop Vault</th>
-					<th>Total Cubes</th>
+					<th data-sort-default>Total Cubes</th>
 					<th>Hang</th>
 					<th>Hosted Hang</th>
 				</tr>
@@ -75,19 +75,28 @@
 
 		getData(regionalCode + "_rankings", "event/2018" + regionalCode + "/rankings", function(returned_data) {
 			var data = {};
-			returned_data['rankings'].forEach(function(item, index) {
-				var team = item.team_key.replace("frc","");
-				data[team] = {};
-				data[team]['rank'] = item.rank;
-				data[team]['matches'] = item.matches_played;
-				data[team]['record'] = item.record.wins + "-" + item.record.losses + "-" + item.record.ties;
-				data[team]['rp'] = item.extra_stats[0];
-			});
+			if (Object.keys(returned_data['rankings']).length>0) {
+				returned_data['rankings'].forEach(function(item, index) {
+					var team = item.team_key.replace("frc","");
+					data[team] = {};
+					data[team]['rank'] = item.rank;
+					data[team]['matches'] = item.matches_played;
+					data[team]['record'] = item.record.wins + "-" + item.record.losses + "-" + item.record.ties;
+					data[team]['rp'] = item.extra_stats[0];
+				});
+			}
 
 			getData(regionalCode + "_oprs", "event/2018" + regionalCode + "/oprs", function(returned_data) {
 				for (var key in returned_data['ccwms']) {
 					if (key != undefined) {
 						var team = key.replace("frc","");
+						if (data[team] == undefined) {
+							data[team] = {};
+							data[team]['rank'] = "N/A";
+							data[team]['matches'] = "N/A";
+							data[team]['record'] = "N/A";
+							data[team]['rp'] = "N/A";
+						}
 						data[team]['opr'] = returned_data['ccwms'][key].toFixed(2);
 					}
 				}
@@ -107,7 +116,7 @@
 						var cell;
 
 						cell = entry.insertCell(0);
-						cell.innerHTML = team;
+						cell.innerHTML = '<a href="chart.html?team=' + team + '">' + team + '</a>';
 						cell.setAttribute('data-title', 'Team');
 
 						cell = entry.insertCell(-1);
