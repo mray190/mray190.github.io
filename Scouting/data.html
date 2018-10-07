@@ -72,7 +72,7 @@
     var averageRef = firebase.database().ref(regionalCode + "/teams/");
     averageRef.on('value', function(snapshot) {
 		$("#team_data tr").remove(); 
-
+/*
 		getData(regionalCode + "_rankings", "event/2018" + regionalCode + "/rankings", function(returned_data) {
 			var data = {};
 			if (Object.keys(returned_data['rankings']).length>0) {
@@ -85,7 +85,7 @@
 					data[team]['rp'] = item.extra_stats[0];
 				});
 			}
-
+*/
 			getData(regionalCode + "_oprs", "event/2018" + regionalCode + "/oprs", function(returned_data) {
 				for (var key in returned_data['ccwms']) {
 					if (key != undefined) {
@@ -120,19 +120,19 @@
 						cell.setAttribute('data-title', 'Team');
 
 						cell = entry.insertCell(-1);
-						cell.innerHTML = data[team]['rank'];
+						cell.innerHTML = "NA"; //data[team]['rank'];
 						cell.setAttribute('data-title', 'Rank');
 
 						cell = entry.insertCell(-1);
-						cell.innerHTML = data[team]['matches'];
+						cell.innerHTML = "NA"; //data[team]['matches'];
 						cell.setAttribute('data-title', 'Matches');
 
 						cell = entry.insertCell(-1);
-						cell.innerHTML = data[team]['record'];
+						cell.innerHTML = "NA"; // data[team]['record'];
 						cell.setAttribute('data-title', 'Record');
 
 						cell = entry.insertCell(-1);
-						cell.innerHTML = data[team]['rp'];
+						cell.innerHTML = "NA"; //data[team]['rp'];
 						cell.setAttribute('data-title', 'RP');
 
 						cell = entry.insertCell(-1);
