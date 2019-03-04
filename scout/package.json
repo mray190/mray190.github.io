@@ -1,0 +1,16 @@
+{
+    "name": "tba",
+    "version": "1.0.0",
+    "description": "Source for TBA accessors",
+    "license": "Apache-2.0",
+    "private": true,
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "Michael Ray",
+    "dependencies": {
+        "mathjs": "^5.5.0",
+        "request": "^2.88.0"
+    }
+}
