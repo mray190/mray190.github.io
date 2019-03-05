@@ -7,11 +7,11 @@ $(document).ready(init);
 var custom_cookie;
 
 document.addEventListener('DOMContentLoaded', function() {
-  var custom_cookie = Cookies.get('location');
-    // Cookies.set('location', $('#location_selector').val(), { expires: 365 });
+  var custom_cookie = Cookies.get('getStartedClose');
   if (!custom_cookie) {
     return;
   }
+  $('#questions_alert').hide();
 }, false);
 
 function filter_results() {
