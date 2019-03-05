@@ -315,7 +315,7 @@
                     return null;
                 }
                 for (var match in matches) {
-                    if (matches[match].actual_time) {
+                    if (matches[match].actual_time && matches[match].comp_level === 'qm') {
                         var parsed_match = that.parseMatch(matches[match]);
                         for (var team in parsed_match) {
 

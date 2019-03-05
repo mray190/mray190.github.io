@@ -217,7 +217,7 @@
                 var name = $(element).find('.table_entry_name').attr('id');
                 var key = $(element).find('.table_entry_code').attr('id');
                 $('#regional_detail_name').html(name);
-                ga('send', 'event', 'scout', key);
+                // ga('send', 'event', 'scout', key);
 
                 tba.genOPRs(key, function(results) {
 
