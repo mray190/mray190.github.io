@@ -33,39 +33,24 @@ a {
   background-color:#939090!important;
 }
 
-.arm-green, .arm-green-no-hover {
-  color:#fff!important;
-  background-color:#00a960!important;
-}
-
-.arm-green:hover {
-  color:#fff!important;
-  background-color:#939090!important;
-}
-
-.check-in {
-  color:#939090!important;
-  background-color:#fff!important;
-}
-
-.arm-red, .arm-red-no-hover, .arm-red-hover:hover {
+.red, .red-no-hover, .red-hover:hover {
   /**background: #000; **/
   color:#fff!important;
   background-color:#cf364a!important;
 }
 
-.arm-red:hover {
+.red:hover {
   /**background: #000; **/
   color:#fff!important;
   background-color:#939090!important;
 }
 
-.arm-gray, .arm-gray-no-hover, .arm-gray-hover:hover {
+.grey, .grey-no-hover, .grey-hover:hover {
   color:#fff!important;
   background: #909393;
 }
 
-#inventory_table .table_entry:hover {
+#regional_table .table_entry:hover {
   cursor: pointer;
   background-color: #ccc!important;
 }

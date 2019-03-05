@@ -31,12 +31,6 @@ sorttable = {
 
     sorttable.DATE_RE = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
 
-    // forEach(document.getElementsByTagName('table'), function(table) {
-    //   if (table.className.search(/\bsortable\b/) != -1) {
-    //     sorttable.makeSortable(table);
-    //   }
-    // });
-
   },
 
   makeSortable: function(table) {
@@ -187,35 +181,7 @@ sorttable = {
   },
 
   guessType: function(table, column) {
-    // guess the type of a column based on its first non-blank row
-    sortfn = sorttable.sort_alpha;
-    // for (var i=0; i<table.tBodies[0].rows.length; i++) {
-    //   text = sorttable.getInnerText(table.tBodies[0].rows[i].cells[column]);
-    //   if (text != '') {
-    //     if (text.match(/^-?[£$¤]?[\d,.]+%?$/)) {
-    //       return sorttable.sort_numeric;
-    //     }
-    //     // check for a date: dd/mm/yyyy or dd/mm/yy
-    //     // can have / or . or - as separator
-    //     // can be mm/dd as well
-    //     possdate = text.match(sorttable.DATE_RE)
-    //     if (possdate) {
-    //       // looks like a date
-    //       first = parseInt(possdate[1]);
-    //       second = parseInt(possdate[2]);
-    //       if (first > 12) {
-    //         // definitely dd/mm
-    //         return sorttable.sort_ddmm;
-    //       } else if (second > 12) {
-    //         return sorttable.sort_mmdd;
-    //       } else {
-    //         // looks like a date, but we can't tell which, so assume
-    //         // that it's dd/mm (English imperialism!) and keep looking
-    //         sortfn = sorttable.sort_ddmm;
-    //       }
-    //     }
-    //   }
-    // }
+    sortfn = sorttable.sort_numeric;
     return sortfn;
   },
 
@@ -287,72 +253,6 @@ sorttable = {
     bb = parseFloat(b[0].replace(/[^0-9.-]/g,''));
     if (isNaN(bb)) bb = 0;
     return aa-bb;
-  },
-  sort_alpha: function(a,b) {
-    if (a[0]==b[0]) return 0;
-    if (a[0]<b[0]) return -1;
-    return 1;
-  },
-  sort_ddmm: function(a,b) {
-    mtch = a[0].match(sorttable.DATE_RE);
-    y = mtch[3]; m = mtch[2]; d = mtch[1];
-    if (m.length == 1) m = '0'+m;
-    if (d.length == 1) d = '0'+d;
-    dt1 = y+m+d;
-    mtch = b[0].match(sorttable.DATE_RE);
-    y = mtch[3]; m = mtch[2]; d = mtch[1];
-    if (m.length == 1) m = '0'+m;
-    if (d.length == 1) d = '0'+d;
-    dt2 = y+m+d;
-    if (dt1==dt2) return 0;
-    if (dt1<dt2) return -1;
-    return 1;
-  },
-  sort_mmdd: function(a,b) {
-    mtch = a[0].match(sorttable.DATE_RE);
-    y = mtch[3]; d = mtch[2]; m = mtch[1];
-    if (m.length == 1) m = '0'+m;
-    if (d.length == 1) d = '0'+d;
-    dt1 = y+m+d;
-    mtch = b[0].match(sorttable.DATE_RE);
-    y = mtch[3]; d = mtch[2]; m = mtch[1];
-    if (m.length == 1) m = '0'+m;
-    if (d.length == 1) d = '0'+d;
-    dt2 = y+m+d;
-    if (dt1==dt2) return 0;
-    if (dt1<dt2) return -1;
-    return 1;
-  },
-
-  shaker_sort: function(list, comp_func) {
-    // A stable sort function to allow multi-level sorting of data
-    // see: http://en.wikipedia.org/wiki/Cocktail_sort
-    // thanks to Joseph Nahmias
-    var b = 0;
-    var t = list.length - 1;
-    var swap = true;
-
-    while(swap) {
-        swap = false;
-        for(var i = b; i < t; ++i) {
-            if ( comp_func(list[i], list[i+1]) > 0 ) {
-                var q = list[i]; list[i] = list[i+1]; list[i+1] = q;
-                swap = true;
-            }
-        } // for
-        t--;
-
-        if (!swap) break;
-
-        for(var i = t; i > b; --i) {
-            if ( comp_func(list[i], list[i-1]) < 0 ) {
-                var q = list[i]; list[i] = list[i-1]; list[i-1] = q;
-                swap = true;
-            }
-        } // for
-        b++;
-
-    } // while(swap)
   }
 }
 

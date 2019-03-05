@@ -310,6 +310,10 @@
             var that = this;
             var results = {};
             this.getMatches(eventCode, function(matches) {
+                if (matches.length == 0) {
+                    callback(null);
+                    return null;
+                }
                 for (var match in matches) {
                     if (matches[match].actual_time) {
                         var parsed_match = that.parseMatch(matches[match]);

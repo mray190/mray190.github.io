@@ -57,27 +57,3 @@ function filter_results() {
   });
   
 }
-
-function startup() {
-  $('#regional_details').hide();
-}
-
-$(function() {
-  $('#home_button').on('click', function() {
-    $('#regional_details').hide();
-    $('#regional_list').show();
-  });
-  
-  $('#questions_button').on('click', function() {
-    $("#questions_alert").show();
-  });
-
-  $('#regional_table tr').not(':first').each(function(index, element) {
-      $(element).on('click', function() {
-          var name = $(element).find('.table_entry_name').attr('id');
-          var location = $(element).find('.table_entry_location').attr('id');
-          var week = $(element).find('.table_entry_week').attr('id');
-      });
-  });
-
-});
