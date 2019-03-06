@@ -6,7 +6,8 @@
     "private": true,
     "main": "app.js",
     "scripts": {
-        "start": "node app.js"
+        "start": "node app.js",
+        "pack": "browserify src/tba.js --standalone TBA -o dist/bundle.js"
     },
     "author": "Michael Ray",
     "dependencies": {

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ViperScout</title>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600italic,600,700italic,700,800italic,800">
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <script type="text/javascript" src="dist/sorttable.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133390567-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-133390567-1');
+    </script>
+  </head>
+
+  <body class="w3-padding-64">
+
+      <div class="w3-top w3-bar w3-black w3-hide-small">
+        <a href="index.html" class="w3-bar-item w3-button" id="home_button">ViperScout</a>
+        <a href="#" class="w3-bar-item w3-button">All regionals/districts</a>
+        <a href="prediction.html" class="w3-bar-item w3-button">Match Prediction</a>
+        <a href="#" class="w3-bar-item w3-button w3-mobile w3-right viper-black-hover" id="questions_button">
+          <i class="fa fa-question-circle" alt="Questions?"></i>
+        </a>
+      </div>
+
+    <!-- Navbar on small screens (Hidden on medium and large screens) -->
+    <div class="w3-top w3-light-grey w3-hide-large w3-hide-medium" id="myNavbar">
+      <div class="w3-bar w3-center w3-large">
+        <a href="index.html" class="w3-bar-item w3-button viper-black" style="width:25% !important" id="home_button"><i class="fa fa-home" alt="Home"></i></a>
+        <div class="w3-bar-item w3-center">ViperScout</div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="w3-padding-large" id="main">
+
+      <!-- Container for the regional list -->
+      <div class="w3-row" id="search_container">
+        <!-- Search box -->
+        <div class="w3-threequarter">
+          <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for team" id="team_search">
+        </div>
+        <div class="w3-quarter">
+          <button id="team_submit" class="w3-black w3-block" style="margin-top: 8px; height: 40px;">Submit</button>
+        </div>
+      </div>
+
+      <div class="w3-container w3-center" id="detail_header">
+      </div>
+
+      <div class="w3-justify w3-text-black" id="detail_container">
+      </div>
+
+    </div>
+
+    <!-- END PAGE CONTENT -->
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.6.0/math.js"></script>
+    <script type="text/javascript" src="dist/scripts.js"></script>
+    <script src="./dist/bundle.js"></script>
+  </body>
+
+<script id="template-detail" type="text/template">
+  <h3>Match {{match}} in {{regional}}</h3>
+</script>
+
+
+<script id="template-detail-last" type="text/template">
+  <h4>Next match unavailable. Last match official score was blue: {{blue}}, red: {{red}}</h4>
+</script>
+
+<script id="header-template-cargoship" type="text/template">
+  <thead>
+    <tr class="w3-{{color}}">
+      <th>Team</th>
+      <th>Hatch Front</th>
+      <th>Hatch Side</th>
+      <th>Cargo Front</th>
+      <th>Cargo Side</th>
+    </tr>
+  </thead>
+</script>
+
+<script id="template-cargoship" type="text/template">
+  <tr>
+    <td>{{team}}</td>
+    <td>{{hatch_front}}</td>
+    <td>{{hatch_side}}</td>
+    <td>{{cargo_front}}</td>
+    <td>{{cargo_side}}</td>
+  </tr>
+</script>
+
+<script id="header-template-rocket" type="text/template">
+  <thead>
+    <tr class="w3-{{color}}">
+      <th>Team</th>
+      <th>Hatch Low</th>
+      <th>Hatch Mid</th>
+      <th>Hatch Top</th>
+      <th>Cargo Low</th>
+      <th>Cargo Mid</th>
+      <th>Cargo Top</th>
+    </tr>
+  </thead>
+</script>
+
+<script id="template-rocket" type="text/template">
+  <tr>
+    <td>{{team}}</td>
+    <td>{{hatch_low}}</td>
+    <td>{{hatch_mid}}</td>
+    <td>{{hatch_top}}</td>
+    <td>{{cargo_low}}</td>
+    <td>{{cargo_mid}}</td>
+    <td>{{cargo_top}}</td>
+  </tr>
+</script>
+
+<script id="header-template-hab" type="text/template">
+  <thead>
+    <tr class="w3-{{color}}">
+      <th>Team</th>
+      <th>Start</th>
+      <th>Endgame</th>
+    </tr>
+  </thead>
+</script>
+
+<script id="template-hab" type="text/template">
+  <tr>
+    <td>{{team}}</td>
+    <td>{{start}}</td>
+    <td>{{end}}</td>
+  </tr>
+</script>
+
+<script id="header-template-overall" type="text/template">
+  <thead>
+    <tr class="w3-{{color}}">
+      <th>Team</th>
+      <th>OPR</th>
+      <th>Ship</th>
+      <th>Rocket</th>
+      <th>Hab</th>
+    </tr>
+  </thead>
+</script>
+
+<script id="template-overall" type="text/template">
+  <tr>
+    <td>{{team}}</td>
+    <td>{{opr}}</td>
+    <td>{{ship}}</td>
+    <td>{{rocket}}</td>
+    <td>{{hab}}</td>
+  </tr>
+</script>
+
+<script id="div-template" type="text/template">
+  <div class="w3-row" id="{{color}}-details">
+    <div class="w3-quarter w3-padding w3-center">
+      <h4>Score: {{score}}</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-overall">
+      </table>
+    </div>
+    <div class="w3-quarter w3-padding w3-center">
+      <h4>Cargoship</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-cargoship">
+      </table>
+    </div>
+    <div class="w3-quarter w3-padding w3-center">
+      <h4>Rocket</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-rocket">
+      </table>
+    </div>
+    <div class="w3-quarter w3-padding w3-center">
+      <h4>Hab</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-hab">
+      </table>
+    </div>
+  </div>
+</script>
+
+<script>
+    var tba = new TBA();
+    var colors = [ 'blue', 'red' ];
+
+    var previousTeam = Cookies.get('team');
+    if (previousTeam) {
+      $('#team_search').val(previousTeam.replace('frc',''));
+      lookupTeam(previousTeam);
+    }
+    
+    $('#team_submit').on('click', function() {
+      document.getElementById("detail_container").innerHTML = "";
+      document.getElementById("detail_header").innerHTML = "";
+      var team = 'frc' + $('#team_search').val();
+      Cookies.set('team', team, { expires: 365 });
+      lookupTeam(team);
+    });
+
+    function lookupTeam(team) {
+      tba.getOverallTeamNextMatch(team, function(result_new) {
+        if (!result_new) {
+          tba.getOverallTeamLastMatch(team, function(result_last) {
+            if (result_last)
+              calcStats(result_last, false);
+          });
+        } else {
+          calcStats(result_new, true);
+        }
+      });
+    }
+
+    function calcStats(match, new_match) {
+
+      // Setup header
+      var detailTemplate = document.getElementById("template-detail");
+      var detailLastTemplate = document.getElementById("template-detail-last");
+      var detailTemplateHtml = detailTemplate.innerHTML;
+      var detailLastTemplateHtml = detailLastTemplate.innerHTML;
+      detailTemplateHtml = detailTemplateHtml.replace(/{{match}}/g, match.comp_level.toUpperCase()+match.match_number)
+                                          .replace(/{{regional}}/g, match.event_key);
+      if (!new_match) {
+        detailLastTemplateHtml = detailLastTemplateHtml.replace(/{{red}}/g, match.alliances.red.score)
+                                                       .replace(/{{blue}}/g, match.alliances.blue.score);
+        document.getElementById("detail_header").innerHTML = detailTemplateHtml + detailLastTemplateHtml;
+      } else {
+        document.getElementById("detail_header").innerHTML += detailTemplateHtml;
+      }
+
+      tba.genOPRs(match.event_key, function(results) {
+
+        for (var color in colors) {
+
+          var teams = [ match.alliances[colors[color]].team_keys[0].replace('frc',''),
+                       match.alliances[colors[color]].team_keys[1].replace('frc',''),
+                       match.alliances[colors[color]].team_keys[2].replace('frc','') ];
+
+          // Setup cargo table
+          var cargoTemplate = document.getElementById("template-cargoship");
+          var cargoHeader = document.getElementById("header-template-cargoship");
+          var cargoTemplateHtml = cargoTemplate.innerHTML;
+          var cargoHeaderHtml = cargoHeader.innerHTML;
+          cargoHeaderHtml = cargoHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var cargoHtml = cargoHeaderHtml;
+
+          // Setup rocket table
+          var rocketTemplate = document.getElementById("template-rocket");
+          var rocketHeader = document.getElementById("header-template-rocket");
+          var rocketTemplateHtml = rocketTemplate.innerHTML;
+          var rocketHeaderHtml = rocketHeader.innerHTML;
+          rocketHeaderHtml = rocketHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var rocketHtml = rocketHeaderHtml;
+
+          // Setup rocket table
+          var habTemplate = document.getElementById("template-hab");
+          var habHeader = document.getElementById("header-template-hab");
+          var habTemplateHtml = habTemplate.innerHTML;
+          var habHeaderHtml = habHeader.innerHTML;
+          habHeaderHtml = habHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var habHtml = habHeaderHtml;
+
+          // Setup rocket table
+          var overallTemplate = document.getElementById("template-overall");
+          var overallHeader = document.getElementById("header-template-overall");
+          var overallTemplateHtml = overallTemplate.innerHTML;
+          var overallHeaderHtml = overallHeader.innerHTML;
+          overallHeaderHtml = overallHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var overallHtml = overallHeaderHtml;
+
+          var score = 0;
+          for (var team in teams) {
+            score += results[teams[team]].opr;
+            cargoHtml += cargoTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{hatch_front}}/g, results[teams[team]].cargo_front_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_side}}/g, results[teams[team]].cargo_side_panel_opr.toFixed(1))
+                                          .replace(/{{cargo_front}}/g, results[teams[team]].cargo_front_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_side}}/g, results[teams[team]].cargo_side_cargo_opr.toFixed(1));
+            rocketHtml += rocketTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{hatch_low}}/g, results[teams[team]].rocket_low_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_mid}}/g, results[teams[team]].rocket_mid_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_top}}/g, results[teams[team]].rocket_high_panel_opr.toFixed(1))
+                                          .replace(/{{cargo_low}}/g, results[teams[team]].rocket_low_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_mid}}/g, results[teams[team]].rocket_mid_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_top}}/g, results[teams[team]].rocket_high_cargo_opr.toFixed(1));
+            habHtml += habTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{start}}/g, results[teams[team]].start_avg.toFixed(1))
+                                          .replace(/{{end}}/g, results[teams[team]].climb_avg.toFixed(1));
+            overallHtml += overallTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{opr}}/g, results[teams[team]].opr.toFixed(1))
+                                          .replace(/{{hab}}/g, (results[teams[team]].start_avg + results[teams[team]].climb_avg).toFixed(1))
+                                          .replace(/{{ship}}/g,
+                                                    (results[teams[team]].cargo_front_panel_opr +
+                                                     results[teams[team]].cargo_side_panel_opr +
+                                                     results[teams[team]].cargo_front_cargo_opr +
+                                                     results[teams[team]].cargo_side_cargo_opr).toFixed(1))
+                                          .replace(/{{rocket}}/g,
+                                                    (results[teams[team]].rocket_low_panel_opr +
+                                                     results[teams[team]].rocket_mid_panel_opr +
+                                                     results[teams[team]].rocket_high_panel_opr +
+                                                     results[teams[team]].rocket_low_cargo_opr +
+                                                     results[teams[team]].rocket_mid_cargo_opr +
+                                                     results[teams[team]].rocket_high_cargo_opr).toFixed(1))
+          }
+
+          // Fill div
+          var detailDiv = document.getElementById("div-template");
+          var detailDivHtml = detailDiv.innerHTML;
+          detailDivHtml = detailDivHtml.replace(/{{color}}/g, colors[color])
+                                       .replace(/{{score}}/g, score.toFixed(0));
+          document.getElementById("detail_container").innerHTML += detailDivHtml;
+
+          document.getElementById(colors[color] + "-cargoship").innerHTML = cargoHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-cargoship"));
+          document.getElementById(colors[color] + "-rocket").innerHTML = rocketHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-rocket"));
+          document.getElementById(colors[color] + "-hab").innerHTML = habHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-hab"));
+          document.getElementById(colors[color] + "-overall").innerHTML = overallHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-overall"));
+        }
+      });
+    }
+</script>
+
+</html>

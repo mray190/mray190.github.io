@@ -99010,6 +99010,43 @@ WError.prototype.cause = function we_cause(c)
             this.httpGet('/team/' + team_code + '/event/' + code + '/status', callback);
         }
 
+        getTeamEvents(team_code, callback)
+        {
+            this.httpGet('/team/' + team_code + '/events/2019/statuses', callback);
+        }
+
+        getOverallTeamNextMatch(team_code, callback)
+        {
+            var that = this;
+            that.getTeamEvents(team_code, function (events) {
+                for (var event in events) {
+                    if (events[event]) {
+                        if (events[event].last_match_key && events[event].next_match_key) {
+                            that.getMatch(events[event].next_match_key, callback);
+                            return;
+                        }
+                    }
+                }
+                callback(null);
+            });
+        }
+
+        getOverallTeamLastMatch(team_code, callback)
+        {
+            var that = this;
+            that.getTeamEvents(team_code, function (events) {
+                for (var event in events) {
+                    if (events[event]) {
+                        if (events[event].last_match_key) {
+                            that.getMatch(events[event].last_match_key, callback);
+                            return;
+                        }
+                    }
+                }
+                callback(null);
+            });
+        }
+
         getTeamLastMatch(code, team_code, callback)
         {
             var that = this;
