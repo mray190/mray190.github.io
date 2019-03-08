@@ -99330,38 +99330,34 @@ WError.prototype.cause = function we_cause(c)
                         results[team].matches);
                     start_avgs.push((results[team].start_level_2_sum * 6 + results[team].start_level_1_sum * 3)/results[team].matches);
                 }
-                if (matches.length > results.length/2) {
-                    var cargo_side_panel_opr = math.lusolve(A, cargo_side_panel_sums);
-                    var cargo_side_cargo_opr = math.lusolve(A, cargo_side_cargo_sums);
-                    var cargo_front_panel_opr = math.lusolve(A, cargo_front_panel_sums);
-                    var cargo_front_cargo_opr = math.lusolve(A, cargo_front_cargo_sums);
-                    var rocket_high_panel_opr = math.lusolve(A, rocket_high_panel_sums);
-                    var rocket_high_cargo_opr = math.lusolve(A, rocket_high_cargo_sums);
-                    var rocket_mid_panel_opr = math.lusolve(A, rocket_mid_panel_sums);
-                    var rocket_mid_cargo_opr = math.lusolve(A, rocket_mid_cargo_sums);
-                    var rocket_low_panel_opr = math.lusolve(A, rocket_low_panel_sums);
-                    var rocket_low_cargo_opr = math.lusolve(A, rocket_low_cargo_sums);
-                }
+                var cargo_side_panel_opr = math.lusolve(A, cargo_side_panel_sums);
+                var cargo_side_cargo_opr = math.lusolve(A, cargo_side_cargo_sums);
+                var cargo_front_panel_opr = math.lusolve(A, cargo_front_panel_sums);
+                var cargo_front_cargo_opr = math.lusolve(A, cargo_front_cargo_sums);
+                var rocket_high_panel_opr = math.lusolve(A, rocket_high_panel_sums);
+                var rocket_high_cargo_opr = math.lusolve(A, rocket_high_cargo_sums);
+                var rocket_mid_panel_opr = math.lusolve(A, rocket_mid_panel_sums);
+                var rocket_mid_cargo_opr = math.lusolve(A, rocket_mid_cargo_sums);
+                var rocket_low_panel_opr = math.lusolve(A, rocket_low_panel_sums);
+                var rocket_low_cargo_opr = math.lusolve(A, rocket_low_cargo_sums);
 
                 var oprs = {};
                 var i = 0;
                 for (var team in results) {
-                    console.log('poop');
                     oprs[team] = {
-                        'cargo_side_panel_opr': (results[team].matches > matches.length/2) ? cargo_side_panel_sum[i]/results[team].matches : cargo_side_panel_opr[i][0],
-                        'cargo_side_cargo_opr': (results[team].matches > matches.length/2) ? cargo_side_cargo_sum[i]/results[team].matches : cargo_side_cargo_opr[i][0],
-                        'cargo_front_panel_opr': (results[team].matches > matches.length/2) ? cargo_front_panel_sum[i]/results[team].matches : cargo_front_panel_opr[i][0],
-                        'cargo_front_cargo_opr': (results[team].matches > matches.length/2) ? cargo_front_cargo_sum[i]/results[team].matches : cargo_front_cargo_opr[i][0],
-                        'rocket_high_panel_opr': (results[team].matches > matches.length/2) ? rocket_high_panel_sum[i]/results[team].matches : rocket_high_panel_opr[i][0],
-                        'rocket_high_cargo_opr': (results[team].matches > matches.length/2) ? rocket_high_cargo_sum[i]/results[team].matches : rocket_high_cargo_opr[i][0],
-                        'rocket_mid_panel_opr': (results[team].matches > matches.length/2) ? rocket_mid_panel_sum[i]/results[team].matches : rocket_mid_panel_opr[i][0],
-                        'rocket_mid_cargo_opr': (results[team].matches > matches.length/2) ? rocket_mid_cargo_sum[i]/results[team].matches : rocket_mid_cargo_opr[i][0],
-                        'rocket_low_panel_opr': (results[team].matches > matches.length/2) ? rocket_low_panel_sum[i]/results[team].matches : rocket_low_panel_opr[i][0],
-                        'rocket_low_cargo_opr': (results[team].matches > matches.length/2) ? rocket_low_cargo_sum[i]/results[team].matches : rocket_low_cargo_opr[i][0],
+                        'cargo_side_panel_opr': cargo_side_panel_opr[i][0],
+                        'cargo_side_cargo_opr': cargo_side_cargo_opr[i][0],
+                        'cargo_front_panel_opr': cargo_front_panel_opr[i][0],
+                        'cargo_front_cargo_opr': cargo_front_cargo_opr[i][0],
+                        'rocket_high_panel_opr': rocket_high_panel_opr[i][0],
+                        'rocket_high_cargo_opr': rocket_high_cargo_opr[i][0],
+                        'rocket_mid_panel_opr': rocket_mid_panel_opr[i][0],
+                        'rocket_mid_cargo_opr': rocket_mid_cargo_opr[i][0],
+                        'rocket_low_panel_opr': rocket_low_panel_opr[i][0],
+                        'rocket_low_cargo_opr': rocket_low_cargo_opr[i][0],
                         'start_avg': start_avgs[i],
                         'climb_avg': climb_avgs[i]
                     };
-                    console.log(oprs[team]);
                     oprs[team].opr = 
                         oprs[team].cargo_side_panel_opr +
                         oprs[team].cargo_side_cargo_opr +
