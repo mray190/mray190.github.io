@@ -28,7 +28,7 @@
 
       <div class="w3-top w3-bar w3-black w3-hide-small">
         <a href="index.html" class="w3-bar-item w3-button" id="home_button">ViperScout</a>
-        <a href="#" class="w3-bar-item w3-button">All regionals/districts</a>
+        <a href="all.html" class="w3-bar-item w3-button">All regionals/districts</a>
         <a href="prediction.html" class="w3-bar-item w3-button">Match Prediction</a>
         <a href="#" class="w3-bar-item w3-button w3-mobile w3-right viper-black-hover" id="questions_button">
           <i class="fa fa-question-circle" alt="Questions?"></i>
@@ -38,8 +38,9 @@
     <!-- Navbar on small screens (Hidden on medium and large screens) -->
     <div class="w3-top w3-light-grey w3-hide-large w3-hide-medium" id="myNavbar">
       <div class="w3-bar w3-center w3-large">
-        <a href="index.html" class="w3-bar-item w3-button viper-black" style="width:25% !important" id="home_button"><i class="fa fa-home" alt="Home"></i></a>
-        <div class="w3-bar-item w3-center">ViperScout</div>
+        <a href="index.html" class="w3-bar-item w3-button w3-light-grey" style="width:25% !important" id="home_button"><i class="fa fa-home" alt="Home"></i></a>
+        <a href="all.html" class="w3-bar-item w3-button w3-light-grey" style="width:25% !important">All</a>
+        <a href="prediction.html" class="w3-bar-item w3-button w3-grey" style="width:25% !important">Predict</a>
       </div>
     </div>
 
@@ -287,37 +288,57 @@
 
           var score = 0;
           for (var team in teams) {
-            score += results[teams[team]].opr;
+            var result;
+            if (!(teams[team] in results)) {
+              result = {
+                        'cargo_side_panel_opr': 0,
+                        'cargo_side_cargo_opr': 0,
+                        'cargo_front_panel_opr': 0,
+                        'cargo_front_cargo_opr': 0,
+                        'rocket_high_panel_opr': 0,
+                        'rocket_high_cargo_opr': 0,
+                        'rocket_mid_panel_opr': 0,
+                        'rocket_mid_cargo_opr': 0,
+                        'rocket_low_panel_opr': 0,
+                        'rocket_low_cargo_opr': 0,
+                        'start_avg': 0,
+                        'climb_avg': 0,
+                        'opr': 0
+                      };
+            } else {
+               result = results[teams[team]];
+            }
+            score += result.opr;
             cargoHtml += cargoTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{hatch_front}}/g, results[teams[team]].cargo_front_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_side}}/g, results[teams[team]].cargo_side_panel_opr.toFixed(1))
-                                          .replace(/{{cargo_front}}/g, results[teams[team]].cargo_front_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_side}}/g, results[teams[team]].cargo_side_cargo_opr.toFixed(1));
+                                          .replace(/{{hatch_front}}/g, result.cargo_front_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_side}}/g, result.cargo_side_panel_opr.toFixed(1))
+                                          .replace(/{{cargo_front}}/g, result.cargo_front_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_side}}/g, result.cargo_side_cargo_opr.toFixed(1));
             rocketHtml += rocketTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{hatch_low}}/g, results[teams[team]].rocket_low_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_mid}}/g, results[teams[team]].rocket_mid_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_top}}/g, results[teams[team]].rocket_high_panel_opr.toFixed(1))
-                                          .replace(/{{cargo_low}}/g, results[teams[team]].rocket_low_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_mid}}/g, results[teams[team]].rocket_mid_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_top}}/g, results[teams[team]].rocket_high_cargo_opr.toFixed(1));
+                                          .replace(/{{hatch_low}}/g, result.rocket_low_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_mid}}/g, result.rocket_mid_panel_opr.toFixed(1))
+                                          .replace(/{{hatch_top}}/g, result.rocket_high_panel_opr.toFixed(1))
+                                          .replace(/{{cargo_low}}/g, result.rocket_low_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_mid}}/g, result.rocket_mid_cargo_opr.toFixed(1))
+                                          .replace(/{{cargo_top}}/g, result.rocket_high_cargo_opr.toFixed(1));
             habHtml += habTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{start}}/g, results[teams[team]].start_avg.toFixed(1))
-                                          .replace(/{{end}}/g, results[teams[team]].climb_avg.toFixed(1));
+                                          .replace(/{{start}}/g, result.start_avg.toFixed(1))
+                                          .replace(/{{end}}/g, result.climb_avg.toFixed(1));
             overallHtml += overallTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{opr}}/g, results[teams[team]].opr.toFixed(1))
-                                          .replace(/{{hab}}/g, (results[teams[team]].start_avg + results[teams[team]].climb_avg).toFixed(1))
+                                          .replace(/{{opr}}/g, result.opr.toFixed(1))
+                                          .replace(/{{hab}}/g, (result.start_avg + result.climb_avg).toFixed(1))
                                           .replace(/{{ship}}/g,
-                                                    (results[teams[team]].cargo_front_panel_opr +
-                                                     results[teams[team]].cargo_side_panel_opr +
-                                                     results[teams[team]].cargo_front_cargo_opr +
-                                                     results[teams[team]].cargo_side_cargo_opr).toFixed(1))
+                                                    (result.cargo_front_panel_opr +
+                                                     result.cargo_side_panel_opr +
+                                                     result.cargo_front_cargo_opr +
+                                                     result.cargo_side_cargo_opr).toFixed(1))
                                           .replace(/{{rocket}}/g,
-                                                    (results[teams[team]].rocket_low_panel_opr +
-                                                     results[teams[team]].rocket_mid_panel_opr +
-                                                     results[teams[team]].rocket_high_panel_opr +
-                                                     results[teams[team]].rocket_low_cargo_opr +
-                                                     results[teams[team]].rocket_mid_cargo_opr +
-                                                     results[teams[team]].rocket_high_cargo_opr).toFixed(1))
+                                                    (result.rocket_low_panel_opr +
+                                                     result.rocket_mid_panel_opr +
+                                                     result.rocket_high_panel_opr +
+                                                     result.rocket_low_cargo_opr +
+                                                     result.rocket_mid_cargo_opr +
+                                                     result.rocket_high_cargo_opr).toFixed(1))
           }
 
           // Fill div
