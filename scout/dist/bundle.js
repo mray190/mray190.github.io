@@ -98934,7 +98934,7 @@ WError.prototype.cause = function we_cause(c)
 
         getRegionals(callback)
         {
-            this.httpGet('/events/2019/keys', callback);
+            this.httpGet('/events/2019', callback);
         }
 
         // Event information
