@@ -69,10 +69,7 @@
       </div>
 
       <!-- Container for the item content viewer -->
-      <div class="w3-justify w3-card w3-white" id="regional_details" style="display: none;">
-        <header class="w3-container viper-black-no-hover">
-          <h3><span id="regional_detail_name"></span></h3>
-        </header>
+      <div class="w3-justify w3-card w3-white" id="regional_details">
 
         <!-- OPR table -->
         <table class="sortable w3-card w3-table w3-striped w3-hoverable" id="opr_table">
@@ -176,7 +173,7 @@
 
   tba.getRegionals(function(events) {
     for (var key in events) {
-      tba.genOPRs(events[key], function(results) {
+      tba.genOPRs('2019' + events[key].event_code, function(results) {
         if (results) {
           for (var team in results) {
               listHtml += OPRTemplateHtml.replace(/{{url}}/g, "https://www.thebluealliance.com/team/" + team)
@@ -199,13 +196,12 @@
                                     .replace(/{{rocket_panel_opr}}/g, (results[team].rocket_high_panel_opr + results[team].rocket_mid_panel_opr + results[team].rocket_low_panel_opr).toFixed(2))
                                     .replace(/{{rocket_cargo_opr}}/g, (results[team].rocket_high_cargo_opr + results[team].rocket_mid_cargo_opr + results[team].rocket_low_cargo_opr).toFixed(2));
           }
+          // Replace the HTML of #list with final HTML
+          document.getElementById("opr_table").innerHTML = listHtml;
+          sorttable.makeSortable(document.getElementById("opr_table"));
         }
       });
     }
-    console.log(listHtml);
-    // Replace the HTML of #list with final HTML
-    document.getElementById("opr_table").innerHTML = listHtml;
-    sorttable.makeSortable(document.getElementById("opr_table"));
   });
 </script>
 
