@@ -64,6 +64,24 @@
       <div class="w3-justify w3-text-black" id="detail_container">
       </div>
 
+      <div class="w3-row">
+        <div class="w3-half">
+          <canvas id="blue_chart" responsive="true" aspectRatio="1"></canvas>
+        </div>
+        <div class="w3-half">
+          <canvas id="red_chart" responsive="true" aspectRatio="1"></canvas>
+        </div>
+      </div>
+
+      <div class="w3-row">
+        <div class="w3-half">
+          <canvas id="blue_detail_chart" responsive="true" aspectRatio="1"></canvas>
+        </div>
+        <div class="w3-half">
+          <canvas id="red_detail_chart" responsive="true" aspectRatio="1"></canvas>
+        </div>
+      </div>
+
     </div>
 
     <!-- END PAGE CONTENT -->
@@ -72,6 +90,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.6.0/math.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
     <script type="text/javascript" src="dist/scripts.js"></script>
     <script src="./dist/bundle.js"></script>
   </body>
@@ -199,6 +218,22 @@
 </script>
 
 <script>
+
+    var html_charts = {
+        'red': document.getElementById('blue_chart').getContext('2d'),
+        'blue': document.getElementById('red_chart').getContext('2d')
+    };
+
+    var chartColors = {
+        red: 'rgb(255, 99, 132, 0.4)',
+        orange: 'rgb(255, 159, 64, 0.4)',
+        yellow: 'rgb(255, 205, 86, 0.4)',
+        green: 'rgb(75, 192, 192, 0.4)',
+        blue: 'rgb(54, 162, 235, 0.4)',
+        purple: 'rgb(153, 102, 255, 0.4)',
+        grey: 'rgb(201, 203, 207, 0.4)'
+    };
+
     var tba = new TBA();
     var colors = [ 'blue', 'red' ];
 
@@ -249,6 +284,24 @@
       tba.genOPRs(match.event_key, function(results) {
 
         for (var color in colors) {
+
+          var teamDataset = [{
+                  data: [],
+                  backgroundColor: chartColors.green,
+                  label: 'Start'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.yellow,
+                  label: 'Cargoship'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.red,
+                  label: 'Rocket'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.blue,
+                  label: 'Climb'
+              }];
 
           var teams = [ match.alliances[colors[color]].team_keys[0].replace('frc',''),
                        match.alliances[colors[color]].team_keys[1].replace('frc',''),
@@ -338,7 +391,19 @@
                                                      result.rocket_high_panel_opr +
                                                      result.rocket_low_cargo_opr +
                                                      result.rocket_mid_cargo_opr +
-                                                     result.rocket_high_cargo_opr).toFixed(1))
+                                                     result.rocket_high_cargo_opr).toFixed(1));
+            teamDataset[0].data.push(result.start_avg.toFixed(1));
+            teamDataset[1].data.push((result.cargo_front_panel_opr +
+                                                     result.cargo_side_panel_opr +
+                                                     result.cargo_front_cargo_opr +
+                                                     result.cargo_side_cargo_opr).toFixed(1));
+            teamDataset[2].data.push((result.rocket_low_panel_opr +
+                                                     result.rocket_mid_panel_opr +
+                                                     result.rocket_high_panel_opr +
+                                                     result.rocket_low_cargo_opr +
+                                                     result.rocket_mid_cargo_opr +
+                                                     result.rocket_high_cargo_opr).toFixed(1));
+            teamDataset[3].data.push(result.climb_avg.toFixed(1));
           }
 
           // Fill div
@@ -355,7 +420,28 @@
           document.getElementById(colors[color] + "-hab").innerHTML = habHtml;
           sorttable.makeSortable(document.getElementById(colors[color] + "-hab"));
           document.getElementById(colors[color] + "-overall").innerHTML = overallHtml;
-          sorttable.makeSortable(document.getElementById(colors[color] + "-overall"));
+          sorttable.makeSortable(document.getElementById(colors[color] + "-overall"));    
+        
+          var chartData = {
+              type: 'bar',
+              data: {
+                  labels: teams,
+                  datasets: teamDataset
+              },
+              options: {
+                  scales: {
+                      xAxes: [{ stacked: true }],
+                      yAxes: [{
+                          ticks: {
+                              suggestedMax: 30,
+                              beginAtZero: true
+                          },
+                          stacked: true
+                      }]
+                  }
+              }
+          };
+          var chart = new Chart(html_charts[colors[color]], chartData);
         }
       });
     }
