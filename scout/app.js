@@ -2,9 +2,9 @@ var TBA = require('./src/tba.js');
 var tba = new TBA();
 
 // Year + 4 digit event code
-var eventCode = "2019miket";
+// var eventCode = "2019miket";
 // Team codes have "frc" in front of the number
-var teamCode = "frc27";
+// var teamCode = "frc27";
 
 /*
 // Team Information
@@ -57,27 +57,29 @@ tba.getNextMatch(eventCode, function(last_match) {
 });
 */
 
-var events = [
-    '2019qcmo',
-    '2019scmb',
-    '2019caoc',
-    '2019migib',
-    '2019miket',
-    '2019misou',
-    '2019nhgrs',
-    '2019cadm',
-    '2019gagai',
-    '2019onosh',
-    '2019pahat',
-    '2019vagle',
-    '2019vahay',
-    '2019txaus',
-    '2019txelp',
-    '2019wamou',
-    '2019tuis',
-    '2019isde1'
-];
+var cache = {};
+var results = {};
+tba.getTeams('2019gal', function(teams) {
+    for (var team in teams) {
+            tba.getOverallTeamLastMatch(teams[team], function(last_match) {
+                if (!(last_match.event_key in cache)) {
+                    var that = { team: this.team, event: last_match.event_key };
+                    tba.genOPRs(last_match.event_key, function(oprs) {
+                        cache[this.event] = oprs;
+                        results[this.team] = { avgs: oprs[this.team] };
+                        tba.genCSV(results, '2019gal_prescout');
+                    }.bind(that));
+                } else {
+                    results[this.team] = { avgs: cache[last_match.event_key][this.team] };
+                    tba.genCSV(results, '2019gal_prescout');
+                }
+            }.bind({team: teams[team].replace('frc','')}));
+    }
+})
 
-for (var event in events) {
-    tba.genCSV(events[event]);
-}
+
+// tba.genOPRs('2019txdel', function(oprs) {
+//     cache[this.event] = oprs;
+//     results[this.team] = { avgs: oprs[this.team] };
+//     tba.genCSV(results, '2019txpas_prescout_elims');
+// });

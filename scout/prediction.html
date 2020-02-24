@@ -74,10 +74,10 @@
           <canvas id="blue_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
         <div class="w3-third w3-padding">
-          <canvas id="blue_cargo_chart" responsive="true" aspectRatio="1"></canvas>
+          <canvas id="blue_auto_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
         <div class="w3-third w3-padding">
-          <canvas id="blue_rocket_chart" responsive="true" aspectRatio="1"></canvas>
+          <canvas id="blue_teleop_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
       </div>
 
@@ -86,10 +86,10 @@
           <canvas id="red_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
         <div class="w3-third w3-padding">
-          <canvas id="red_cargo_chart" responsive="true" aspectRatio="1"></canvas>
+          <canvas id="red_auto_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
         <div class="w3-third w3-padding">
-          <canvas id="red_rocket_chart" responsive="true" aspectRatio="1"></canvas>
+          <canvas id="red_teleop_chart" responsive="true" aspectRatio="1"></canvas>
         </div>
       </div>
 
@@ -116,51 +116,43 @@
   <h4>Next match unavailable. Last match official score was blue: {{blue}}, red: {{red}}</h4>
 </script>
 
-<script id="header-template-cargoship" type="text/template">
+<script id="header-template-auto" type="text/template">
   <thead>
     <tr class="w3-light-grey">
       <th>Team</th>
-      <th>Hatch Front</th>
-      <th>Hatch Side</th>
-      <th>Cargo Front</th>
-      <th>Cargo Side</th>
+      <th>Low</th>
+      <th>Outer</th>
+      <th>Inner</th>
     </tr>
   </thead>
 </script>
 
-<script id="template-cargoship" type="text/template">
+<script id="template-auto" type="text/template">
   <tr>
     <td>{{team}}</td>
-    <td>{{hatch_front}}</td>
-    <td>{{hatch_side}}</td>
-    <td>{{cargo_front}}</td>
-    <td>{{cargo_side}}</td>
+    <td>{{auto_low}}</td>
+    <td>{{auto_outer}}</td>
+    <td>{{auto_inner}}</td>
   </tr>
 </script>
 
-<script id="header-template-rocket" type="text/template">
+<script id="header-template-teleop" type="text/template">
   <thead>
     <tr class="w3-light-grey">
       <th>Team</th>
-      <th>Hatch Low</th>
-      <th>Hatch Mid</th>
-      <th>Hatch Top</th>
-      <th>Cargo Low</th>
-      <th>Cargo Mid</th>
-      <th>Cargo Top</th>
+      <th>Low</th>
+      <th>Outer</th>
+      <th>Inner</th>
     </tr>
   </thead>
 </script>
 
-<script id="template-rocket" type="text/template">
+<script id="template-teleop" type="text/template">
   <tr>
     <td>{{team}}</td>
-    <td>{{hatch_low}}</td>
-    <td>{{hatch_mid}}</td>
-    <td>{{hatch_top}}</td>
-    <td>{{cargo_low}}</td>
-    <td>{{cargo_mid}}</td>
-    <td>{{cargo_top}}</td>
+    <td>{{teleop_low}}</td>
+    <td>{{teleop_outer}}</td>
+    <td>{{teleop_inner}}</td>
   </tr>
 </script>
 
@@ -169,8 +161,8 @@
     <tr class="w3-light-grey">
       <th>Team</th>
       <th>OPR</th>
-      <th>Ship</th>
-      <th>Rocket</th>
+      <th>Auto Cells</th>
+      <th>Teleop Cells</th>
       <th>Start</th>
       <th>Climb</th>
     </tr>
@@ -181,8 +173,8 @@
   <tr>
     <td>{{team}}</td>
     <td>{{opr}}</td>
-    <td>{{ship}}</td>
-    <td>{{rocket}}</td>
+    <td>{{auto}}</td>
+    <td>{{teleop}}</td>
     <td>{{start}}</td>
     <td>{{end}}</td>
   </tr>
@@ -196,13 +188,13 @@
       </table>
     </div>
     <div class="w3-third w3-padding w3-center">
-      <h4>Cargoship</h4>
-      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-cargoship">
+      <h4>Auto</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-auto">
       </table>
     </div>
     <div class="w3-third w3-padding w3-center">
-      <h4>Rocket</h4>
-      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-rocket">
+      <h4>Teleop</h4>
+      <table class="sortable w3-hoverable w3-striped w3-table" id="{{color}}-teleop">
       </table>
     </div>
   </div>
@@ -234,13 +226,13 @@ function switchTab(color) {
     var html_charts = {
         'red': {
           'overall': document.getElementById('red_chart').getContext('2d'),
-          'cargo': document.getElementById('red_cargo_chart').getContext('2d'),
-          'rocket': document.getElementById('red_rocket_chart').getContext('2d')
+          'auto': document.getElementById('red_auto_chart').getContext('2d'),
+          'teleop': document.getElementById('red_teleop_chart').getContext('2d')
         },
         'blue': {
           'overall': document.getElementById('blue_chart').getContext('2d'),
-          'cargo': document.getElementById('blue_cargo_chart').getContext('2d'),
-          'rocket': document.getElementById('blue_rocket_chart').getContext('2d')
+          'auto': document.getElementById('blue_auto_chart').getContext('2d'),
+          'teleop': document.getElementById('blue_teleop_chart').getContext('2d')
         }
     };
 
@@ -311,64 +303,48 @@ function switchTab(color) {
 
           var teamDataset = [{
                   data: [],
-                  backgroundColor: chartColors.green,
+                  backgroundColor: chartColors.grey,
                   label: 'Start'
               },{
                   data: [],
                   backgroundColor: chartColors.yellow,
-                  label: 'Cargoship'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.red,
-                  label: 'Rocket'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.blue,
-                  label: 'Climb'
-              }];
-
-          var cargoDataset = [{
-                  data: [],
-                  backgroundColor: chartColors.blue,
-                  label: 'Front Hatch'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.green,
-                  label: 'Side Hatch'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.orange,
-                  label: 'Front Cargo'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.red,
-                  label: 'Side Cargo'
-              }];
-
-          var rocketDataset = [{
-                  data: [],
-                  backgroundColor: chartColors.blue,
-                  label: 'Low Hatch'
-              },{
-                  data: [],
-                  backgroundColor: chartColors.green,
-                  label: 'Mid Hatch'
+                  label: 'Auto'
               },{
                   data: [],
                   backgroundColor: chartColors.purple,
-                  label: 'Top Hatch'
+                  label: 'Teleop'
               },{
                   data: [],
                   backgroundColor: chartColors.red,
-                  label: 'Low Cargo'
+                  label: 'Climb'
+              }];
+
+          var autoDataset = [{
+                  data: [],
+                  backgroundColor: chartColors.blue,
+                  label: 'Low'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.green,
+                  label: 'Outer'
               },{
                   data: [],
                   backgroundColor: chartColors.orange,
-                  label: 'Mid Cargo'
+                  label: 'Inner'
+              }];
+
+          var teleopDataset = [{
+                  data: [],
+                  backgroundColor: chartColors.blue,
+                  label: 'Low'
               },{
                   data: [],
-                  backgroundColor: chartColors.yellow,
-                  label: 'Top Cargo'
+                  backgroundColor: chartColors.green,
+                  label: 'Outer'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.orange,
+                  label: 'Inner'
               }];
 
           var teams = [ match.alliances[colors[color]].team_keys[0].replace('frc',''),
@@ -376,20 +352,20 @@ function switchTab(color) {
                        match.alliances[colors[color]].team_keys[2].replace('frc','') ];
 
           // Setup cargo table
-          var cargoTemplate = document.getElementById("template-cargoship");
-          var cargoHeader = document.getElementById("header-template-cargoship");
-          var cargoTemplateHtml = cargoTemplate.innerHTML;
-          var cargoHeaderHtml = cargoHeader.innerHTML;
-          cargoHeaderHtml = cargoHeaderHtml.replace(/{{color}}/g, colors[color]);
-          var cargoHtml = cargoHeaderHtml;
+          var autoTemplate = document.getElementById("template-auto");
+          var autoHeader = document.getElementById("header-template-auto");
+          var autoTemplateHtml = autoTemplate.innerHTML;
+          var autoHeaderHtml = autoHeader.innerHTML;
+          autoHeaderHtml = autoHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var autoHtml = autoHeaderHtml;
 
           // Setup rocket table
-          var rocketTemplate = document.getElementById("template-rocket");
-          var rocketHeader = document.getElementById("header-template-rocket");
-          var rocketTemplateHtml = rocketTemplate.innerHTML;
-          var rocketHeaderHtml = rocketHeader.innerHTML;
-          rocketHeaderHtml = rocketHeaderHtml.replace(/{{color}}/g, colors[color]);
-          var rocketHtml = rocketHeaderHtml;
+          var teleopTemplate = document.getElementById("template-teleop");
+          var teleopHeader = document.getElementById("header-template-teleop");
+          var teleopTemplateHtml = teleopTemplate.innerHTML;
+          var teleopHeaderHtml = teleopHeader.innerHTML;
+          teleopHeaderHtml = teleopHeaderHtml.replace(/{{color}}/g, colors[color]);
+          var teleopHtml = teleopHeaderHtml;
 
           // Setup rocket table
           var overallTemplate = document.getElementById("template-overall");
@@ -404,74 +380,54 @@ function switchTab(color) {
             var result;
             if (!(teams[team] in results)) {
               result = {
-                        'cargo_side_panel_opr': 0,
-                        'cargo_side_cargo_opr': 0,
-                        'cargo_front_panel_opr': 0,
-                        'cargo_front_cargo_opr': 0,
-                        'rocket_high_panel_opr': 0,
-                        'rocket_high_cargo_opr': 0,
-                        'rocket_mid_panel_opr': 0,
-                        'rocket_mid_cargo_opr': 0,
-                        'rocket_low_panel_opr': 0,
-                        'rocket_low_cargo_opr': 0,
-                        'start_avg': 0,
-                        'climb_avg': 0,
+                        'autoCellsInner': 0,
+                        'autoCellsOuter': 0,
+                        'autoCellsBottom': 0,
+                        'teleopCellsInner': 0,
+                        'teleopCellsOuter': 0,
+                        'teleopCellsBottom': 0,
+                        'move': 0,
+                        'climb': 0,
                         'opr': 0
                       };
             } else {
                result = results[teams[team]];
             }
             score += result.opr;
-            cargoHtml += cargoTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{hatch_front}}/g, result.cargo_front_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_side}}/g, result.cargo_side_panel_opr.toFixed(1))
-                                          .replace(/{{cargo_front}}/g, result.cargo_front_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_side}}/g, result.cargo_side_cargo_opr.toFixed(1));
-            rocketHtml += rocketTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{hatch_low}}/g, result.rocket_low_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_mid}}/g, result.rocket_mid_panel_opr.toFixed(1))
-                                          .replace(/{{hatch_top}}/g, result.rocket_high_panel_opr.toFixed(1))
-                                          .replace(/{{cargo_low}}/g, result.rocket_low_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_mid}}/g, result.rocket_mid_cargo_opr.toFixed(1))
-                                          .replace(/{{cargo_top}}/g, result.rocket_high_cargo_opr.toFixed(1));
+            autoHtml += autoTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{auto_low}}/g, result.autoCellsBottom.toFixed(1))
+                                          .replace(/{{auto_outer}}/g, result.autoCellsOuter.toFixed(1))
+                                          .replace(/{{auto_inner}}/g, result.autoCellsInner.toFixed(1));
+            teleopHtml += teleopTemplateHtml.replace(/{{team}}/g, teams[team])
+                                          .replace(/{{teleop_low}}/g, result.teleopCellsBottom.toFixed(1))
+                                          .replace(/{{teleop_outer}}/g, result.teleopCellsOuter.toFixed(1))
+                                          .replace(/{{teleop_inner}}/g, result.teleopCellsInner.toFixed(1));
             overallHtml += overallTemplateHtml.replace(/{{team}}/g, teams[team])
                                           .replace(/{{opr}}/g, result.opr.toFixed(1))
-                                          .replace(/{{start}}/g, result.start_avg.toFixed(1))
-                                          .replace(/{{end}}/g, result.climb_avg.toFixed(1))
-                                          .replace(/{{ship}}/g,
-                                                    (result.cargo_front_panel_opr +
-                                                     result.cargo_side_panel_opr +
-                                                     result.cargo_front_cargo_opr +
-                                                     result.cargo_side_cargo_opr).toFixed(1))
-                                          .replace(/{{rocket}}/g,
-                                                    (result.rocket_low_panel_opr +
-                                                     result.rocket_mid_panel_opr +
-                                                     result.rocket_high_panel_opr +
-                                                     result.rocket_low_cargo_opr +
-                                                     result.rocket_mid_cargo_opr +
-                                                     result.rocket_high_cargo_opr).toFixed(1));
-            teamDataset[0].data.push(result.start_avg.toFixed(1));
-            teamDataset[1].data.push((result.cargo_front_panel_opr +
-                                                     result.cargo_side_panel_opr +
-                                                     result.cargo_front_cargo_opr +
-                                                     result.cargo_side_cargo_opr).toFixed(1));
-            teamDataset[2].data.push((result.rocket_low_panel_opr +
-                                                     result.rocket_mid_panel_opr +
-                                                     result.rocket_high_panel_opr +
-                                                     result.rocket_low_cargo_opr +
-                                                     result.rocket_mid_cargo_opr +
-                                                     result.rocket_high_cargo_opr).toFixed(1));
-            teamDataset[3].data.push(result.climb_avg.toFixed(1));
-            cargoDataset[0].data.push(result.cargo_front_panel_opr.toFixed(1));
-            cargoDataset[1].data.push(result.cargo_side_panel_opr.toFixed(1));
-            cargoDataset[2].data.push(result.cargo_front_cargo_opr.toFixed(1));
-            cargoDataset[3].data.push(result.cargo_side_cargo_opr.toFixed(1));
-            rocketDataset[0].data.push(result.rocket_low_panel_opr.toFixed(1));
-            rocketDataset[1].data.push(result.rocket_mid_panel_opr.toFixed(1));
-            rocketDataset[2].data.push(result.rocket_high_panel_opr.toFixed(1));
-            rocketDataset[3].data.push(result.rocket_low_cargo_opr.toFixed(1));
-            rocketDataset[4].data.push(result.rocket_mid_cargo_opr.toFixed(1));
-            rocketDataset[5].data.push(result.rocket_high_cargo_opr.toFixed(1));
+                                          .replace(/{{start}}/g, result.move.toFixed(1))
+                                          .replace(/{{end}}/g, result.climb.toFixed(1))
+                                          .replace(/{{auto}}/g,
+                                                    (result.autoCellsBottom +
+                                                     result.autoCellsInner +
+                                                     result.autoCellsOuter).toFixed(1))
+                                          .replace(/{{teleop}}/g,
+                                                    (result.teleopCellsInner +
+                                                     result.teleopCellsOuter +
+                                                     result.teleopCellsBottom).toFixed(1));
+            teamDataset[0].data.push(result.move.toFixed(1));
+            teamDataset[1].data.push((result.autoCellsBottom +
+                                      result.autoCellsInner +
+                                      result.autoCellsOuter).toFixed(1));
+            teamDataset[2].data.push((result.teleopCellsInner +
+                                      result.teleopCellsOuter +
+                                      result.teleopCellsBottom).toFixed(1));
+            teamDataset[3].data.push(result.climb.toFixed(1));
+            autoDataset[0].data.push(result.autoCellsBottom.toFixed(1));
+            autoDataset[1].data.push(result.autoCellsOuter.toFixed(1));
+            autoDataset[2].data.push(result.autoCellsInner.toFixed(1));
+            teleopDataset[0].data.push(result.teleopCellsBottom.toFixed(1));
+            teleopDataset[1].data.push(result.teleopCellsOuter.toFixed(1));
+            teleopDataset[2].data.push(result.teleopCellsInner.toFixed(1));
           }
 
           // Fill div
@@ -481,10 +437,10 @@ function switchTab(color) {
                                        .replace(/{{score}}/g, score.toFixed(0));
           document.getElementById("detail_container").innerHTML += detailDivHtml;
 
-          document.getElementById(colors[color] + "-cargoship").innerHTML = cargoHtml;
-          sorttable.makeSortable(document.getElementById(colors[color] + "-cargoship"));
-          document.getElementById(colors[color] + "-rocket").innerHTML = rocketHtml;
-          sorttable.makeSortable(document.getElementById(colors[color] + "-rocket"));
+          document.getElementById(colors[color] + "-auto").innerHTML = autoHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-auto"));
+          document.getElementById(colors[color] + "-teleop").innerHTML = teleopHtml;
+          sorttable.makeSortable(document.getElementById(colors[color] + "-teleop"));
           document.getElementById(colors[color] + "-overall").innerHTML = overallHtml;
           sorttable.makeSortable(document.getElementById(colors[color] + "-overall"));    
         
@@ -509,11 +465,11 @@ function switchTab(color) {
           };
           var chart = new Chart(html_charts[colors[color]].overall, overallChartData);
         
-          var cargoChartData = {
+          var autoChartData = {
               type: 'bar',
               data: {
                   labels: teams,
-                  datasets: cargoDataset
+                  datasets: autoDataset
               },
               options: {
                   scales: {
@@ -528,13 +484,13 @@ function switchTab(color) {
                   }
               }
           };
-          var chart = new Chart(html_charts[colors[color]].cargo, cargoChartData);
+          var chart = new Chart(html_charts[colors[color]].auto, autoChartData);
         
-          var rocketChartData = {
+          var teleopChartData = {
               type: 'bar',
               data: {
                   labels: teams,
-                  datasets: rocketDataset
+                  datasets: teleopDataset
               },
               options: {
                   scales: {
@@ -549,7 +505,7 @@ function switchTab(color) {
                   }
               }
           };
-          var chart = new Chart(html_charts[colors[color]].rocket, rocketChartData);
+          var chart = new Chart(html_charts[colors[color]].teleop, teleopChartData);
 
           document.getElementById('alliance-tabs').style.display = 'block';
         }

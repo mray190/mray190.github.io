@@ -98913,17 +98913,51 @@ WError.prototype.cause = function we_cause(c)
 
         constructor()
         {
-            this.apiKey = 'LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M';
-            this.baseURL = 'https://www.thebluealliance.com/api/v3';
+            this.year = '2020';
+            this.tba_base_url = 'https://www.thebluealliance.com/api/v3/';
+            this.tba_auth_token = 'LCBZ7qqYrBR0e06C4QJEjaW1O7r2TZat7KZwvQcfDqShwIxV4N7epHK9lbafjc4M';
+            this.component_opr_2019_keys = [
+                'HatchRocketLow',
+                'HatchRocketMid',
+                'HatchRocketTop',
+                'HatchShipFront',
+                'HatchShipSide',
+                'CargoRocketLow',
+                'CargoRocketMid',
+                'CargoRocketTop',
+                'CargoShipFront',
+                'CargoShipSide',
+                'HabAuto',
+                'HabEnd',
+                'Penalty'
+            ];
+            this.component_opr_2020_keys = [
+                'autoCellsBottom',
+                'autoCellsInner',
+                'autoCellsOuter',
+                'teleopCellsBottom',
+                'teleopCellsInner',
+                'teleopCellsOuter',
+                'move',
+                'climb',
+                'penalty'
+            ];
+            this.component_opr_keys = this.component_opr_2020_keys;
         }
 
+        /**
+         * Get data from TheBlueAlliance
+         * @private
+         * @param {String} url - URL extension for TBA
+         * @param {TBAResponseCallback} callback - Callback when data is acquired
+         */
         httpGet(url, callback)
         {
             var options = {
                 method: 'GET',
-                url: this.baseURL + url,
+                url: this.tba_base_url + url,
                 headers: {
-                    'X-TBA-Auth-Key': this.apiKey
+                    'X-TBA-Auth-Key': this.tba_auth_token
                 }
             };
             request(options, function (error, response, body) {
@@ -98932,33 +98966,58 @@ WError.prototype.cause = function we_cause(c)
             });
         }
 
-        getRegionals(callback)
-        {
-            this.httpGet('/events/2019', callback);
-        }
-
         // Event information
 
-        getTeams(code, callback)
+        getEvents(callback)
         {
-            this.httpGet('/event/' + code + '/teams/keys', callback);
+            this.httpGet('events/' + this.year, callback);
         }
 
+        /**
+         * Get a list of teams at an event
+         * @param {String} code - event code
+         * @param {TBAResponseCallback} callback - Callback when data is acquired
+         */
+        getEvent(code, callback)
+        {
+            this.httpGet('event/' + code + '/simple', callback);
+        }
+
+        /**
+         * Get a list of teams at an event
+         * @param {String} code - event code
+         * @param {TBAResponseCallback} callback - Callback when data is acquired
+         */
+        getTeams(code, callback)
+        {
+            this.httpGet('event/' + code + '/teams/keys', callback);
+        }
+
+        /**
+         * Get a specific match
+         * @param {String} match_code - match code
+         * @param {TBAResponseCallback} callback - Callback when data is acquired
+         */
         getMatch(match_code, callback)
         {
-            this.httpGet('/match/' + match_code, callback);
+            this.httpGet('match/' + match_code, callback);
         }
 
         getMatches(code, callback)
         {
-            this.httpGet('/event/' + code + '/matches', callback);
+            this.httpGet('event/' + code + '/matches', callback);
         }
 
         getOPRs(code, callback)
         {
-            this.httpGet('/event/' + code + '/oprs', function(stats) {
+            this.httpGet('event/' + code + '/oprs', function(stats) {
                 callback(stats.oprs);
             });
+        }
+
+        getComponentOPRs(code, callback)
+        {
+            this.genOPRs(code, callback);
         }
 
         getLastMatch(code, callback)
@@ -99007,12 +99066,12 @@ WError.prototype.cause = function we_cause(c)
 
         getTeamStatus(code, team_code, callback)
         {
-            this.httpGet('/team/' + team_code + '/event/' + code + '/status', callback);
+            this.httpGet('team/' + team_code + '/event/' + code + '/status', callback);
         }
 
         getTeamEvents(team_code, callback)
         {
-            this.httpGet('/team/' + team_code + '/events/2019/statuses', callback);
+            this.httpGet('team/' + team_code + '/events/' + this.year + '/statuses', callback);
         }
 
         getOverallTeamNextMatch(team_code, callback)
@@ -99034,16 +99093,17 @@ WError.prototype.cause = function we_cause(c)
         getOverallTeamLastMatch(team_code, callback)
         {
             var that = this;
+            var last_match_key = null;
             that.getTeamEvents(team_code, function (events) {
                 for (var event in events) {
                     if (events[event]) {
                         if (events[event].last_match_key) {
-                            that.getMatch(events[event].last_match_key, callback);
+                            last_match_key = events[event].last_match_key;
+                            that.getMatch(last_match_key, callback);
                             return;
                         }
                     }
                 }
-                callback(null);
             });
         }
 
@@ -99077,112 +99137,29 @@ WError.prototype.cause = function we_cause(c)
             });
         }
 
+        // Internal helper functions (generic)
+
         parseMatch(complete_match_data)
         {
+            var results = {};
             var match = complete_match_data.score_breakdown;
 
-            var colors = ['blue', 'red'];
-
-            var low_rocket = [
-                                'lowLeftRocketFar',
-                                'lowRightRocketFar',
-                                'lowLeftRocketNear',
-                                'lowRightRocketNear',
-                            ];
-            var mid_rocket = [
-                                'midLeftRocketFar',
-                                'midRightRocketFar',
-                                'midLeftRocketNear',
-                                'midRightRocketNear',
-                            ];
-            var high_rocket = [
-                                'topLeftRocketFar',
-                                'topRightRocketFar',
-                                'topLeftRocketNear',
-                                'topRightRocketNear',
-                            ];
-
-            var results = {};
-
+            let colors = ['blue', 'red'];
             for (var color in colors) {
-
-                var cargo_side_panels = 0;
-                var cargo_side_cargo = 0;
-                var cargo_front_panels = 0;
-                var cargo_front_cargo = 0;
-
-                for (var i = 1; i <= 8; i++) {
-
-                    var bay = match[colors[color]]['bay' + i].replace('And', '');
-                    var scored_bay = bay.replace(match[colors[color]]['preMatchBay' + i], '');
-
-                    if (scored_bay.includes('Cargo')) {
-                        if (i == 4 || i == 5)
-                            cargo_front_cargo++;
-                        else
-                            cargo_side_cargo++;
+                // let sums = this.parse2019Match(match[colors[color]]);
+                let sums = this.parse2020Match(match[colors[color]]);
+                for (var i = 0; i < 3; i++) {
+                    var robot = parseInt(complete_match_data.alliances[colors[color]].team_keys[i].replace('frc', ''));
+                    if (!(robot in results))
+                        results[robot] = {};
+                    for (var j = 0; j < this.component_opr_keys.length; j++) {
+                        results[robot][this.component_opr_keys[j]] = sums[this.component_opr_keys[j]];
                     }
-                    if (scored_bay.includes('Panel')) {
-                        if (i == 4 || i == 5)
-                            cargo_front_panels++;
-                        else
-                            cargo_side_panels++;
-                    }
-                }
-
-                var rocket_high_panels = 0;
-                var rocket_mid_panels = 0;
-                var rocket_low_panels = 0;
-
-                var rocket_high_cargo = 0;
-                var rocket_mid_cargo = 0;
-                var rocket_low_cargo = 0;
-
-                for (var i = 0; i < 4; i++) {
-                    var top = match[colors[color]][high_rocket[i]].replace('And', '');
-                    if (top.includes('Cargo'))
-                        rocket_high_cargo++;
-                    if (top.includes('Panel'))
-                        rocket_high_panels++;
-                    var mid = match[colors[color]][mid_rocket[i]].replace('And', '');
-                    if (mid.includes('Cargo'))
-                        rocket_mid_cargo++;
-                    if (mid.includes('Panel'))
-                        rocket_mid_panels++;
-                    var low = match[colors[color]][low_rocket[i]].replace('And', '');
-                    if (low.includes('Cargo'))
-                        rocket_low_cargo++;
-                    if (low.includes('Panel'))
-                        rocket_low_panels++;
-                }
-
-                for (var i = 1; i <= 3; i++) {
-                    var robot_start = parseInt(match[colors[color]]['preMatchLevelRobot' + i].replace('HabLevel', ''));
-                    var robot_climb = parseInt(match[colors[color]]['endgameRobot' + i].replace('HabLevel', ''));
-                    var robot_auto_move = match[colors[color]]['habLineRobot' + i] == 'CrossedHabLineInSandstorm';
-                
-                    var robot = parseInt(complete_match_data.alliances[colors[color]].team_keys[i-1].replace('frc', ''));
-                    results[robot] = {
-                        'cargo_side_panels': cargo_side_panels,
-                        'cargo_side_cargo': cargo_side_cargo,
-                        'cargo_front_panels': cargo_front_panels,
-                        'cargo_front_cargo': cargo_front_cargo,
-                        'rocket_high_panels': rocket_high_panels,
-                        'rocket_high_cargo': rocket_high_cargo,
-                        'rocket_mid_cargo': rocket_mid_cargo,
-                        'rocket_mid_panels': rocket_mid_panels,
-                        'rocket_low_panels': rocket_low_panels,
-                        'rocket_low_cargo': rocket_low_cargo,
-                        'level_start': robot_start,
-                        'level_climb': robot_climb,
-                        'auto_move': robot_auto_move,
-                        'teams_played_with': [
-                            parseInt(complete_match_data.alliances[colors[color]].team_keys[0].replace('frc', '')),
-                            parseInt(complete_match_data.alliances[colors[color]].team_keys[1].replace('frc', '')),
-                            parseInt(complete_match_data.alliances[colors[color]].team_keys[2].replace('frc', ''))
-                        ]
-                    }
-
+                    results[robot].teams_played_with = [
+                        parseInt(complete_match_data.alliances[colors[color]].team_keys[0].replace('frc', '')),
+                        parseInt(complete_match_data.alliances[colors[color]].team_keys[1].replace('frc', '')),
+                        parseInt(complete_match_data.alliances[colors[color]].team_keys[2].replace('frc', ''))
+                    ];
                 }
             }
             return results;
@@ -99192,190 +99169,245 @@ WError.prototype.cause = function we_cause(c)
             return array.reduce((n, x) => n + (x === value), 0);
         }
 
-        genCSV(eventCode)
-        {
-            this.genOPRs(eventCode, function(results) {
-                var output = 'Team,OPR,' +
-                    'Cargo Side (Panel),' +
-                    'Cargo Side (Cargo),' +
-                    'Cargo Front (Panel),' +
-                    'Cargo Front (Cargo),' +
-                    'Rocket High (Panel),' +
-                    'Rocket High (Cargo),' +
-                    'Rocket Mid (Panel),' +
-                    'Rocket Mid (Cargo),' +
-                    'Rocket Low (Panel),' +
-                    'Rocket Low (Cargo),' +
-                    'Starting Avg,' +
-                    'Climbing Avg\n';
-                for (var team in results) {
-                    output += team + ',' +
-                        results[team].opr.toFixed(3) + ',' +
-                        results[team].cargo_side_panel_opr.toFixed(3) + ',' +
-                        results[team].cargo_side_cargo_opr.toFixed(3) + ',' +
-                        results[team].cargo_front_panel_opr.toFixed(3) + ',' +
-                        results[team].cargo_front_cargo_opr.toFixed(3) + ',' +
-                        results[team].rocket_high_panel_opr.toFixed(3) + ',' +
-                        results[team].rocket_high_cargo_opr.toFixed(3) + ',' +
-                        results[team].rocket_mid_panel_opr.toFixed(3) + ',' +
-                        results[team].rocket_mid_cargo_opr.toFixed(3) + ',' +
-                        results[team].rocket_low_panel_opr.toFixed(3) + ',' +
-                        results[team].rocket_low_cargo_opr.toFixed(3) + ',' +
-                        results[team].start_avg.toFixed(3) + ',' +
-                        results[team].climb_avg.toFixed(3) + '\n';
-                }
-                // fs.writeFile('./results/' + eventCode + '.csv', output, function(err) {
-                //     if(err) console.log(err);
-                // });
-            });
-        }
-
         genOPRs(eventCode, callback)
         {
-            var that = this;
-            var results = {};
             this.getMatches(eventCode, function(matches) {
+                var results = {};
                 if (matches.length == 0) {
                     callback(null);
                     return null;
                 }
                 for (var match in matches) {
-                    if (matches[match].actual_time && matches[match].comp_level === 'qm') {
-                        var parsed_match = that.parseMatch(matches[match]);
+                    if (matches[match].actual_time && (
+                        matches[match].comp_level === 'qm')) {
+                        var parsed_match = this.parseMatch(matches[match]);
                         for (var team in parsed_match) {
 
                             // Initialize entrys
                             if (!(team in results)) {
                                 results[team] = {
                                     'matches': 0,
-                                    'cargo_side_panel_sum': 0,
-                                    'cargo_side_cargo_sum': 0,
-                                    'cargo_front_panel_sum': 0,
-                                    'cargo_front_cargo_sum': 0,
-                                    'rocket_high_panel_sum': 0,
-                                    'rocket_high_cargo_sum': 0,
-                                    'rocket_mid_panel_sum': 0,
-                                    'rocket_mid_cargo_sum': 0,
-                                    'rocket_low_panel_sum': 0,
-                                    'rocket_low_cargo_sum': 0,
-                                    'start_level_2_sum': 0,
-                                    'start_level_1_sum': 0,
-                                    'climb_level_3_sum': 0,
-                                    'climb_level_2_sum': 0,
-                                    'climb_level_1_sum': 0,
                                     'teams_played_with': []
                                 };
+                                for (var i = 0; i < this.component_opr_keys.length; i++) {
+                                    results[team][this.component_opr_keys[i]] = 0;
+                                }
                             }
 
                             // Fill sum table
                             results[team].matches += 1;
-                            results[team].cargo_side_panel_sum += parsed_match[team].cargo_side_panels;
-                            results[team].cargo_side_cargo_sum += parsed_match[team].cargo_side_cargo;
-                            results[team].cargo_front_panel_sum += parsed_match[team].cargo_front_panels;
-                            results[team].cargo_front_cargo_sum += parsed_match[team].cargo_front_cargo;
-                            results[team].rocket_high_panel_sum += parsed_match[team].rocket_high_panels;
-                            results[team].rocket_high_cargo_sum += parsed_match[team].rocket_high_cargo;
-                            results[team].rocket_mid_panel_sum += parsed_match[team].rocket_mid_panels;
-                            results[team].rocket_mid_cargo_sum += parsed_match[team].rocket_mid_cargo;
-                            results[team].rocket_low_panel_sum += parsed_match[team].rocket_low_panels;
-                            results[team].rocket_low_cargo_sum += parsed_match[team].rocket_low_cargo;
-                            results[team].start_level_2_sum += (parsed_match[team].level_start == 2) && (parsed_match[team].auto_move == 1);
-                            results[team].start_level_1_sum += (parsed_match[team].level_start == 1) && (parsed_match[team].auto_move == 1);
-                            results[team].climb_level_3_sum += parsed_match[team].level_climb == 3;
-                            results[team].climb_level_2_sum += parsed_match[team].level_climb == 2;
-                            results[team].climb_level_1_sum += parsed_match[team].level_climb == 1;
+                            for (var i = 0; i < this.component_opr_keys.length; i++) {
+                                let key = this.component_opr_keys[i];
+                                results[team][key] += parsed_match[team][key];
+                            }
                             results[team].teams_played_with = results[team].teams_played_with.concat(parsed_match[team].teams_played_with);
-
                         }
-
                     }
                 }
 
-                // Formulate team playing with team array
                 var A = [];
+                var B = {};
 
-                var cargo_side_panel_sums = [];
-                var cargo_side_cargo_sums = [];
-                var cargo_front_panel_sums = [];
-                var cargo_front_cargo_sums = [];
-                var rocket_high_panel_sums = [];
-                var rocket_high_cargo_sums = [];
-                var rocket_mid_panel_sums = [];
-                var rocket_mid_cargo_sums = [];
-                var rocket_low_panel_sums = [];
-                var rocket_low_cargo_sums = [];
-                var climb_avgs = [];
-                var start_avgs = [];
+                // OPR formula is Ax = B[z]
+                //   where A is a square matrix NxN
+                //   where N is the amount of teams
+                //   where B is a ZxN matrix
+                //   where x is a 1xN matrix
+                //   where Z is the amount of components you want OPRs for
+                //   where B[z] is a specific component you want an OPR for
+
+                // A represents which teams have played with each other
+                //   Diagonal is a team playing itself, so the number of matches the team played
+                // B represents the sum of a component you are trying to solve for
+
+                // Set the sum arrays to empty
+                for (var i = 0; i < this.component_opr_keys.length; i++) {
+                    B[this.component_opr_keys[i]] = [];
+                }
 
                 for (var team in results) {
+                    // Figure out for a specific team  which teams that team has played with
+                    // Ex.
+                    //   Say 118, 148, 2468 played against 6800, 418, 8000
+                    //   The A matrix would look like:
+                    //        118  148  418  2468 6800 8000
+                    //   118  [1    1    0    1    0    0]
+                    //   148  [1    1    0    1    0    0]
+                    //   418  [0    0    1    0    1    1]
+                    //   2468 [1    1    0    1    0    0]
+                    //   6800 [0    0    1    0    1    1]
+                    //   8000 [0    0    1    0    1    1]
                     var row = [];
                     for (var comparing_team in results) {
-                        row.push(that.countInArray(results[comparing_team].teams_played_with, parseInt(team)));
+                        row.push(this.countInArray(results[comparing_team].teams_played_with, parseInt(team)));
                     }
                     A.push(row);
-                    cargo_side_panel_sums.push(results[team].cargo_side_panel_sum * 2);
-                    cargo_side_cargo_sums.push(results[team].cargo_side_cargo_sum * 3);
-                    cargo_front_panel_sums.push(results[team].cargo_front_panel_sum * 2);
-                    cargo_front_cargo_sums.push(results[team].cargo_front_cargo_sum * 3);
-                    rocket_high_panel_sums.push(results[team].rocket_high_panel_sum * 2);
-                    rocket_high_cargo_sums.push(results[team].rocket_high_cargo_sum * 3);
-                    rocket_mid_panel_sums.push(results[team].rocket_mid_panel_sum * 2);
-                    rocket_mid_cargo_sums.push(results[team].rocket_mid_cargo_sum * 3);
-                    rocket_low_panel_sums.push(results[team].rocket_low_panel_sum * 2);
-                    rocket_low_cargo_sums.push(results[team].rocket_low_cargo_sum * 3);
-                    climb_avgs.push(
-                        (results[team].climb_level_3_sum * 12 + 
-                        results[team].climb_level_2_sum * 6 + 
-                        results[team].climb_level_1_sum * 3) /
-                        results[team].matches);
-                    start_avgs.push((results[team].start_level_2_sum * 6 + results[team].start_level_1_sum * 3)/results[team].matches);
-                }
-                var cargo_side_panel_opr = math.lusolve(A, cargo_side_panel_sums);
-                var cargo_side_cargo_opr = math.lusolve(A, cargo_side_cargo_sums);
-                var cargo_front_panel_opr = math.lusolve(A, cargo_front_panel_sums);
-                var cargo_front_cargo_opr = math.lusolve(A, cargo_front_cargo_sums);
-                var rocket_high_panel_opr = math.lusolve(A, rocket_high_panel_sums);
-                var rocket_high_cargo_opr = math.lusolve(A, rocket_high_cargo_sums);
-                var rocket_mid_panel_opr = math.lusolve(A, rocket_mid_panel_sums);
-                var rocket_mid_cargo_opr = math.lusolve(A, rocket_mid_cargo_sums);
-                var rocket_low_panel_opr = math.lusolve(A, rocket_low_panel_sums);
-                var rocket_low_cargo_opr = math.lusolve(A, rocket_low_cargo_sums);
 
+                    // Put in each sub array of B the sum for that specific component the team has scored
+                    // Ex.
+                    //   Say 118 scored 543 total points for component 0, and 234 for component 1
+                    //   Say 148 scored 856 total points for component 0, and 134 for component 1
+                    //   Say 6800 scored 245 total points for component 0, and 328 for component 1
+                    //   [[543] [234]]
+                    //   [[856] [134]]
+                    //   [[245] [328]]
+                    for (var i = 0; i < this.component_opr_keys.length; i++) {
+                        B[this.component_opr_keys[i]].push(results[team][this.component_opr_keys[i]]);
+                    }
+                }
+
+                // Solve Ax = B[z] for each z
+                var opr_arrays = {};
+                for (var i = 0; i < this.component_opr_keys.length; i++) {
+                    opr_arrays[this.component_opr_keys[i]] = math.lusolve(A, B[this.component_opr_keys[i]]);
+                }
+
+                // Reformat the final array to give each team a dictionary for their component OPRs
                 var oprs = {};
                 var i = 0;
                 for (var team in results) {
-                    oprs[team] = {
-                        'cargo_side_panel_opr': cargo_side_panel_opr[i][0],
-                        'cargo_side_cargo_opr': cargo_side_cargo_opr[i][0],
-                        'cargo_front_panel_opr': cargo_front_panel_opr[i][0],
-                        'cargo_front_cargo_opr': cargo_front_cargo_opr[i][0],
-                        'rocket_high_panel_opr': rocket_high_panel_opr[i][0],
-                        'rocket_high_cargo_opr': rocket_high_cargo_opr[i][0],
-                        'rocket_mid_panel_opr': rocket_mid_panel_opr[i][0],
-                        'rocket_mid_cargo_opr': rocket_mid_cargo_opr[i][0],
-                        'rocket_low_panel_opr': rocket_low_panel_opr[i][0],
-                        'rocket_low_cargo_opr': rocket_low_cargo_opr[i][0],
-                        'start_avg': start_avgs[i],
-                        'climb_avg': climb_avgs[i]
-                    };
-                    oprs[team].opr = 
-                        oprs[team].cargo_side_panel_opr +
-                        oprs[team].cargo_side_cargo_opr +
-                        oprs[team].cargo_front_panel_opr +
-                        oprs[team].cargo_front_cargo_opr +
-                        oprs[team].rocket_high_panel_opr +
-                        oprs[team].rocket_high_cargo_opr +
-                        oprs[team].rocket_mid_panel_opr +
-                        oprs[team].rocket_mid_cargo_opr +
-                        oprs[team].rocket_low_panel_opr +
-                        oprs[team].rocket_low_cargo_opr +
-                        oprs[team].start_avg +
-                        oprs[team].climb_avg
+                    oprs[team] = {'opr': 0, 'oprp': 0};
+                    for (var j = 0; j < this.component_opr_keys.length; j++) {
+                        oprs[team][this.component_opr_keys[j]] = opr_arrays[this.component_opr_keys[j]][i][0];
+                        if (j === 8) {
+                            oprs[team].oprp -= oprs[team][this.component_opr_keys[j]];
+                        } else {
+                            oprs[team].opr += oprs[team][this.component_opr_keys[j]];
+                            oprs[team].oprp += oprs[team][this.component_opr_keys[j]];
+                        }
+                    }
                     i++;
                 }
 
                 callback(oprs);
-            });
+            }.bind(this));
+        }
+
+        parse2020Match(match)
+        {
+            let sums = {};
+            for (var i = 0; i < this.component_opr_keys.length; i++) {
+                sums[this.component_opr_keys[i]] = 0;
+            }
+
+            for (var i = 0; i < this.component_opr_keys.length - 3; i++) {
+                sums[this.component_opr_keys[i]] = match[this.component_opr_keys[i]];
+                if (this.component_opr_keys[i].includes('Outer')) {
+                    if (this.component_opr_keys[i].includes('auto'))
+                        sums[this.component_opr_keys[i]] *= 4;
+                    else
+                        sums[this.component_opr_keys[i]] *= 2;
+                }
+                else if (this.component_opr_keys[i].includes('Inner')) {
+                    if (this.component_opr_keys[i].includes('auto'))
+                        sums[this.component_opr_keys[i]] *= 6;
+                    else
+                        sums[this.component_opr_keys[i]] *= 3;
+                }
+                else if (this.component_opr_keys[i].includes('Bottom')) {
+                    if (this.component_opr_keys[i].includes('auto'))
+                        sums[this.component_opr_keys[i]] *= 2;
+                    else
+                        sums[this.component_opr_keys[i]] *= 1;
+                }
+            }
+
+            // Hab game element
+            for (var i = 1; i <= 3; i++) {
+                sums[this.component_opr_keys[6]] += match['initLineRobot' + i] === 'Exited' ? 5 : 0;
+                sums[this.component_opr_keys[7]] += match['endgameRobot' + i] === 'Hang' ? 25 : (match['endgameRobot' + i] === 'Park' ? 5 : 0);
+            }
+
+            // Foul points
+            sums[this.component_opr_keys[8]] += match['foulPoints'];
+
+            // Return element sum array
+            return sums;
+        }
+
+        parse2019Match(match)
+        {
+            let sums = {};
+            for (var i = 0; i < this.component_opr_keys.length; i++) {
+                sums[this.component_opr_keys[i]] = 0;
+            }
+
+            // Cargoship game element
+            for (var i = 1; i <= 8; i++) {
+                let bay = match['bay' + i].replace('And', '');
+                let scored_bay = bay.replace(match['preMatchBay' + i], '');
+
+                let index = -1;
+
+                if (scored_bay.includes('Cargo')) {
+                    index = (i == 4 || i == 5) ? 8 : 9;
+                    sums[this.component_opr_keys[index]]++;
+                }
+
+                if (scored_bay.includes('Panel')) {
+                    index = (i == 4 || i == 5) ? 3 : 4;
+                    sums[this.component_opr_keys[index]]++;
+                }
+            }
+
+            // Rocket game element
+            var tba_scoring_keys = [
+                'lowLeftRocketFar',
+                'lowRightRocketFar',
+                'lowLeftRocketNear',
+                'lowRightRocketNear',
+                'midLeftRocketFar',
+                'midRightRocketFar',
+                'midLeftRocketNear',
+                'midRightRocketNear',
+                'topLeftRocketFar',
+                'topRightRocketFar',
+                'topLeftRocketNear',
+                'topRightRocketNear'
+            ];
+            for (var i = 0; i < tba_scoring_keys.length; i++) {
+                let slot = match[tba_scoring_keys[i]].replace('And', '');
+
+                let index = -1;
+
+                if (slot.includes('Cargo')) {
+                    index = (tba_scoring_keys[i].includes('low')) ? 5 :
+                            (tba_scoring_keys[i].includes('mid')) ? 6 : 7;
+                    sums[this.component_opr_keys[index]]++;
+                }
+                if (slot.includes('Panel')) {
+                    index = (tba_scoring_keys[i].includes('low')) ? 0 :
+                            (tba_scoring_keys[i].includes('mid')) ? 1 : 2;
+                    sums[this.component_opr_keys[index]]++;
+                }
+            }
+
+            // Hab game element
+            for (var i = 1; i <= 3; i++) {
+                let robot_start = parseInt(match['preMatchLevelRobot' + i].replace('HabLevel', ''));
+                let robot_climb = parseInt(match['endgameRobot' + i].replace('HabLevel', ''));
+                let robot_auto_move = match['habLineRobot' + i] == 'CrossedHabLineInSandstorm';
+
+                sums[this.component_opr_keys[11]] += ((robot_climb == 3) ? 12 :
+                                                      (robot_climb == 2) ? 6 :
+                                                      (robot_climb == 1) ? 3 : 0);
+                if (robot_auto_move)
+                    sums[this.component_opr_keys[10]] += ((robot_start == 2) ? 6 : 3);
+            }
+
+            // Foul points
+            sums[this.component_opr_keys[12]] += match['foulPoints'];
+
+            // Convert scored elements into points
+            for (var i = 0; i < 5; i++) {
+                sums[this.component_opr_keys[i]] *= 2;
+            }
+            for (var i = 5; i < 10; i++) {
+                sums[this.component_opr_keys[i]] *= 3;
+            }
+
+            // Return element sum array
+            return sums;
         }
 
     };
@@ -99390,6 +99422,7 @@ WError.prototype.cause = function we_cause(c)
     }
 
 }).call(this);
+
 },{"mathjs":106,"request":688}],746:[function(require,module,exports){
 
 },{}],747:[function(require,module,exports){
