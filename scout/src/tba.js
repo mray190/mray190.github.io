@@ -257,6 +257,7 @@
             var match = complete_match_data.score_breakdown;
 
             let colors = ['blue', 'red'];
+            let fouls = [0, 0];
             for (var color in colors) {
                 // let sums = this.parse2019Match(match[colors[color]]);
                 let sums = this.parse2020Match(match[colors[color]]);
@@ -265,13 +266,23 @@
                     if (!(robot in results))
                         results[robot] = {};
                     for (var j = 0; j < this.component_opr_keys.length; j++) {
-                        results[robot][this.component_opr_keys[j]] = sums[this.component_opr_keys[j]];
+                        if (j === 8) {
+                            fouls[1 - color] = sums[this.component_opr_keys[j]];
+                        } else {
+                            results[robot][this.component_opr_keys[j]] = sums[this.component_opr_keys[j]];
+                        }
                     }
                     results[robot].teams_played_with = [
                         parseInt(complete_match_data.alliances[colors[color]].team_keys[0].replace('frc', '')),
                         parseInt(complete_match_data.alliances[colors[color]].team_keys[1].replace('frc', '')),
                         parseInt(complete_match_data.alliances[colors[color]].team_keys[2].replace('frc', ''))
                     ];
+                }
+            }
+            for (var color in colors) {
+                for (var i = 0; i < 3; i++) {
+                    var robot = parseInt(complete_match_data.alliances[colors[color]].team_keys[i].replace('frc', ''));
+                    results[robot][this.component_opr_keys[8]] = fouls[color];
                 }
             }
             return results;
