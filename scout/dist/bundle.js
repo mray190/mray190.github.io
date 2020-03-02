@@ -99355,7 +99355,7 @@ WError.prototype.cause = function we_cause(c)
 
             // Foul points
             sums[this.component_opr_keys[8]] += match['foulPoints'];
-            sums[this.component_opr_keys[9]] += (match['endgameRungIsLevel'] === 'IsLevel' && sums[this.component_opr_keys[7]] >= 50) ? 15 : 0;
+            sums[this.component_opr_keys[9]] += (match['endgameRungIsLevel'] === 'IsLevel' && sums[this.component_opr_keys[7]] > 15) ? 15 : 0;
             sums[this.component_opr_keys[10]] += match['controlPanelPoints'];
 
             // Return element sum array
