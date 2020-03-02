@@ -57,29 +57,29 @@ tba.getNextMatch(eventCode, function(last_match) {
 });
 */
 
-var cache = {};
-var results = {};
-tba.getTeams('2019gal', function(teams) {
-    for (var team in teams) {
-            tba.getOverallTeamLastMatch(teams[team], function(last_match) {
-                if (!(last_match.event_key in cache)) {
-                    var that = { team: this.team, event: last_match.event_key };
-                    tba.genOPRs(last_match.event_key, function(oprs) {
-                        cache[this.event] = oprs;
-                        results[this.team] = { avgs: oprs[this.team] };
-                        tba.genCSV(results, '2019gal_prescout');
-                    }.bind(that));
-                } else {
-                    results[this.team] = { avgs: cache[last_match.event_key][this.team] };
-                    tba.genCSV(results, '2019gal_prescout');
-                }
-            }.bind({team: teams[team].replace('frc','')}));
-    }
-})
+// var cache = {};
+// var results = {};
+// tba.getTeams('2019gal', function(teams) {
+//     for (var team in teams) {
+//             tba.getOverallTeamLastMatch(teams[team], function(last_match) {
+//                 if (!(last_match.event_key in cache)) {
+//                     var that = { team: this.team, event: last_match.event_key };
+//                     tba.genOPRs(last_match.event_key, function(oprs) {
+//                         cache[this.event] = oprs;
+//                         results[this.team] = { avgs: oprs[this.team] };
+//                         tba.genCSV(results, '2019gal_prescout');
+//                     }.bind(that));
+//                 } else {
+//                     results[this.team] = { avgs: cache[last_match.event_key][this.team] };
+//                     tba.genCSV(results, '2019gal_prescout');
+//                 }
+//             }.bind({team: teams[team].replace('frc','')}));
+//     }
+// })
 
 
-// tba.genOPRs('2019txdel', function(oprs) {
-//     cache[this.event] = oprs;
-//     results[this.team] = { avgs: oprs[this.team] };
-//     tba.genCSV(results, '2019txpas_prescout_elims');
-// });
+tba.genOPRs('2020isde1', function(oprs) {
+    // cache[this.event] = oprs;
+    // results[this.team] = { avgs: oprs[this.team] };
+    // tba.genCSV(results, '2019txpas_prescout_elims');
+}, true);

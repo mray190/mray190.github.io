@@ -120,14 +120,16 @@
         <td>OPRP</td>
         <td>Auto Line</td>
         <td>Climb</td>
-        <td>Auto</td>
+        <td>Rung Level?</td>
+        <td>Auto Cells</td>
         <td>Auto Inner</td>
         <td>Auto Outer</td>
         <td>Auto Bottom</td>
-        <td>Teleop</td>
+        <td>Teleop Cells</td>
         <td>Teleop Inner</td>
         <td>Teleop Outer</td>
         <td>Teleop Bottom</td>
+        <td>Control Panel</td>
         <td>Penalty</td>
     </thead>
 </script>
@@ -139,6 +141,7 @@
         <td>{{oprp}}</td>
         <td>{{move}}</td>
         <td>{{climb}}</td>
+        <td>{{rung_level}}</td>
         <td>{{auto}}</td>
         <td>{{autoCellsInner}}</td>
         <td>{{autoCellsOuter}}</td>
@@ -147,6 +150,7 @@
         <td>{{teleopCellsInner}}</td>
         <td>{{teleopCellsOuter}}</td>
         <td>{{teleopCellsBottom}}</td>
+        <td>{{panel}}</td>
         <td>{{penalty}}</td>
     </tr>
 </script>
@@ -219,6 +223,7 @@
                                                   .replace(/{{oprp}}/g, results[team].oprp.toFixed(2))
                                                   .replace(/{{move}}/g, results[team].move.toFixed(2))
                                                   .replace(/{{climb}}/g, results[team].climb.toFixed(2))
+                                                  .replace(/{{rung_level}}/g, results[team].rung_level.toFixed(2))
                                                   .replace(/{{auto}}/g, (results[team].autoCellsInner + results[team].autoCellsOuter + results[team].autoCellsBottom).toFixed(2))
                                                   .replace(/{{autoCellsInner}}/g, results[team].autoCellsInner.toFixed(2))
                                                   .replace(/{{autoCellsOuter}}/g, results[team].autoCellsOuter.toFixed(2))
@@ -227,6 +232,7 @@
                                                   .replace(/{{teleopCellsInner}}/g, results[team].teleopCellsInner.toFixed(2))
                                                   .replace(/{{teleopCellsOuter}}/g, results[team].teleopCellsOuter.toFixed(2))
                                                   .replace(/{{teleopCellsBottom}}/g, results[team].teleopCellsBottom.toFixed(2))
+                                                  .replace(/{{panel}}/g, results[team].panel.toFixed(2))
                                                   .replace(/{{penalty}}/g, results[team].penalty.toFixed(2))
                         }
 

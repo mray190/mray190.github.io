@@ -165,6 +165,7 @@
       <th>Teleop Cells</th>
       <th>Start</th>
       <th>Climb</th>
+      <th>Level?</th>
     </tr>
   </thead>
 </script>
@@ -177,6 +178,7 @@
     <td>{{teleop}}</td>
     <td>{{start}}</td>
     <td>{{end}}</td>
+    <td>{{rung_level}}</td>
   </tr>
 </script>
 
@@ -388,6 +390,7 @@ function switchTab(color) {
                         'teleopCellsBottom': 0,
                         'move': 0,
                         'climb': 0,
+                        'rung_level': 0,
                         'opr': 0
                       };
             } else {
@@ -406,6 +409,7 @@ function switchTab(color) {
                                           .replace(/{{opr}}/g, result.opr.toFixed(1))
                                           .replace(/{{start}}/g, result.move.toFixed(1))
                                           .replace(/{{end}}/g, result.climb.toFixed(1))
+                                          .replace(/{{rung_level}}/g, result.rung_level.toFixed(1))
                                           .replace(/{{auto}}/g,
                                                     (result.autoCellsBottom +
                                                      result.autoCellsInner +

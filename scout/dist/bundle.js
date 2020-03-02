@@ -98886,6 +98886,7 @@ WError.prototype.cause = function we_cause(c)
 };
 
 },{"assert-plus":49,"core-util-is":58,"extsprintf":66,"util":932}],745:[function(require,module,exports){
+(function (process){
 'use strict';
 
 (function() {
@@ -98940,7 +98941,9 @@ WError.prototype.cause = function we_cause(c)
                 'teleopCellsOuter',
                 'move',
                 'climb',
-                'penalty'
+                'penalty',
+                'rung_level',
+                'panel'
             ];
             this.component_opr_keys = this.component_opr_2020_keys;
         }
@@ -99155,8 +99158,6 @@ WError.prototype.cause = function we_cause(c)
                         results[robot] = {};
                     for (var j = 0; j < this.component_opr_keys.length; j++) {
                         if (j === 8) {
-                            console.log("Robot: " + robot + " Match: " + complete_match_data.key + " Penalty: " + sums[this.component_opr_keys[j]]);
-                            console.log("Color: " + color + " Inverted: " + (1 - color));
                             fouls[1 - color] = sums[this.component_opr_keys[j]];
                         } else {
                             results[robot][this.component_opr_keys[j]] = sums[this.component_opr_keys[j]];
@@ -99173,7 +99174,6 @@ WError.prototype.cause = function we_cause(c)
                 for (var i = 0; i < 3; i++) {
                     var robot = parseInt(complete_match_data.alliances[colors[color]].team_keys[i].replace('frc', ''));
                     results[robot][this.component_opr_keys[8]] = fouls[color];
-                    console.log("Robot: " + robot + " Match: " + complete_match_data.key + " Assessed: " + fouls[color]);
                 }
             }
             return results;
@@ -99183,7 +99183,26 @@ WError.prototype.cause = function we_cause(c)
             return array.reduce((n, x) => n + (x === value), 0);
         }
 
-        genOPRs(eventCode, callback)
+        genCSV(oprs, callback = null)
+        {
+            process.stdout.write("team,opr,oprp,");
+            for (var j = 0; j < this.component_opr_keys.length; j++) {
+                process.stdout.write(this.component_opr_keys[j] + ",");
+            }
+            process.stdout.write("\n");
+            for (var team in oprs) {
+                process.stdout.write(team + ",");
+                for (var element in oprs[team]) {
+                    process.stdout.write(oprs[team][element].toFixed(3) + ",");
+                }
+                process.stdout.write("\n");
+            }
+
+            if (callback)
+                callback(oprs);
+        }
+
+        genOPRs(eventCode, callback, gen_csv = false)
         {
             this.getMatches(eventCode, function(matches) {
                 var results = {};
@@ -99292,8 +99311,10 @@ WError.prototype.cause = function we_cause(c)
                     }
                     i++;
                 }
-
-                callback(oprs);
+                if (gen_csv)
+                    this.genCSV(oprs, callback);
+                else
+                    callback(oprs);
             }.bind(this));
         }
 
@@ -99304,7 +99325,7 @@ WError.prototype.cause = function we_cause(c)
                 sums[this.component_opr_keys[i]] = 0;
             }
 
-            for (var i = 0; i < this.component_opr_keys.length - 3; i++) {
+            for (var i = 0; i < 6; i++) {
                 sums[this.component_opr_keys[i]] = match[this.component_opr_keys[i]];
                 if (this.component_opr_keys[i].includes('Outer')) {
                     if (this.component_opr_keys[i].includes('auto'))
@@ -99334,6 +99355,8 @@ WError.prototype.cause = function we_cause(c)
 
             // Foul points
             sums[this.component_opr_keys[8]] += match['foulPoints'];
+            sums[this.component_opr_keys[9]] += (match['endgameRungIsLevel'] === 'IsLevel' && sums[this.component_opr_keys[7]] >= 50) ? 15 : 0;
+            sums[this.component_opr_keys[10]] += match['controlPanelPoints'];
 
             // Return element sum array
             return sums;
@@ -99437,7 +99460,8 @@ WError.prototype.cause = function we_cause(c)
 
 }).call(this);
 
-},{"mathjs":106,"request":688}],746:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":883,"mathjs":106,"request":688}],746:[function(require,module,exports){
 
 },{}],747:[function(require,module,exports){
 var asn1 = exports;
