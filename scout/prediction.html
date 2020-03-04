@@ -160,7 +160,7 @@
   <thead>
     <tr class="w3-light-grey">
       <th>Team</th>
-      <th>OPR</th>
+      <th>OPRP</th>
       <th>Auto Cells</th>
       <th>Teleop Cells</th>
       <th>Start</th>
@@ -173,7 +173,7 @@
 <script id="template-overall" type="text/template">
   <tr>
     <td>{{team}}</td>
-    <td>{{opr}}</td>
+    <td>{{oprp}}</td>
     <td>{{auto}}</td>
     <td>{{teleop}}</td>
     <td>{{start}}</td>
@@ -239,7 +239,8 @@ function switchTab(color) {
     };
 
     var chartColors = {
-        red: 'rgb(255, 99, 132, 0.4)',
+        red: 'rgb(255, 0, 0, 0.4)',
+        pink: 'rgb(255, 99, 132, 0.4)',
         orange: 'rgb(255, 159, 64, 0.4)',
         dark_orange: 'rgb(255, 109, 64, 0.4)',
         light_orange: 'rgb(255, 209, 64, 0.4)',
@@ -319,6 +320,10 @@ function switchTab(color) {
                   data: [],
                   backgroundColor: chartColors.red,
                   label: 'Climb'
+              },{
+                  data: [],
+                  backgroundColor: chartColors.pink,
+                  label: 'Level?'
               }];
 
           var autoDataset = [{
@@ -391,12 +396,13 @@ function switchTab(color) {
                         'move': 0,
                         'climb': 0,
                         'rung_level': 0,
-                        'opr': 0
+                        'opr': 0,
+                        'oprp': 0
                       };
             } else {
                result = results[teams[team]];
             }
-            score += result.opr;
+            score += result.oprp;
             autoHtml += autoTemplateHtml.replace(/{{team}}/g, teams[team])
                                           .replace(/{{auto_low}}/g, result.autoCellsBottom.toFixed(1))
                                           .replace(/{{auto_outer}}/g, result.autoCellsOuter.toFixed(1))
@@ -406,7 +412,7 @@ function switchTab(color) {
                                           .replace(/{{teleop_outer}}/g, result.teleopCellsOuter.toFixed(1))
                                           .replace(/{{teleop_inner}}/g, result.teleopCellsInner.toFixed(1));
             overallHtml += overallTemplateHtml.replace(/{{team}}/g, teams[team])
-                                          .replace(/{{opr}}/g, result.opr.toFixed(1))
+                                          .replace(/{{oprp}}/g, result.oprp.toFixed(1))
                                           .replace(/{{start}}/g, result.move.toFixed(1))
                                           .replace(/{{end}}/g, result.climb.toFixed(1))
                                           .replace(/{{rung_level}}/g, result.rung_level.toFixed(1))
@@ -426,6 +432,7 @@ function switchTab(color) {
                                       result.teleopCellsOuter +
                                       result.teleopCellsBottom).toFixed(1));
             teamDataset[3].data.push(result.climb.toFixed(1));
+            teamDataset[4].data.push(result.rung_level.toFixed(1));
             autoDataset[0].data.push(result.autoCellsBottom.toFixed(1));
             autoDataset[1].data.push(result.autoCellsOuter.toFixed(1));
             autoDataset[2].data.push(result.autoCellsInner.toFixed(1));
@@ -455,6 +462,10 @@ function switchTab(color) {
                   datasets: teamDataset
               },
               options: {
+                  title: {
+                      display: true,
+                      text: 'Overall'
+                  },
                   scales: {
                       xAxes: [{ stacked: true }],
                       yAxes: [{
@@ -476,6 +487,10 @@ function switchTab(color) {
                   datasets: autoDataset
               },
               options: {
+                  title: {
+                      display: true,
+                      text: 'Auto Cells'
+                  },
                   scales: {
                       xAxes: [{ stacked: true }],
                       yAxes: [{
@@ -497,6 +512,10 @@ function switchTab(color) {
                   datasets: teleopDataset
               },
               options: {
+                  title: {
+                      display: true,
+                      text: 'Teleop Cells'
+                  },
                   scales: {
                       xAxes: [{ stacked: true }],
                       yAxes: [{
